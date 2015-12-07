@@ -17,7 +17,10 @@
 #include <stdio.h>
 
 // Defined datatypes
-#define GRID_DIM 20
+#define GRID_X 60
+#define GRID_Y 22
+#define ROW_START 1
+#define COL_START 19
 
 // Grid cell types for local maps
 typedef enum local_type {
@@ -40,7 +43,7 @@ typedef struct{
 
 typedef struct{
 //	int id;
-	Cell cell[GRID_DIM*GRID_DIM];
+	Cell cell[GRID_X*GRID_Y];
 //	map_type type; Include this later when you have different map types	
 }Map;
 

@@ -25,7 +25,7 @@ int main(int argc, char ** argv){
 	char junk;	
 
 	// File pointer init
-	fin = fopen("./artlib/resources/maps/test.map","r");
+	fin = fopen("./resources/maps/test.map","r");
 	map_read(fin,&M);
 
 //	print_deb(M);	
