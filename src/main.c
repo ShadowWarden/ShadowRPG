@@ -30,6 +30,7 @@ int main(int argc, char ** argv){
 
 //	print_deb(M);	
 	initscr();
+	curs_set(0);
 	print_map(M);
 	refresh();
 	getch();
