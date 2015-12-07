@@ -15,6 +15,26 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include "shadows.h"
+#include <ncurses.h>
+#include "map.h"
 
+int main(int argc, char ** argv){
+	// Declerations
+	Map M;
+	FILE *fin;
+	char junk;	
+
+	// File pointer init
+	fin = fopen("./artlib/resources/maps/test.map","r");
+	map_read(fin,&M);
+
+//	print_deb(M);	
+	initscr();
+	print_map(M);
+	refresh();
+	getch();
+	endwin();
+	
+	fclose(fin);
+	return 0;
+}

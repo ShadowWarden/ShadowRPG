@@ -1,0 +1,2 @@
+shadowengine v0.0
+Initial commit : I've only created the files and added basic descriptions as to what they should do. 
