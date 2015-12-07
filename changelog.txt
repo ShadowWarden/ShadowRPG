@@ -1,2 +1,10 @@
-shadowengine v0.0
+shadowengine 
+v0.0
+OHR : 
 Initial commit : I've only created the files and added basic descriptions as to what they should do. 
+
+v0.1
+OHR : 
+map.c should now be able to read from a data file in artlib/resources/maps and print it out to the screen. I've switched completely from stdio to ncurses. Right now, all map data is black and white and we only have 2 possible elements : movable floor and dungeon walls. (Fixed grid size)
+List of known issues :
+1. Map path is hardcoded. Has to be changed ASAP
