@@ -17,9 +17,9 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <string.h>
-#include "map.h"
+#include "shadowengine.h"
 
-char print[2]={'.','#'};
+char print[3]={'.','#','@'};
 
 int print_map(Map M){
 	int row,col;

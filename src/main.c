@@ -16,17 +16,21 @@
 
 #include <stdio.h>
 #include <ncurses.h>
-#include "map.h"
+#include "shadowengine.h"
 
 int main(int argc, char ** argv){
 	// Declerations
 	Map M;
+	Char C;
 	FILE *fin;
 	char junk;	
 
 	// File pointer init
 	fin = fopen("./resources/maps/test.map","r");
 	map_read(fin,&M);
+	int ret = read_chars(&C);
+	printf("%d\n",ret);
+	place_on_map(C,&M);
 
 //	print_deb(M);	
 	initscr();
