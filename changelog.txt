@@ -10,3 +10,4 @@ List of known issues :
 1. Map path is hardcoded. Has to be changed ASAP
 OHR : 
 v0.1 Patch 1 : Added curs_set(0); to main.c (Made cursor invisible)
+v0.1.2 Added PC to the map
