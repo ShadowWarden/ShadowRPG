@@ -48,6 +48,13 @@ enum Gender{
         FEMALE=1
 };
 
+enum Action{
+	UP = 'w',
+	DOWN = 's',
+	LEFT = 'a',
+	RIGHT = 'd'
+};
+
 // Structures
 typedef struct{
 	int x;
@@ -92,3 +99,4 @@ int print_map(Map);
 int map_read(FILE *,Map*);
 int read_chars(Char *);
 int place_on_map(Char, Map *);
+int action(Char *,Map *,char);

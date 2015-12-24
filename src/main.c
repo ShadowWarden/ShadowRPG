@@ -23,21 +23,30 @@ int main(int argc, char ** argv){
 	Map M;
 	Char C;
 	FILE *fin;
-	char junk;	
+	char input;	
 
 	// File pointer init
 	fin = fopen("./resources/maps/test.map","r");
 	map_read(fin,&M);
-	int ret = read_chars(&C);
-	printf("%d\n",ret);
+	read_chars(&C);
+//	printf("%d\n",ret);
 	place_on_map(C,&M);
 
 //	print_deb(M);	
 	initscr();
 	curs_set(0);
 	print_map(M);
-	refresh();
-	getch();
+	do{
+		input = getch();	
+		clear();
+		int ret = action(&C,&M,input);
+		if(ret){
+			mvprintw(GRID_Y,0,"Can't do that!");
+		}
+		fflush(stdin);
+		print_map(M);
+		refresh();
+	}while(input != 'q');
 	endwin();
 	
 	fclose(fin);
