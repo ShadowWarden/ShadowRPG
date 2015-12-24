@@ -11,3 +11,6 @@ List of known issues :
 OHR : 
 v0.1 Patch 1 : Added curs_set(0); to main.c (Made cursor invisible)
 v0.1.2 Added PC to the map
+v0.1.3 PC can now move
+List of known issues (v0.1.3)
+1. Capital W,S,A,D does not work. Change checking condition to ignore case
