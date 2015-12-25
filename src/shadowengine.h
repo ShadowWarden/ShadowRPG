@@ -17,6 +17,8 @@
 #include <stdio.h>
 
 // Defined datatypes
+#define COL 80
+#define ROW 24
 #define GRID_X 60
 #define GRID_Y 22
 #define ROW_START 1
@@ -100,3 +102,4 @@ int map_read(FILE *,Map*);
 int read_chars(Char *);
 int place_on_map(Char, Map *);
 int action(Char *,Map *,char);
+void header();

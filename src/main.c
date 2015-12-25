@@ -35,7 +35,11 @@ int main(int argc, char ** argv){
 //	print_deb(M);	
 	initscr();
 	curs_set(0);
+	header();
+	getch();
+	clear();
 	print_map(M);
+	// Main game loop
 	do{
 		input = getch();	
 		clear();
@@ -43,9 +47,9 @@ int main(int argc, char ** argv){
 		if(ret){
 			mvprintw(GRID_Y,0,"Can't do that!");
 		}
-		fflush(stdin);
 		print_map(M);
 		refresh();
+		fflush(stdin);
 	}while(input != 'q');
 	endwin();
 	
