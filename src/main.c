@@ -2,6 +2,10 @@
 *  Omkar H. Ramachandran
 *  omkar.ramachandran@colorado.edu
 *
+*  Abhirath Mahipal
+*  abhirathmahipal@hotmail.com
+*
+*
 *  (Sign in your name here if you make changes)
 *  Everything has to come together here. No big function definitions here. 
 *  This file should only contain the skeleton of the core game loop. Put 

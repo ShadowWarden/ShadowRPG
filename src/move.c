@@ -1,6 +1,9 @@
 /* move.c
 *  Omkar H. Ramachandran
 *  omkar.ramachandran@colorado.edu
+* 
+*  Abhirath Mahipal
+*  abhirathmahipal@hotmail.com
 *
 *  (Sign in your name here if you make changes)
 *  Player/NPC movement functions
@@ -17,38 +20,50 @@
 #include <ncurses.h>
 #include "shadowengine.h"
 
-int action(Char *C, Map *M,char input){
-	if(input == 'w'){
-		if(M->cell[GRID_X*(C->y-1)+C->x].type == 0){
-			M->cell[GRID_X*(C->y)+C->x].type = 0;
-			C->y -= 1;
-			place_on_map(*C,M);
-			return 0;
-		}
+int action(Char *C, Map *M,int input){
+	keypad(stdscr,TRUE);
+	switch(input){
+		case 119:
+		case KEY_UP:
+			if(M->cell[GRID_X*(C->y-1)+C->x].type == 0){
+				M->cell[GRID_X*(C->y)+C->x].type = 0;
+				C->y -= 1;
+				place_on_map(*C,M);
+				return 0;
+			}else
+				return 1;
+			break;
+		case 115:
+		case KEY_DOWN:
+			if(M->cell[GRID_X*(C->y+1)+C->x].type == 0){
+				M->cell[GRID_X*(C->y)+C->x].type = 0;
+				C->y += 1;
+				place_on_map(*C,M);
+				return 0;
+			}else
+				return 1;
+			break;
+		case 97:	
+		case KEY_LEFT:
+			if(M->cell[GRID_X*(C->y)+C->x-1].type == 0){
+				M->cell[GRID_X*(C->y)+C->x].type = 0;
+				C->x -= 1;
+				place_on_map(*C,M);
+				return 0;
+			}else
+				return 1;
+			break;
+		case 100:
+		case KEY_RIGHT:
+			if(M->cell[GRID_X*(C->y)+C->x+1].type == 0){
+				M->cell[GRID_X*(C->y)+C->x].type = 0;		
+				C->x += 1;
+				place_on_map(*C,M);
+				return 0;
+			}else
+				return 1;
+			break;
+		default:
+			return 1;
 	}
-	if(input == 's'){
-		if(M->cell[GRID_X*(C->y+1)+C->x].type == 0){
-			M->cell[GRID_X*(C->y)+C->x].type = 0;
-			C->y += 1;
-			place_on_map(*C,M);
-			return 0;
-		}
-	}
-	if(input == 'a'){
-		if(M->cell[GRID_X*(C->y)+C->x-1].type == 0){
-			M->cell[GRID_X*(C->y)+C->x].type = 0;
-			C->x -= 1;
-			place_on_map(*C,M);
-			return 0;
-		}
-	}
-	if(input == 'd'){
-		if(M->cell[GRID_X*(C->y)+C->x+1].type == 0){
-			M->cell[GRID_X*(C->y)+C->x].type = 0;		
-			C->x += 1;
-			place_on_map(*C,M);
-			return 0;
-		}
-	}
-	return 1;
 }

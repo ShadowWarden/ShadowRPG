@@ -2,6 +2,9 @@
 *  Omkar H. Ramachandran
 *  omkar.ramachandran@colorado.edu
 *
+*  Abhirath Mahipal
+*  abhirathmahipal@hotmail.com
+*
 *  (Sign in your name here if you make changes)
 *  Define structures, enum types, etc.
 * 
@@ -101,5 +104,5 @@ int print_map(Map);
 int map_read(FILE *,Map*);
 int read_chars(Char *);
 int place_on_map(Char, Map *);
-int action(Char *,Map *,char);
+int action(Char *,Map *,int);
 void header();
