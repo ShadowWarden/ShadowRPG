@@ -21,7 +21,6 @@
 #include "shadowengine.h"
 
 int action(Char *C, Map *M,int input){
-	keypad(stdscr,TRUE);
 	switch(input){
 		case 119:
 		case KEY_UP:

@@ -40,6 +40,8 @@ int main(int argc, char ** argv){
 	initscr();
 	curs_set(0);
 	header();
+	keypad(stdscr,TRUE);
+	cbreak();
 	getch();
 	clear();
 	print_map(M);

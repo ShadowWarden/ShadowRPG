@@ -1,14 +1,14 @@
-1
-Tyronst
-Ironblade
-0
-1
-10
-14
-18
-13
-57
-13
-1
-30
-10
+CharID: 1
+FirstName: Tyronst
+LastName: Ironblade
+Gender: 0
+State: 1
+St: 10
+Dx: 14
+Iq: 18
+Wz: 13
+Hpts: 57
+Lvl: 13
+Mapid: 1
+x: 30
+y: 10

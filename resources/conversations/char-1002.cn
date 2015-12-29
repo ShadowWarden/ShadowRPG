@@ -1,0 +1,53 @@
+[Preamble]
+Preamble: This is a prototype for convo files. Anything in between '[]' are tags. Each conversation packet MUST contain a tag. The tags until [root] are all comments and will be ignored by the Kardinal script engine. Use these to make sure that things are updated and recorded properly during level design. The file should end with a special 'END' (no []) tag
+
+[Header]
+Author: OHR
+Scripting: 
+Approved:
+Engine: 0.1.3
+End:
+
+[States]
+Set:
+Checked:
+Removed:
+End:
+
+[Quest]
+Added:
+Removed:
+End:
+
+[Items]
+Given:
+Taken:
+Checked:
+Added:
+End:
+
+[ProofRead]
+End:
+
+[Problems]
+1:
+End:
+
+[Comments]
+1:
+End:
+
+[root]
+count:
+Default: Good Bye
+say1:
+goto1: test
+End:
+
+[test]
+Say: Hey there! This is a test
+Rsp1: Hello
+Rsp2: Good Bye
+End:
+
+END

@@ -14,6 +14,6 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
+#include <ncurses.h>
+#include "shadowengine.h"
 
-#include <stdlib.h>
-#include "shadows.h"
