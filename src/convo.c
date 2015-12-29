@@ -17,3 +17,5 @@
 #include <ncurses.h>
 #include "shadowengine.h"
 
+int read(FILE *){
+}
