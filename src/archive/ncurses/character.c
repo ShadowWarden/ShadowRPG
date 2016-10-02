@@ -16,6 +16,7 @@
 */
 
 #include <stdio.h>
+#include <ncurses.h>
 #include "shadowengine.h"
 
 #define INT_SIZE 4

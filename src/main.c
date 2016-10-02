@@ -18,47 +18,82 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
+#include <SDL.h>
 #include <stdio.h>
-#include <ncurses.h>
 #include "shadowengine.h"
 
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
+
 int main(int argc, char ** argv){
-	// Declerations
-	Map M;
-	Char C;
-	FILE *fin;
-	char input;	
 
-	// File pointer init
-	fin = fopen("./resources/maps/test.map","r");
-	map_read(fin,&M);
-	read_chars(&C);
-//	printf("%d\n",ret);
-	place_on_map(C,&M);
+	SDL_Window* window = NULL;
+    
+    SDL_Surface* screenSurface = NULL;
 
-//	print_deb(M);	
-	initscr();
-	curs_set(0);
-	header();
-	keypad(stdscr,TRUE);
-	cbreak();
-	getch();
-	clear();
-	print_map(M);
-	// Main game loop
-	do{
-		input = getch();	
-		clear();
-		int ret = action(&C,&M,input);
-		if(ret){
-			mvprintw(GRID_Y,0,"Can't do that!");
-		}
-		print_map(M);
-		refresh();
-		fflush(stdin);
-	}while(input != 'q');
-	endwin();
-	
-	fclose(fin);
-	return 0;
+    if( SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+    }
+    else {
+        //Create window
+        window = SDL_CreateWindow( "Shadow RPG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+        if(window == NULL) {
+            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        }
+        else {
+            screenSurface = SDL_GetWindowSurface( window);
+
+            SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+            
+            SDL_UpdateWindowSurface(window);
+
+            //Wait two seconds
+            SDL_Delay(2000);
+        }
+    }
+
+    SDL_DestroyWindow( window );
+
+    SDL_Quit();
+
+    return 0;
 }
+// 	// Declerations
+// 	Map M;
+// 	Char C;
+// 	FILE *fin;
+// 	char input;	
+
+// 	// File pointer init
+// 	fin = fopen("./resources/maps/test.map","r");
+// 	map_read(fin,&M);
+// 	read_chars(&C);
+// //	printf("%d\n",ret);
+// 	place_on_map(C,&M);
+
+// //	print_deb(M);	
+// 	initscr();
+// 	curs_set(0);
+// 	header();
+// 	keypad(stdscr,TRUE);
+// 	cbreak();
+// 	getch();
+// 	clear();
+// 	print_map(M);
+// 	// Main game loop
+// 	do{
+// 		input = getch();	
+// 		clear();
+// 		int ret = action(&C,&M,input);
+// 		if(ret){
+// 			mvprintw(GRID_Y,0,"Can't do that!");
+// 		}
+// 		print_map(M);
+// 		refresh();
+// 		fflush(stdin);
+// 	}while(input != 'q');
+// 	endwin();
+	
+// 	fclose(fin);
+// 	return 0;
+// }
