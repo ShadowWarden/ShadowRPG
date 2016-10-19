@@ -20,4 +20,4 @@ inst.o: inst.c
 
 .PHONY: clean
 clean:
-	rm -f $(obj) ../main *c.swp
+	rm -f $(obj) ../main .*.swp
