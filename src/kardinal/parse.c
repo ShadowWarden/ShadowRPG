@@ -24,6 +24,20 @@ void header(){
 	printf("Debug : ");
 }
 
+int freeform_new(Input **In, Input cur, int pos){
+	// Creates a new node in the freeform stack
+
+	Input * new = (Input *) malloc (sizeof(Input));
+	new->lvl = cur.lvl;
+	new->type = cur.type;
+	strcpy(new->name,cur.name);
+	new->prev = *In;
+	new->pos = pos;
+	*In = new;
+	
+	return 0;
+}
+
 Input * build(Input * In, char *in){
 	// Declarations
 	char buf[MAXBUF];
@@ -121,7 +135,7 @@ void print(Input In){
 	int flag = 0;
 //	printf("i : str : t : l\n");
 	while(tmp != NULL){
-		printf("%d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+		printf("Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
 		tmp = tmp->prev;
 		flag++;
 	}
@@ -155,11 +169,14 @@ int write(Input *In1, Input *In2){
 	In1->prev = In2->prev;
 }
 
-void sequential_print(Input *In,int size){
-	int i;
-	for(i=0;i<size;i++){
-		printf("Debug : In[%d].name = %s\n",i+1,In[i].name);
-	}
+void sequential_print(Input *In, char *name){
+	int i=0;
+	Input *tmp = In;
+	do{
+		printf("Debug : %s[%d].name = %s\n",name,i,tmp->name);
+		tmp = tmp->prev;
+		i++;
+	}while(tmp->prev!=NULL);
 }
 
 Input * selective_free(Input *In, int lev_limit, int *size_args){
@@ -188,32 +205,42 @@ Input * selective_free(Input *In, int lev_limit, int *size_args){
 }
 
 Input * evaluate(Input * In, Input * args, int size_args){
+// Dummy evaluate function. Must be updated in the next few iterations. 
+// Perhaps a starting project for NearlyHeadless?
 	strcpy(In->name,"Result");
 	In->type = 0;
 }
 
 Input * parse(Input * In){
 	int i,j;
-	int size_argsold = 0;
+//	int size_argsold = 0;
 	int maxlvl = find_maxlvl(*In);
 //	printf("Debug : maxlvl = %d\n",maxlvl);	
-	int curlvl = In->lvl;
-	
-	Input *argsold = (Input *) malloc (sizeof(Input));
-	Input *args = (Input *) malloc (sizeof(Input));
+//	int curlvl = In->lvl;
+	int pos = 0;	
+	Input *argsold = NULL;
+	Input *args = NULL;
 	Input *old = In;
 	Input *cur = In->prev;
+	int curlvl = old->lvl; 
+// I'm shifting the defn of curlvl here to make things a little clearer.
+
 	printf("Debug : Entered parse\n");
 
 	while(cur!=NULL){
 		if(cur->lvl > curlvl){
+/* If stmt 1 in the gameplan. If cur->lvl > curlvl, then we are inside another
+* command. Something like ..cur),old.. As a result, we need to add old to 
+* argsold and we should be done.
+*/
 			printf("Debug : Entered if stmt 1\n");
-			argsold = (Input *) realloc (argsold,(size_argsold+2)*sizeof(Input));
-			printf("Debug : Survived realloc\n");
-			size_argsold++;
-			write(&argsold[size_argsold],old);
-			sequential_print(argsold,size_argsold);
+			freeform_new(&argsold,*old,pos);
+			printf("Debug : Survived freeform_new()\n");
+//			size_argsold++;
+//			write(&argsold[size_argsold],old);
+			print(*argsold);
 		//	old = cur;
+			pos++;
 			curlvl = cur->lvl;
 		}else if(cur->lvl < curlvl){
 			int size_args = 1;
@@ -227,24 +254,28 @@ Input * parse(Input * In){
 			}
 */
 			printf("Debug : Survived the args loop\n");
-			argsold = selective_free(argsold,cur->lvl+1,&size_argsold);
-			sequential_print(argsold,size_argsold);
+//			argsold = selective_free(argsold,cur->lvl+1,&size_argsold);
+//			sequential_print(argsold,size_argsold,"argsold");
 			printf("Debug : Survived the selective_free\n");
-			cur = evaluate(cur,args,size_args-1);
+			cur = evaluate(cur,argsold,1);
 			curlvl = cur->lvl;
 		}else{
 			printf("Debug : Entered if stmt 3\n");
-			argsold = (Input *) realloc (argsold,(size_argsold+2)*sizeof(Input));
+//			argsold = (Input *) realloc (argsold,(size_argsold+2)*sizeof(Input));
 			printf("Debug : Survived Realloc if stmt 3\n");
-			write(&argsold[size_argsold],cur);
-			sequential_print(argsold,size_argsold);
-			size_argsold+=1;
+			freeform_new(&argsold,*old,pos);
+			printf("Debug : Survived Realloc if stmt 3\n");
+			pos++;
+			print(*argsold);
+//			sequential_print(argsold,size_argsold,"argsold");
+//			size_argsold+=1;
 			curlvl = cur->lvl;
 		}
 //		sequential_print(argsold,size_argsold);
 		old = cur;
 		cur = cur->prev;	
 	}
+	Free(argsold);
 	printf("Debug : Survived the core loop!\n");
 //	In = selective_free(In,maxlvl);
 //	Input *old = 
@@ -253,6 +284,6 @@ Input * parse(Input * In){
 //	Input *args = (Input *) malloc (sizeof(Input));	
 //	int curlvl = In->lvl;
 //	int cmd_exec = 0;
-	free(args);
+//	free(args);
 	return In;	
 }

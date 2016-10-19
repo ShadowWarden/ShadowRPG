@@ -21,6 +21,7 @@ struct Input{
 	int type;     // 0 = Arg  ;  1 = Var
 	int lvl;
 	struct Input * prev;
+	int pos;
 };
 
 typedef struct Input Input;
