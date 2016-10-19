@@ -11,4 +11,4 @@ parse.o: parse.c
 
 .PHONY: clean
 clean:
-	rm -f $(obj) kardinal
+	rm -f $(obj) kardinal .*.swp
