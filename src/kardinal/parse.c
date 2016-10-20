@@ -34,7 +34,7 @@ int freeform_new(Input **In, Input cur, int pos){
 	new->prev = *In;
 	new->pos = pos;
 	*In = new;
-	
+//	printf("Debug : %d : %s : %d : %d\n",cur.lvl,cur.name,cur.type,pos);	
 	return 0;
 }
 
@@ -111,7 +111,7 @@ Input * build(Input * In, char *in){
 }
 
 void Free(Input * In){
-	while(In->prev != NULL){
+	while(In != NULL){
 		Input * tmp = In;
 		In = In->prev;
 		free(tmp);
@@ -134,6 +134,7 @@ void print(Input In){
 //	printf("%d\n",strcmp(In.name,"def\0"));
 	int flag = 0;
 //	printf("i : str : t : l\n");
+//	printf("Debug : tmp = %p\n",tmp);
 	while(tmp != NULL){
 		printf("Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
 		tmp = tmp->prev;
@@ -141,7 +142,7 @@ void print(Input In){
 	}
 }
 
-Input * sel_free(Input *In, int lvl_limit){
+Input * selective_free(Input *In, int lvl_limit){
 	Input *cur = In;
 	Input *old = NULL;
 	while(cur!=NULL){
@@ -176,39 +177,7 @@ void sequential_print(Input *In, char *name){
 		printf("Debug : %s[%d].name = %s\n",name,i,tmp->name);
 		tmp = tmp->prev;
 		i++;
-	}while(tmp->prev!=NULL);
-}
-
-Input * selective_free(Input *In, int lev_limit, int *size_args){
-	int i,j;
-	int size = *size_args;
-	int flag=0;
-//	sequential_print(In,size);
-	for(i=0;i<size;i++){
-		if(In[i].lvl==lev_limit){
-			// Delete element
-			for(j=i+1;j<size;j++){
-				write(&In[j-1],&In[j]);
-			}	
-			flag++;
-		}
-	}
-	printf("Debug : Flag : %d\nDebug : size_args : %d\n",flag,size);
-	Input *tmp = (Input *) malloc ((size-flag)*sizeof(Input));
-	for(i=0;i<size-flag;i++){
-		write(&tmp[i],&In[i]);
-	}
-	
-	free(In);
-	*size_args = size-flag; 
-	return tmp;
-}
-
-Input * evaluate(Input * In, Input * args, int size_args){
-// Dummy evaluate function. Must be updated in the next few iterations. 
-// Perhaps a starting project for NearlyHeadless?
-	strcpy(In->name,"Result");
-	In->type = 0;
+	}while(tmp!=NULL);
 }
 
 Input * parse(Input * In){
@@ -219,7 +188,7 @@ Input * parse(Input * In){
 //	int curlvl = In->lvl;
 	int pos = 0;	
 	Input *argsold = NULL;
-	Input *args = NULL;
+//	Input *args = NULL;
 	Input *old = In;
 	Input *cur = In->prev;
 	int curlvl = old->lvl; 
@@ -243,21 +212,33 @@ Input * parse(Input * In){
 			pos++;
 			curlvl = cur->lvl;
 		}else if(cur->lvl < curlvl){
-			int size_args = 1;
+			int size_args = 0;
 			printf("Debug : Entered if stmt 2\n");
-/*			for(j=0;j<size_argsold;j++){
-				if(argsold[i].lvl == cur->lvl+1){
-					args = (Input *) realloc (args,sizeof(Input)*(size_args+1));
-					write(&args[size_args],&argsold[i]);
+			Input *tmp = In;
+			Input *args=NULL;
+			while(tmp->prev!=NULL){
+				if(tmp->lvl == curlvl){
+					freeform_new(&args,*tmp,size_args);
 					size_args+=1;
+			//		print(*args);
+				//	char junk;
+				//	scanf("%c",&junk);
 				}
+				tmp = tmp->prev;
+//				printf("Debug : tmp --> tmp->prev\n");
 			}
-*/
+
 			printf("Debug : Survived the args loop\n");
-//			argsold = selective_free(argsold,cur->lvl+1,&size_argsold);
-//			sequential_print(argsold,size_argsold,"argsold");
+			argsold = selective_free(argsold,curlvl);
+		//	printf("Debug : tmp = %p\n",argsold);	
+		//	print(*argsold);
+/* Note : Author : OHR
+*  For some reason, passing a null pointer to a function just leads straight to
+*  a seg fault - even though I'm not using it. Anyone know why?
+*/
 			printf("Debug : Survived the selective_free\n");
-			cur = evaluate(cur,argsold,1);
+			evaluate(cur,args,1);
+			Free(args);
 			curlvl = cur->lvl;
 		}else{
 			printf("Debug : Entered if stmt 3\n");

@@ -29,3 +29,4 @@ Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 Input * parse(Input *);
+int evaluate(Input *, Input *, int);

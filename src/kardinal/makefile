@@ -1,7 +1,10 @@
-obj=main.o parse.o
+obj=main.o parse.o evaluate.o
 
-kardinal: main.o parse.o
-	cc -o kardinal main.o parse.o
+kardinal: main.o parse.o evaluate.o
+	cc -o kardinal $(obj)
+
+evaluate.o: evaluate.c
+	cc -c evaluate.c 
 
 main.o: main.c
 	cc -c main.c
