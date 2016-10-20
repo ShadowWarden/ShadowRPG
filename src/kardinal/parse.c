@@ -233,6 +233,7 @@ Input * parse(Input * In){
 		//	old = cur;
 			pos++;
 			curlvl = cur->lvl;
+			printf("Debug : Leaving if stmt 1\n\n");
 		}else if(cur->lvl < curlvl){
 /* If stmt 2 in the gameplan. If cur->lvl < curlvl, then we are going from
 *  argument to command - Only possible way in which this can happen, 
@@ -241,11 +242,16 @@ Input * parse(Input * In){
 *  selectively cleaned at the end of this block, the only nodes at curlvl
 *  are the arguments of the command.
 */
+			freeform_new(&argsold,*old,pos);
+			pos++;
+			printf("Debug : Argsold at the start of if stmt 2\n");
+			print(*argsold);
 			int size_args = 0;
 			printf("Debug : Entered if stmt 2\n");
-			Input *tmp = In;
+			Input *tmp = argsold;
 			Input *args=NULL;
-			while(tmp->prev!=NULL){
+			while(tmp!=NULL){
+				printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
 				if(tmp->lvl == curlvl){
 					freeform_new(&args,*tmp,size_args);
 					size_args+=1;
@@ -257,7 +263,10 @@ Input * parse(Input * In){
 			printf("Debug : Survived the args loop\n");
 			argsold = selective_free(argsold,curlvl);
 		//	printf("Debug : tmp = %p\n",argsold);	
-		//	print(*argsold);
+			if(argsold!=NULL){
+				printf("Debug : Argsold in if stmt 2\n");
+				print(*argsold);
+			}
 /* 
 *  Note : Author : OHR
 *  For some reason, passing a null pointer to a function just leads straight to
@@ -266,7 +275,9 @@ Input * parse(Input * In){
 			printf("Debug : Survived the selective_free\n");
 			evaluate(cur,args,1);
 			Free(args);
+			printf("Debug : Freed args\n");
 			curlvl = cur->lvl;
+			printf("Debug : Leaving if stmt 2\n\n");
 		}else{
 /* If stmt 3 in the gameplan. If curlvl doesn't change, then we're looking at
 *  another argument. Write to argsold and get on with life ;-)
@@ -274,16 +285,18 @@ Input * parse(Input * In){
 			printf("Debug : Entered if stmt 3\n");
 			printf("Debug : Survived Realloc if stmt 3\n");
 			freeform_new(&argsold,*old,pos);
-			printf("Debug : Survived Realloc if stmt 3\n");
+			printf("Debug : Survived freeform_new() if stmt 3\n");
 			pos++;
 			print(*argsold);
 			curlvl = cur->lvl;
+			printf("Debug : Leaving if stmt 3\n\n");
 		}
 //		sequential_print(argsold,size_argsold);
 		old = cur;
 		cur = cur->prev;	
 	}
 	Free(argsold);
-	printf("Debug : Survived the core loop!\n");
+	printf("Debug : Freed argsold\n");
+	printf("Debug : Survived the parse loop!\n");
 	return In;	
 }
