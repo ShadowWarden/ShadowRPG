@@ -21,8 +21,10 @@
 int evaluate(Input * In, Input * args, int size_args){
 /* Dummy evaluate function. Must be updated in the next few iterations. 
 * Perhaps a starting project for NearlyHeadless?
-* At present, it just prints out args and seems to work fine. See debug.txt
-* -- Tyronst
+* At present, it just prints out args and sets the command name to 'Result' 
+* - seems to work fine, although we need to come up with test cases that
+* account for all possible corner cases. See debug.txt
+* -- OHR
 */
 	printf("Debug : Entered Evaluate\n");
 	print(*args);

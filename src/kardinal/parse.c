@@ -39,6 +39,15 @@ int freeform_new(Input **In, Input cur, int pos){
 }
 
 Input * build(Input * In, char *in){
+/* This takes the input string - something like all(ttl(abc,def,efg)) and breaks
+*  it up as follows : 
+*  1. Anything that preceeds a bracket is a command. In this case, that refers
+*     to all and tll (Node.type=1)
+*  2. Everything else is a argument (Node.type=0)
+*  In addition to this, it assigns levels as shown below :
+*  Cmd : all(ttl(abc,def))
+*  Lvl :  0   1   2   2
+*/
 	// Declarations
 	char buf[MAXBUF];
 	int i = 0;
@@ -58,6 +67,11 @@ Input * build(Input * In, char *in){
 		ch = in[i];
 //		Input * cmd;
 		if(ch == '('){
+/* If the buffer character is a (, then the word that came before it has 
+*  to be an argument (Rule 1). Hence, we give it type 1. We check for 
+*  flag==0 so that we can assign Node->prev to NULL (this is a bit clunky
+*  needs to be improved)
+*/			
 			buf[index] = '\0';
 			if(flag==0){
 				strcpy(In->name,buf);
@@ -76,6 +90,11 @@ Input * build(Input * In, char *in){
 			index = 0;
 			lvl+=1;
 		}else if(ch == ',' || ch == ')' && index!=0){
+/* If the buffer character is a ',' or a ')', then the word that came 
+*  before it has to be an argument. The if statements below are to avoid 
+*  corner cases that occur when you have a ) followed by a , and when you're
+*  looking at the final ) 
+*/
 			buf[index] = '\0';
 		//	printf("buf : %s\n",buf);
 			Input * new = (Input *) malloc (sizeof(Input));
@@ -100,6 +119,9 @@ Input * build(Input * In, char *in){
 				continue;
 			} 
 		}else if(ch != ' ' && index < MAXBUF && ch!=')'){
+/* If the character looked at is neither a ',' nor a bracket, then it must
+*  be a word (either arg or cmd). Write to buffer.
+*/
 			buf[index] = ch;
 			index++;
 		//	printf("buf : %s\n",buf);
@@ -212,6 +234,13 @@ Input * parse(Input * In){
 			pos++;
 			curlvl = cur->lvl;
 		}else if(cur->lvl < curlvl){
+/* If stmt 2 in the gameplan. If cur->lvl < curlvl, then we are going from
+*  argument to command - Only possible way in which this can happen, 
+*  something like cur(old,...). To evaluate, pull out the elements of 
+*  argsold that are curlvl and send to evaluate. Because argsold gets 
+*  selectively cleaned at the end of this block, the only nodes at curlvl
+*  are the arguments of the command.
+*/
 			int size_args = 0;
 			printf("Debug : Entered if stmt 2\n");
 			Input *tmp = In;
@@ -220,9 +249,6 @@ Input * parse(Input * In){
 				if(tmp->lvl == curlvl){
 					freeform_new(&args,*tmp,size_args);
 					size_args+=1;
-			//		print(*args);
-				//	char junk;
-				//	scanf("%c",&junk);
 				}
 				tmp = tmp->prev;
 //				printf("Debug : tmp --> tmp->prev\n");
@@ -232,7 +258,8 @@ Input * parse(Input * In){
 			argsold = selective_free(argsold,curlvl);
 		//	printf("Debug : tmp = %p\n",argsold);	
 		//	print(*argsold);
-/* Note : Author : OHR
+/* 
+*  Note : Author : OHR
 *  For some reason, passing a null pointer to a function just leads straight to
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
@@ -241,15 +268,15 @@ Input * parse(Input * In){
 			Free(args);
 			curlvl = cur->lvl;
 		}else{
+/* If stmt 3 in the gameplan. If curlvl doesn't change, then we're looking at
+*  another argument. Write to argsold and get on with life ;-)
+*/
 			printf("Debug : Entered if stmt 3\n");
-//			argsold = (Input *) realloc (argsold,(size_argsold+2)*sizeof(Input));
 			printf("Debug : Survived Realloc if stmt 3\n");
 			freeform_new(&argsold,*old,pos);
 			printf("Debug : Survived Realloc if stmt 3\n");
 			pos++;
 			print(*argsold);
-//			sequential_print(argsold,size_argsold,"argsold");
-//			size_argsold+=1;
 			curlvl = cur->lvl;
 		}
 //		sequential_print(argsold,size_argsold);
@@ -258,13 +285,5 @@ Input * parse(Input * In){
 	}
 	Free(argsold);
 	printf("Debug : Survived the core loop!\n");
-//	In = selective_free(In,maxlvl);
-//	Input *old = 
-//	Input *tmp = In;
-//	Input *argsold;
-//	Input *args = (Input *) malloc (sizeof(Input));	
-//	int curlvl = In->lvl;
-//	int cmd_exec = 0;
-//	free(args);
 	return In;	
 }
