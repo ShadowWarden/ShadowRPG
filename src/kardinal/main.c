@@ -23,6 +23,10 @@
 int main(int argc, char ** argv){
 	char input[100];
 	State S={NULL,0};
+	if(argc<2){
+		printf("No input command!\n");
+		exit(1);
+	}
 	Input *In = (Input *) malloc (sizeof(Input));
 //	In->prev = NULL;
 	int i,err,maxlvl;
