@@ -21,7 +21,7 @@
 int evaluate(Input * In, Input * args, int size_args){
 /* Dummy evaluate function. Must be updated in the next few iterations. 
 * Perhaps a starting project for NearlyHeadless?
-* At present, it just prints out args and sets the command name to 'Result' 
+* At present, it does 'all' (universal and), 'one' (exactly one true) and 'not' 
 * - seems to work fine, although we need to come up with test cases that
 * account for all possible corner cases. See debug.txt
 * -- OHR
@@ -63,8 +63,25 @@ int evaluate(Input * In, Input * args, int size_args){
 			strcpy(In->name,"false");		
 		}
 		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
+	}else if(strcmp(In->name,"not")==0){
+/* Note to NearlyHeadless : Do an errorcheck for number of arguments here. 
+*  There should be exactly 1 and no more. I'm just spitting out a warning in
+*  this version of the code here :
+*/
+		printf("Debug : Command is 'not'\n");
+		if(args->prev!=NULL){
+			printf("Warning : Too many arguments. The code will act only on the last argument\n");
+		}
+		if(strcmp(args->name,"true")==0){
+			printf("Debug : arg=%s\n",args->name);
+			strcpy(In->name,"false");
+		}else if(strcmp(args->name,"false")==0){
+			printf("Debug : arg=%s\n",args->name);
+			strcpy(In->name,"true");
+		}
+	// Do an error check here if argument name is neither true or false
+		printf("Debug : Arg=%s, In.name=%s\n",args->name,In->name);
 	}
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }
-
