@@ -214,7 +214,7 @@ void sequential_print(Input *In, char *name){
 	}while(tmp!=NULL);
 }
 
-Input * parse(Input * In){
+Input * parse(Input * In, State * Player, int *PlayerSize){
 	int i,j;
 //	int size_argsold = 0;
 	int maxlvl = find_maxlvl(*In);
@@ -286,7 +286,7 @@ Input * parse(Input * In){
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
 			printf("Debug : Survived the selective_free\n");
-			evaluate(cur,args,1);
+			evaluate(cur,args,Player,PlayerSize);
 			Free(args);
 			printf("Debug : Freed args\n");
 			curlvl = cur->lvl;

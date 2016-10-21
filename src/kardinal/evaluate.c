@@ -18,7 +18,7 @@
 #include <string.h>
 #include "kardinal.h"
 
-int evaluate(Input * In, Input * args, int size_args){
+int evaluate(Input * In, Input * args, State * Player, int *PlayerSize){
 /* Dummy evaluate function. Must be updated in the next few iterations. 
 * Perhaps a starting project for NearlyHeadless?
 * At present, it does 'all' (universal and), 'one' (exactly one true) and 'not' 
@@ -81,6 +81,25 @@ int evaluate(Input * In, Input * args, int size_args){
 		}
 	// Do an error check here if argument name is neither true or false
 		printf("Debug : Arg=%s, In.name=%s\n",args->name,In->name);
+	}else if(strcmp(In->name,"ttl")==0){
+/* Only looking at last arg again. NearlyHeadless : Error check. In addition,
+*  Replace this with binary search (O(N) vs O(log N))
+*/
+		int i,flag=0;
+		int id = atoi(args->name);
+		for(i=0;i<*PlayerSize;i++){
+			printf("Debug : Player[i].id=%d\n",Player[i].id);
+			if(id == Player[i].id){
+				printf("Debug : State %d found at i=%d\n",id,i);
+				strcpy(In->name,"true");			
+				flag++;
+				break;
+			}
+		}
+		if(flag == 0){
+			printf("Debug : State %d not found\n",id);
+			strcpy(In->name,"false");			
+		}
 	}
 	printf("Debug : Leaving Evaluate\n");
 	return 0;

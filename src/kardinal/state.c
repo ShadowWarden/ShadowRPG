@@ -18,6 +18,12 @@
 #include <string.h>
 #include "kardinal.h"
 
+int Statecpy(State *a, State b){
+	a->id = b.id;
+	strcpy(a->name,b.name);
+	a->attribute=b.attribute;
+}
+
 int getsize(FILE * in){
 	int N;
 	fseek(in,SEEK_SET,0);
@@ -43,7 +49,33 @@ int build_states_test(FILE * in){
 		fscanf(in,"%s %d",name,&att);
 		strcpy(Titles[i].name,name);
 		Titles[i].attribute = att;
+		Titles[i].id = i+1;
 	}
+}
+
+State * add_state_to_player(int StateId, State * Player, int *PlayerSize){
+/* Assume sorted, do insertion sort of 1 element to keep the array sorted
+*  Error checks need to be done. Check max stateid and so on
+*/
+	int i,j;
+	if(*PlayerSize>0){
+		Player = (State *) realloc(Player,sizeof(State)*(*PlayerSize+1)); 
+	}else{
+		Player = (State *) malloc(sizeof(State)*(*PlayerSize+1)); 
+	}
+	*PlayerSize+=1;
+	printf("Debug : PlayerSize = %d\n",*PlayerSize);
+	for(i=0;i<*PlayerSize;i++){
+		printf("Debug : Player[%d].id = %d\n",i,Player[i].id);
+		if(Player[i].id<StateId){
+			for(j=*PlayerSize-1;j>i;j--){
+				Statecpy(&Player[j],Player[j-1]);
+			}
+			Statecpy(&Player[i],Titles[StateId-1]);
+		}
+	}
+	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);	
+	return Player;
 }
 
 int dump_states_test(){
@@ -51,7 +83,7 @@ int dump_states_test(){
 	printf("Debug : Dump of global states\n");
 	printf("Debug : TitleSize=%d\n",TitleSize);
 	for(i=0;i<TitleSize;i++){
-		printf("Debug : %s %d\n",Titles[i].name,Titles[i].attribute);
+		printf("Debug : %d %s %d\n",Titles[i].id,Titles[i].name,Titles[i].attribute);
 	}
 	printf("\n");
 	return 0;

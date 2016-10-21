@@ -12,6 +12,7 @@
 */
 
 struct State{
+	unsigned int id;
 	char name[20];
 	int attribute;
 };
@@ -31,9 +32,10 @@ Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 void print_final(Input );
-Input * parse(Input *);
-int evaluate(Input *, Input *, int);
+Input * parse(Input *, State *, int *);
+int evaluate(Input *, Input *, State *, int *);
 int build_states_test(FILE *);
+State * add_state_to_player(int, State *, int *);
 
 // Extern variables
 extern State * Titles;
