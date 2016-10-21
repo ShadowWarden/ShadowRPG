@@ -20,13 +20,20 @@
 
 #define MAX_INPUT 100
 
+int TitleSize;
+State * Titles;
+
 int main(int argc, char ** argv){
 	char input[100];
-	State S={NULL,0};
-	if(argc<2){
-		printf("No input command!\n");
+//	State S={NULL,0};
+	if(argc<3){
+		printf("2 input parameters needed!\n");
 		exit(1);
 	}
+	FILE * state_in = fopen(argv[2],"r");
+	
+	build_states_test(state_in);
+	dump_states_test();
 	Input *In = (Input *) malloc (sizeof(Input));
 //	In->prev = NULL;
 	int i,err,maxlvl;
@@ -46,5 +53,7 @@ int main(int argc, char ** argv){
 	print_final(*In);
 //	scanf("%c",&junk);	
 	Free(In);
+	free(Titles);
+	fclose(state_in);
 	return 0;
 }

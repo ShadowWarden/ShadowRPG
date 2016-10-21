@@ -11,10 +11,10 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
-typedef struct{
-	char ** title;		
-	int size;
-}State;
+struct State{
+	char name[20];
+	int attribute;
+};
 
 struct Input{
 	char name[20];
@@ -25,9 +25,18 @@ struct Input{
 };
 
 typedef struct Input Input;
+typedef struct State State;
+
 Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 void print_final(Input );
 Input * parse(Input *);
 int evaluate(Input *, Input *, int);
+int build_states_test(FILE *);
+
+// Extern variables
+extern State * Titles;
+extern int TitleSize;
+extern State * Players;
+extern int PlayerSize;
