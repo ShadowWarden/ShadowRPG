@@ -164,6 +164,18 @@ void print(Input In){
 	}
 }
 
+void print_final(Input In){
+	Input *tmp = &In;
+	int flag = 0;
+	while(tmp != NULL){
+		if(tmp->prev==NULL){
+			printf("Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+		}
+		flag++;
+		tmp=tmp->prev;
+	}
+}
+
 Input * selective_free(Input *In, int lvl_limit){
 	Input *cur = In;
 	Input *old = NULL;
@@ -250,8 +262,9 @@ Input * parse(Input * In){
 			printf("Debug : Entered if stmt 2\n");
 			Input *tmp = argsold;
 			Input *args=NULL;
+			printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
 			while(tmp!=NULL){
-				printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
+	//			printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
 				if(tmp->lvl == curlvl){
 					freeform_new(&args,*tmp,size_args);
 					size_args+=1;

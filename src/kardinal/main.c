@@ -40,7 +40,10 @@ int main(int argc, char ** argv){
 	In = build(In,input);
 //	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 	In = parse(In);
+	printf("Debug : Command stack after parse\n");
 	print(*In);
+	printf("\nDebug : Final Result\n");
+	print_final(*In);
 //	scanf("%c",&junk);	
 	Free(In);
 	return 0;

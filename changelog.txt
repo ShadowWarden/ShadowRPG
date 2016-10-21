@@ -17,3 +17,13 @@ List of known issues (v0.1.3)
 1. Capital W,S,A,D does not work. Change checking condition to ignore case
 2. Diagonal movement not implemented
 v0.1.4 Added makefile (Can't believe I didn't do this initially)
+
+v0.2 : Kardinal basic running
+OHR :
+Kardinal can parse bugs commands now! I've added a few basic commands to evaluate.c ('all' for universal and - every argument should be true - and 'one' - exactly one argument should be true. With these, we have a basic framework for evaluating logic)
+Try running as follows : 
+./kardinal "all(one(true,false),true,all(true,true))"
+List of known issues (v0.2)
+1. Does not handle no argument situations well. It just returns command name without giving anything to evaluate. (Something that NearlyHeadless should try fixing. All you need to do is have a check of argument type (if its 1, then return failed - under normal circumstances, args should always only have type 0s))
+2. Is case sensitive. And is designed to be.
+3. No checks of number of arguments within each if stmt in evaluate (again, something NearlyHeadless should get started on)

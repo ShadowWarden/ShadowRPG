@@ -26,10 +26,44 @@ int evaluate(Input * In, Input * args, int size_args){
 * account for all possible corner cases. See debug.txt
 * -- OHR
 */
+	char a[20] = "Result_";
 	printf("Debug : Entered Evaluate\n");
+	printf("Debug : Printing arguments\n");
 	print(*args);
-	strcpy(In->name,"Result");
 	In->type = 0;
+	if(strcmp(In->name,"all")==0){
+		printf("Debug : Command is 'all'\n");
+		int flag = 0;
+		do{
+			if(strcmp(args->name,"true")!=0){
+				flag++;
+				printf("Debug : %s is not true\n",args->name);
+				strcpy(In->name,"false");
+				break;
+			}
+			args = args->prev;
+		}while(args!=NULL);
+		if(flag==0){
+			strcpy(In->name,"true");	
+		}
+		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
+	}else if(strcmp(In->name,"one")==0){
+		printf("Debug : Command is 'one'\n");
+		int flag = 0;
+		do{
+			if(strcmp(args->name,"true")==0){
+				flag++;
+				printf("Debug : %s is true\n",args->name);	
+			}
+			args = args->prev;	
+		}while(args!=NULL);
+		if(flag==1){
+			strcpy(In->name,"true");	
+		}else{
+			strcpy(In->name,"false");		
+		}
+		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
+	}
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }

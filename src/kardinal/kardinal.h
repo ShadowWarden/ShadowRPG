@@ -28,5 +28,6 @@ typedef struct Input Input;
 Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
+void print_final(Input );
 Input * parse(Input *);
 int evaluate(Input *, Input *, int);
