@@ -1,7 +1,13 @@
-obj=main.o parse.o
+obj=main.o parse.o evaluate.o state.o
 
-kardinal: main.o parse.o
-	cc -o kardinal main.o parse.o
+kardinal: main.o parse.o evaluate.o state.o
+	cc -o kardinal $(obj)
+
+state.o: state.c
+	cc -c state.c
+
+evaluate.o: evaluate.c
+	cc -c evaluate.c 
 
 main.o: main.c
 	cc -c main.c
@@ -11,4 +17,4 @@ parse.o: parse.c
 
 .PHONY: clean
 clean:
-	rm -f $(obj) kardinal
+	rm -f $(obj) kardinal .*.swp

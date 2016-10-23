@@ -1,0 +1,57 @@
+all(ttl(abc,def),def(123,456),jkl)
+
+Debug : Removed spaces
+Debug : Entered parse
+Debug : Entered if stmt 1
+Debug : Survived freeform_new()
+Debug : 0 : jkl : 0 : 1
+Debug : Entered if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : 0 : 456 : 0 : 2
+Debug : 1 : jkl : 0 : 1
+Debug : Entered if stmt 2
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : 0 : abc : 0 : 2
+Debug : 1 : def : 0 : 2
+Debug : 2 : 123 : 0 : 2
+Debug : 3 : 456 : 0 : 2
+Debug : Leaving Evaluate
+Debug : Entered if stmt 1
+Debug : Survived freeform_new()
+Debug : 0 : Result : 0 : 1
+Debug : 1 : jkl : 0 : 1
+Debug : Entered if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : 0 : def : 0 : 2
+Debug : 1 : Result : 0 : 1
+Debug : 2 : jkl : 0 : 1
+Debug : Entered if stmt 2
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : 0 : abc : 0 : 2
+Debug : 1 : def : 0 : 2
+Debug : 2 : 123 : 0 : 2
+Debug : 3 : 456 : 0 : 2
+Debug : Leaving Evaluate
+Debug : Entered if stmt 2
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : 0 : Result : 0 : 1
+Debug : 1 : Result : 0 : 1
+Debug : 2 : jkl : 0 : 1
+Debug : Leaving Evaluate
+Debug : Survived the core loop!
+Debug : 0 : jkl : 0 : 1
+Debug : 1 : 456 : 0 : 2
+Debug : 2 : 123 : 0 : 2
+Debug : 3 : Result : 0 : 1
+Debug : 4 : def : 0 : 2
+Debug : 5 : abc : 0 : 2
+Debug : 6 : Result : 0 : 1
+Debug : 7 : Result : 0 : 0

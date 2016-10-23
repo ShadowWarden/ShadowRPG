@@ -20,14 +20,28 @@
 
 #define MAX_INPUT 100
 
+int TitleSize;
+State * Titles;
+
 int main(int argc, char ** argv){
 	char input[100];
-	State S={NULL,0};
+	State *Player;
+	int PlayerSize = 0;
+	if(argc<3){
+		printf("2 input parameters needed!\n");
+		exit(1);
+	}
+	FILE * state_in = fopen(argv[2],"r");
+	
+	build_states_test(state_in);
+	dump_states_test();
+	add_state_to_player(2,&Player,&PlayerSize);
+//	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	Input *In = (Input *) malloc (sizeof(Input));
 //	In->prev = NULL;
 	int i,err,maxlvl;
 	int size_in = (MAX_INPUT>(sizeof(argv[1])))?MAX_INPUT:sizeof(argv[i]);
-	printf("%s\n\n",argv[1]);
+	printf("Debug : Cmd = %s\n\n",argv[1]);
 	for(i=0;i<size_in;i++){
 		input[i] = argv[1][i];	
 	}
@@ -35,9 +49,16 @@ int main(int argc, char ** argv){
 	// Build the command stack
 	In = build(In,input);
 //	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-	In = parse(In);
+	In = parse(In,&Player,&PlayerSize);
+	printf("Debug : Command stack after parse\n");
 	print(*In);
+	printf("\nDebug : Final Result\n");
+	print_final(*In);
 //	scanf("%c",&junk);	
+	print_player_state(Player,PlayerSize);
 	Free(In);
+	free(Titles);
+	free(Player);
+	fclose(state_in);
 	return 0;
 }

@@ -24,7 +24,30 @@ void header(){
 	printf("Debug : ");
 }
 
+int freeform_new(Input **In, Input cur, int pos){
+	// Creates a new node in the freeform stack
+
+	Input * new = (Input *) malloc (sizeof(Input));
+	new->lvl = cur.lvl;
+	new->type = cur.type;
+	strcpy(new->name,cur.name);
+	new->prev = *In;
+	new->pos = pos;
+	*In = new;
+//	printf("Debug : %d : %s : %d : %d\n",cur.lvl,cur.name,cur.type,pos);	
+	return 0;
+}
+
 Input * build(Input * In, char *in){
+/* This takes the input string - something like all(ttl(abc,def,efg)) and breaks
+*  it up as follows : 
+*  1. Anything that preceeds a bracket is a command. In this case, that refers
+*     to all and tll (Node.type=1)
+*  2. Everything else is a argument (Node.type=0)
+*  In addition to this, it assigns levels as shown below :
+*  Cmd : all(ttl(abc,def))
+*  Lvl :  0   1   2   2
+*/
 	// Declarations
 	char buf[MAXBUF];
 	int i = 0;
@@ -44,6 +67,11 @@ Input * build(Input * In, char *in){
 		ch = in[i];
 //		Input * cmd;
 		if(ch == '('){
+/* If the buffer character is a (, then the word that came before it has 
+*  to be an argument (Rule 1). Hence, we give it type 1. We check for 
+*  flag==0 so that we can assign Node->prev to NULL (this is a bit clunky
+*  needs to be improved)
+*/			
 			buf[index] = '\0';
 			if(flag==0){
 				strcpy(In->name,buf);
@@ -62,6 +90,11 @@ Input * build(Input * In, char *in){
 			index = 0;
 			lvl+=1;
 		}else if(ch == ',' || ch == ')' && index!=0){
+/* If the buffer character is a ',' or a ')', then the word that came 
+*  before it has to be an argument. The if statements below are to avoid 
+*  corner cases that occur when you have a ) followed by a , and when you're
+*  looking at the final ) 
+*/
 			buf[index] = '\0';
 		//	printf("buf : %s\n",buf);
 			Input * new = (Input *) malloc (sizeof(Input));
@@ -86,6 +119,9 @@ Input * build(Input * In, char *in){
 				continue;
 			} 
 		}else if(ch != ' ' && index < MAXBUF && ch!=')'){
+/* If the character looked at is neither a ',' nor a bracket, then it must
+*  be a word (either arg or cmd). Write to buffer.
+*/
 			buf[index] = ch;
 			index++;
 		//	printf("buf : %s\n",buf);
@@ -97,7 +133,7 @@ Input * build(Input * In, char *in){
 }
 
 void Free(Input * In){
-	while(In->prev != NULL){
+	while(In != NULL){
 		Input * tmp = In;
 		In = In->prev;
 		free(tmp);
@@ -120,14 +156,27 @@ void print(Input In){
 //	printf("%d\n",strcmp(In.name,"def\0"));
 	int flag = 0;
 //	printf("i : str : t : l\n");
+//	printf("Debug : tmp = %p\n",tmp);
 	while(tmp != NULL){
-		printf("%d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+		printf("Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
 		tmp = tmp->prev;
 		flag++;
 	}
 }
 
-Input * sel_free(Input *In, int lvl_limit){
+void print_final(Input In){
+	Input *tmp = &In;
+	int flag = 0;
+	while(tmp != NULL){
+		if(tmp->prev==NULL){
+			printf("Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+		}
+		flag++;
+		tmp=tmp->prev;
+	}
+}
+
+Input * selective_free(Input *In, int lvl_limit){
 	Input *cur = In;
 	Input *old = NULL;
 	while(cur!=NULL){
@@ -155,104 +204,112 @@ int write(Input *In1, Input *In2){
 	In1->prev = In2->prev;
 }
 
-void sequential_print(Input *In,int size){
-	int i;
-	for(i=0;i<size;i++){
-		printf("Debug : In[%d].name = %s\n",i+1,In[i].name);
-	}
+void sequential_print(Input *In, char *name){
+	int i=0;
+	Input *tmp = In;
+	do{
+		printf("Debug : %s[%d].name = %s\n",name,i,tmp->name);
+		tmp = tmp->prev;
+		i++;
+	}while(tmp!=NULL);
 }
 
-Input * selective_free(Input *In, int lev_limit, int *size_args){
+Input * parse(Input * In, State ** Player, int *PlayerSize){
 	int i,j;
-	int size = *size_args;
-	int flag=0;
-//	sequential_print(In,size);
-	for(i=0;i<size;i++){
-		if(In[i].lvl==lev_limit){
-			// Delete element
-			for(j=i+1;j<size;j++){
-				write(&In[j-1],&In[j]);
-			}	
-			flag++;
-		}
-	}
-	printf("Debug : Flag : %d\nDebug : size_args : %d\n",flag,size);
-	Input *tmp = (Input *) malloc ((size-flag)*sizeof(Input));
-	for(i=0;i<size-flag;i++){
-		write(&tmp[i],&In[i]);
-	}
-	
-	free(In);
-	*size_args = size-flag; 
-	return tmp;
-}
-
-Input * evaluate(Input * In, Input * args, int size_args){
-	strcpy(In->name,"Result");
-	In->type = 0;
-}
-
-Input * parse(Input * In){
-	int i,j;
-	int size_argsold = 0;
+//	int size_argsold = 0;
 	int maxlvl = find_maxlvl(*In);
 //	printf("Debug : maxlvl = %d\n",maxlvl);	
-	int curlvl = In->lvl;
-	
-	Input *argsold = (Input *) malloc (sizeof(Input));
-	Input *args = (Input *) malloc (sizeof(Input));
+//	int curlvl = In->lvl;
+	int pos = 0;	
+	Input *argsold = NULL;
+//	Input *args = NULL;
 	Input *old = In;
 	Input *cur = In->prev;
+	int curlvl = old->lvl; 
+// I'm shifting the defn of curlvl here to make things a little clearer.
+
 	printf("Debug : Entered parse\n");
 
 	while(cur!=NULL){
 		if(cur->lvl > curlvl){
+/* If stmt 1 in the gameplan. If cur->lvl > curlvl, then we are inside another
+* command. Something like ..cur),old.. As a result, we need to add old to 
+* argsold and we should be done.
+*/
 			printf("Debug : Entered if stmt 1\n");
-			argsold = (Input *) realloc (argsold,(size_argsold+2)*sizeof(Input));
-			printf("Debug : Survived realloc\n");
-			size_argsold++;
-			write(&argsold[size_argsold],old);
-			sequential_print(argsold,size_argsold);
+			freeform_new(&argsold,*old,pos);
+			printf("Debug : Survived freeform_new()\n");
+//			size_argsold++;
+//			write(&argsold[size_argsold],old);
+			print(*argsold);
 		//	old = cur;
+			pos++;
 			curlvl = cur->lvl;
+			printf("Debug : Leaving if stmt 1\n\n");
 		}else if(cur->lvl < curlvl){
-			int size_args = 1;
+/* If stmt 2 in the gameplan. If cur->lvl < curlvl, then we are going from
+*  argument to command - Only possible way in which this can happen, 
+*  something like cur(old,...). To evaluate, pull out the elements of 
+*  argsold that are curlvl and send to evaluate. Because argsold gets 
+*  selectively cleaned at the end of this block, the only nodes at curlvl
+*  are the arguments of the command.
+*/
+			freeform_new(&argsold,*old,pos);
+			pos++;
+			printf("Debug : Argsold at the start of if stmt 2\n");
+			print(*argsold);
+			int size_args = 0;
 			printf("Debug : Entered if stmt 2\n");
-/*			for(j=0;j<size_argsold;j++){
-				if(argsold[i].lvl == cur->lvl+1){
-					args = (Input *) realloc (args,sizeof(Input)*(size_args+1));
-					write(&args[size_args],&argsold[i]);
+			Input *tmp = argsold;
+			Input *args=NULL;
+			printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
+			while(tmp!=NULL){
+	//			printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
+				if(tmp->lvl == curlvl){
+					freeform_new(&args,*tmp,size_args);
 					size_args+=1;
 				}
+				tmp = tmp->prev;
+//				printf("Debug : tmp --> tmp->prev\n");
 			}
-*/
+
 			printf("Debug : Survived the args loop\n");
-			argsold = selective_free(argsold,cur->lvl+1,&size_argsold);
-			sequential_print(argsold,size_argsold);
+			argsold = selective_free(argsold,curlvl);
+		//	printf("Debug : tmp = %p\n",argsold);	
+			if(argsold!=NULL){
+				printf("Debug : Argsold in if stmt 2\n");
+				print(*argsold);
+			}
+/* 
+*  Note : Author : OHR
+*  For some reason, passing a null pointer to a function just leads straight to
+*  a seg fault - even though I'm not using it. Anyone know why?
+*/
 			printf("Debug : Survived the selective_free\n");
-			cur = evaluate(cur,args,size_args-1);
+			evaluate(cur,args,Player,PlayerSize);
+			Free(args);
+			printf("Debug : Freed args\n");
 			curlvl = cur->lvl;
+			printf("Debug : Leaving if stmt 2\n\n");
 		}else{
+/* If stmt 3 in the gameplan. If curlvl doesn't change, then we're looking at
+*  another argument. Write to argsold and get on with life ;-)
+*/
 			printf("Debug : Entered if stmt 3\n");
-			argsold = (Input *) realloc (argsold,(size_argsold+2)*sizeof(Input));
 			printf("Debug : Survived Realloc if stmt 3\n");
-			write(&argsold[size_argsold],cur);
-			sequential_print(argsold,size_argsold);
-			size_argsold+=1;
+			freeform_new(&argsold,*old,pos);
+			printf("Debug : Survived freeform_new() if stmt 3\n");
+			pos++;
+			print(*argsold);
 			curlvl = cur->lvl;
+			printf("Debug : Leaving if stmt 3\n\n");
 		}
 //		sequential_print(argsold,size_argsold);
 		old = cur;
 		cur = cur->prev;	
 	}
-	printf("Debug : Survived the core loop!\n");
-//	In = selective_free(In,maxlvl);
-//	Input *old = 
-//	Input *tmp = In;
-//	Input *argsold;
-//	Input *args = (Input *) malloc (sizeof(Input));	
-//	int curlvl = In->lvl;
-//	int cmd_exec = 0;
-	free(args);
+	Free(argsold);
+	printf("Debug : Freed argsold\n");
+	printf("Debug : Survived the parse loop!\n");
 	return In;	
 }
