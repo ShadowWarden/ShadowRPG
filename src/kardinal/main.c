@@ -35,7 +35,7 @@ int main(int argc, char ** argv){
 	
 	build_states_test(state_in);
 	dump_states_test();
-	Player = add_state_to_player(1,Player,&PlayerSize);
+	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	Input *In = (Input *) malloc (sizeof(Input));
 //	In->prev = NULL;
@@ -49,12 +49,13 @@ int main(int argc, char ** argv){
 	// Build the command stack
 	In = build(In,input);
 //	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-	In = parse(In,Player,&PlayerSize);
+	In = parse(In,&Player,&PlayerSize);
 	printf("Debug : Command stack after parse\n");
 	print(*In);
 	printf("\nDebug : Final Result\n");
 	print_final(*In);
 //	scanf("%c",&junk);	
+	print_player_state(Player,PlayerSize);
 	Free(In);
 	free(Titles);
 	free(Player);

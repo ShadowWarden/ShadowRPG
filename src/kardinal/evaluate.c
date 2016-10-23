@@ -18,7 +18,9 @@
 #include <string.h>
 #include "kardinal.h"
 
-int evaluate(Input * In, Input * args, State * Player, int *PlayerSize){
+#define EQSTR(a,b) (strcmp(a,b)==0)
+
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 /* Dummy evaluate function. Must be updated in the next few iterations. 
 * Perhaps a starting project for NearlyHeadless?
 * At present, it does 'all' (universal and), 'one' (exactly one true) and 'not' 
@@ -88,8 +90,8 @@ int evaluate(Input * In, Input * args, State * Player, int *PlayerSize){
 		int i,flag=0;
 		int id = atoi(args->name);
 		for(i=0;i<*PlayerSize;i++){
-			printf("Debug : Player[i].id=%d\n",Player[i].id);
-			if(id == Player[i].id){
+			printf("Debug : Player[i].id=%d\n",((*Player)+i)->id);
+			if(id == ((*Player)+i)->id){
 				printf("Debug : State %d found at i=%d\n",id,i);
 				strcpy(In->name,"true");			
 				flag++;
@@ -100,7 +102,14 @@ int evaluate(Input * In, Input * args, State * Player, int *PlayerSize){
 			printf("Debug : State %d not found\n",id);
 			strcpy(In->name,"false");			
 		}
+	}else if(EQSTR(In->name,"addttl")){
+/* Again. This only accepts exactly one argument. Error checks
+*/
+		int i;
+		add_state_to_player(atoi(args->name),Player,PlayerSize);
+		printf("Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
+		strcpy(In->name,"true");			
 	}
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
-}
+} 

@@ -214,7 +214,7 @@ void sequential_print(Input *In, char *name){
 	}while(tmp!=NULL);
 }
 
-Input * parse(Input * In, State * Player, int *PlayerSize){
+Input * parse(Input * In, State ** Player, int *PlayerSize){
 	int i,j;
 //	int size_argsold = 0;
 	int maxlvl = find_maxlvl(*In);
