@@ -33,11 +33,11 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 	printf("Debug : Printing arguments\n");
 	print(*args);
 	In->type = 0;
-	if(strcmp(In->name,"all")==0){
+	if(EQSTR(In->name,"all")){
 		printf("Debug : Command is 'all'\n");
 		int flag = 0;
 		do{
-			if(strcmp(args->name,"true")!=0){
+			if(!EQSTR(args->name,"true")){
 				flag++;
 				printf("Debug : %s is not true\n",args->name);
 				strcpy(In->name,"false");
@@ -49,11 +49,11 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 			strcpy(In->name,"true");	
 		}
 		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
-	}else if(strcmp(In->name,"one")==0){
+	}else if(EQSTR(In->name,"one")){
 		printf("Debug : Command is 'one'\n");
 		int flag = 0;
 		do{
-			if(strcmp(args->name,"true")==0){
+			if(EQSTR(args->name,"true")){
 				flag++;
 				printf("Debug : %s is true\n",args->name);	
 			}
@@ -65,7 +65,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 			strcpy(In->name,"false");		
 		}
 		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
-	}else if(strcmp(In->name,"not")==0){
+	}else if(EQSTR(In->name,"not")){
 /* Note to NearlyHeadless : Do an errorcheck for number of arguments here. 
 *  There should be exactly 1 and no more. I'm just spitting out a warning in
 *  this version of the code here :
@@ -74,16 +74,16 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 		if(args->prev!=NULL){
 			printf("Warning : Too many arguments. The code will act only on the last argument\n");
 		}
-		if(strcmp(args->name,"true")==0){
+		if(EQSTR(args->name,"true")){
 			printf("Debug : arg=%s\n",args->name);
 			strcpy(In->name,"false");
-		}else if(strcmp(args->name,"false")==0){
+		}else if(EQSTR(args->name,"false")){
 			printf("Debug : arg=%s\n",args->name);
 			strcpy(In->name,"true");
 		}
 	// Do an error check here if argument name is neither true or false
 		printf("Debug : Arg=%s, In.name=%s\n",args->name,In->name);
-	}else if(strcmp(In->name,"ttl")==0){
+	}else if(EQSTR(In->name,"ttl")){
 /* Only looking at last arg again. NearlyHeadless : Error check. In addition,
 *  Replace this with binary search (O(N) vs O(log N))
 */
