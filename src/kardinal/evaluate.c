@@ -28,7 +28,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 * account for all possible corner cases. See debug.txt
 * -- OHR
 */
-	char a[20] = "Result_";
+//	char a[20] = "Result_";
 	printf("Debug : Entered Evaluate\n");
 	printf("Debug : Printing arguments\n");
 	print(*args);
