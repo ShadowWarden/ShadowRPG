@@ -46,15 +46,24 @@ int main(int argc, char ** argv){
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	while(fgets(line,MAX_INPUT,fin)){
-		Input *In = (Input *) malloc (sizeof(Input));
 	//	In->prev = NULL;
-		int i,err,maxlvl;
+		int i=0,err,maxlvl;
+		char ch=line[i];
 /* Pretty sure my beautiful conditional operator is no longer necessary
 *  :'-( - OHR
 */
 //		int size_in = (MAX_INPUT>(sizeof(line)))?MAX_INPUT:sizeof(line);
-		printf("Debug : Cmd = %s\n\n",line);
+		while(ch==' '){
+			i++;
+			ch = line[i];
+		}
+		printf("Debug : ch = %c\n",ch);
+		if(ch == '#'){
+		// Comment
+			continue;
+		}		
 		// Build the command stack
+		Input *In = (Input *) malloc (sizeof(Input));
 		In = build(In,line);
 	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 		In = parse(In,&Player,&PlayerSize);
