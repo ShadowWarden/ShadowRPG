@@ -26,6 +26,7 @@ State * Titles;
 int main(int argc, char ** argv){
 	/* Declarations */
 	char line[MAX_INPUT];
+//	char ** result;
 //	char input[MAX_INPUT];
 	int Fsize;
 	State *Player;
@@ -42,21 +43,17 @@ int main(int argc, char ** argv){
 	
 	build_states_test(state_in);
 	dump_states_test();
-	add_state_to_player(2,&Player,&PlayerSize);
+//	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	while(fgets(line,MAX_INPUT,fin)){
 		Input *In = (Input *) malloc (sizeof(Input));
 	//	In->prev = NULL;
 		int i,err,maxlvl;
-	// Pretty sure my beautiful conditional operator is no longer necessary
-	// :'-( - OHR
-		int size_in = (MAX_INPUT>(sizeof(line)))?MAX_INPUT:sizeof(line);
-		printf("Debug : Cmd = %s\n\n",line);
-/*		for(i=0;i<size_in;i++){
-			input[i] = argv[1][i];	
-		}
-		input[size_in]='\0';
+/* Pretty sure my beautiful conditional operator is no longer necessary
+*  :'-( - OHR
 */
+//		int size_in = (MAX_INPUT>(sizeof(line)))?MAX_INPUT:sizeof(line);
+		printf("Debug : Cmd = %s\n\n",line);
 		// Build the command stack
 		In = build(In,line);
 	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);

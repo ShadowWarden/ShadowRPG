@@ -1,2 +1,3 @@
 addttl(1)
-all(all(ttl(1),ttl(2)))
+addttl(2)
+all(some(ttl(1),ttl(2),2))
