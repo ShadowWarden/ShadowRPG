@@ -28,7 +28,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 * account for all possible corner cases. See debug.txt
 * -- OHR
 */
-	char a[20] = "Result_";
+//	char a[20] = "Result_";
 	printf("Debug : Entered Evaluate\n");
 	printf("Debug : Printing arguments\n");
 	print(*args);
@@ -49,9 +49,10 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 			strcpy(In->name,"true");	
 		}
 		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
-	}else if(EQSTR(In->name,"one")){
-		printf("Debug : Command is 'one'\n");
+	}else if(EQSTR(In->name,"some")){
+		printf("Debug : Command is 'some'\n");
 		int flag = 0;
+		int lim = atoi(args->name);
 		do{
 			if(EQSTR(args->name,"true")){
 				flag++;
@@ -59,7 +60,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 			}
 			args = args->prev;	
 		}while(args!=NULL);
-		if(flag==1){
+		if(flag==lim){
 			strcpy(In->name,"true");	
 		}else{
 			strcpy(In->name,"false");		

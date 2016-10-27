@@ -18,45 +18,63 @@
 #include <stdlib.h>
 #include "kardinal.h"
 
-#define MAX_INPUT 100
+#define MAX_INPUT 256
 
 int TitleSize;
 State * Titles;
 
 int main(int argc, char ** argv){
-	char input[100];
+	/* Declarations */
+	char line[MAX_INPUT];
+//	char ** result;
+//	char input[MAX_INPUT];
+	int Fsize;
 	State *Player;
 	int PlayerSize = 0;
+	
 	if(argc<3){
 		printf("2 input parameters needed!\n");
 		exit(1);
 	}
-	FILE * state_in = fopen(argv[2],"r");
+	FILE * state_in = fopen(argv[2],"r"),
+	     * fin = fopen(argv[1],"r");
+	Fsize = getsize(fin);
+
 	
 	build_states_test(state_in);
 	dump_states_test();
-	add_state_to_player(2,&Player,&PlayerSize);
+//	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
-	Input *In = (Input *) malloc (sizeof(Input));
-//	In->prev = NULL;
-	int i,err,maxlvl;
-	int size_in = (MAX_INPUT>(sizeof(argv[1])))?MAX_INPUT:sizeof(argv[i]);
-	printf("Debug : Cmd = %s\n\n",argv[1]);
-	for(i=0;i<size_in;i++){
-		input[i] = argv[1][i];	
-	}
-	input[size_in]='\0';
-	// Build the command stack
-	In = build(In,input);
-//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-	In = parse(In,&Player,&PlayerSize);
-	printf("Debug : Command stack after parse\n");
-	print(*In);
-	printf("\nDebug : Final Result\n");
-	print_final(*In);
-//	scanf("%c",&junk);	
-	print_player_state(Player,PlayerSize);
-	Free(In);
+	while(fgets(line,MAX_INPUT,fin)){
+	//	In->prev = NULL;
+		int i=0,err,maxlvl;
+		char ch=line[i];
+/* Pretty sure my beautiful conditional operator is no longer necessary
+*  :'-( - OHR
+*/
+//		int size_in = (MAX_INPUT>(sizeof(line)))?MAX_INPUT:sizeof(line);
+		while(ch==' '){
+			i++;
+			ch = line[i];
+		}
+		printf("Debug : ch = %c\n",ch);
+		if(ch == '#'){
+		// Comment
+			continue;
+		}		
+		// Build the command stack
+		Input *In = (Input *) malloc (sizeof(Input));
+		In = build(In,line);
+	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
+		In = parse(In,&Player,&PlayerSize);
+		printf("Debug : Command stack after parse\n");
+		print(*In);
+		printf("\nDebug : Final Result\n");
+		print_final(*In);
+	//	scanf("%c",&junk);	
+		print_player_state(Player,PlayerSize);
+		Free(In);
+	}	
 	free(Titles);
 	free(Player);
 	fclose(state_in);

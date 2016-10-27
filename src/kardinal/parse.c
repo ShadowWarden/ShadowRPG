@@ -32,7 +32,7 @@ int freeform_new(Input **In, Input cur, int pos){
 	new->type = cur.type;
 	strcpy(new->name,cur.name);
 	new->prev = *In;
-	new->pos = pos;
+//	new->pos = pos;
 	*In = new;
 //	printf("Debug : %d : %s : %d : %d\n",cur.lvl,cur.name,cur.type,pos);	
 	return 0;

@@ -22,7 +22,7 @@ struct Input{
 	int type;     // 0 = Arg  ;  1 = Var
 	int lvl;
 	struct Input * prev;
-	int pos;
+//	int pos;
 };
 
 typedef struct Input Input;
@@ -37,6 +37,7 @@ int evaluate(Input *, Input *, State **, int *);
 int build_states_test(FILE *);
 int add_state_to_player(int, State **, int *);
 int print_player_state(State *, int);
+int getsize(FILE *);
 
 // Extern variables
 extern State * Titles;
