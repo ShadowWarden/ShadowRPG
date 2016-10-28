@@ -19,6 +19,7 @@
 */
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include "shadowengine.h"
 
@@ -27,43 +28,57 @@ const int SCREEN_HEIGHT = 480;
 
 int main(int argc, char ** argv){
 
-	SDL_Window* window = NULL;
-	SDL_Renderer* renderer = NULL;
-	SDL_Texture* texture = NULL;
+
+	// As of now we support 128 different textures i.e ASCII Characters
+	// Screen size is 640 * 280 and each square is 20 X 20
+	SDL_Window* window;
+	SDL_Renderer* renderer;	
+	SDL_Texture* texture[128];
+	SDL_Rect rect[24][32];
     
     SDL_Surface* screenSurface = NULL;
 
-    if( SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if( SDL_Init(SDL_INIT_VIDEO) < 0){
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     }
-    else {
+    else{
         //Create window
         window = SDL_CreateWindow( "Shadow RPG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-        if(window == NULL) {
+        if(window == NULL){
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError());
         }
-        else {
+        else{
             
         	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-            screenSurface = SDL_GetWindowSurface( window);
 
+        	texture[0] = IMG_LoadTexture(renderer, "grass.png");
+
+        	for (int i = 0; i < 20; i++){
+        		rect[0][i].x = i * 20;
+        		rect[0][i].y = 0;
+        		rect[0][i].w = 20;
+        		rect[0][i].h = 20;	
             
-            SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-            
+	            SDL_RenderCopy(renderer, texture[0], NULL, &rect[0][i]);
+	            
+	            SDL_RenderPresent(renderer);
+
+        	}
+        	
+
+        	
+
             SDL_UpdateWindowSurface(window);
 
-            SDL_Delay(3000);
+            SDL_Delay(30000);
            
         }
     }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    window = NULL;
-    renderer = NULL;
-
     SDL_Quit();
-    //IMG_Quit();
+    IMG_Quit();
 
     return 0;
 }
