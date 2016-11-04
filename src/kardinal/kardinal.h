@@ -9,6 +9,7 @@
 *  or go online to <http://www.gnu.org/licenses>
 *  
 *  Any redistribution of this code must contain this header in its entirety
+*
 */
 
 struct State{
@@ -25,8 +26,17 @@ struct Input{
 //	int pos;
 };
 
+struct Var{
+	unsigned int id;
+	char name[20];
+	void * att;
+	int isassigned;
+	int type;
+};
+
 typedef struct Input Input;
 typedef struct State State;
+typedef struct Var Var;
 
 Input * build(Input *, char *);
 void Free(Input *);
@@ -35,6 +45,7 @@ void print_final(Input );
 Input * parse(Input *, State **, int *);
 int evaluate(Input *, Input *, State **, int *);
 int build_states_test(FILE *);
+int dump_states_test();
 int add_state_to_player(int, State **, int *);
 int print_player_state(State *, int);
 int getsize(FILE *);

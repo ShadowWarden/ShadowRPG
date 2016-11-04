@@ -216,13 +216,9 @@ void sequential_print(Input *In, char *name){
 
 Input * parse(Input * In, State ** Player, int *PlayerSize){
 	int i,j;
-//	int size_argsold = 0;
 	int maxlvl = find_maxlvl(*In);
-//	printf("Debug : maxlvl = %d\n",maxlvl);	
-//	int curlvl = In->lvl;
 	int pos = 0;	
 	Input *argsold = NULL;
-//	Input *args = NULL;
 	Input *old = In;
 	Input *cur = In->prev;
 	int curlvl = old->lvl; 
