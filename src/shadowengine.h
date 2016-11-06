@@ -100,7 +100,6 @@ typedef struct{
 
 
 // Function declarations
-int print_map(Map);
 int map_read(FILE *,Map*);
 int read_chars(Char *);
 int place_on_map(Char, Map *);
