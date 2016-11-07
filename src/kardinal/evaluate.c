@@ -20,13 +20,17 @@
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
-/* Dummy evaluate function. Must be updated in the next few iterations. 
-* Perhaps a starting project for NearlyHeadless?
-* At present, it does 'all' (universal and), 'one' (exactly one true) and 'not' 
-* - seems to work fine, although we need to come up with test cases that
-* account for all possible corner cases. See debug.txt
-* -- OHR
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Var ** Vars, int * VarSize){
+/* At present, it works. We have a few different thigns that evaluate can do. The three things I
+*  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
+*  the code so that this function looks like 
+*  if(EQSTR(In->name,<command>)){
+*	<initialization of appropriate variables>  
+*	<command>(<args>);
+*  }
+*  If NearlyHeadless understands the code by the end of the week, then this should really be something
+*  that he should do. I'll do it otherwise - but right now, I'm only thinking about variable support
+*  -- OHR
 */
 //	char a[20] = "Result_";
 	printf("Debug : Entered Evaluate\n");
@@ -106,11 +110,36 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 	}else if(EQSTR(In->name,"addttl")){
 /* Again. This only accepts exactly one argument. Error checks
 */
-		int i;
 		add_state_to_player(atoi(args->name),Player,PlayerSize);
 		printf("Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
 		strcpy(In->name,"true");			
 	}
+/*	else if(EQSTR(In->name,"setvar")){
+* This will define and set variables. Once this is done, we essentially have a programming language  
+*  Ofc, we need to define loops and conditionals, but otherwise, we've got it all
+*  setvar(varname,type,value)
+*
+		*VarSize+=1;
+		if(*VarSize > 1)
+			*Vars = realloc(*Vars,(*VarSize)*sizeof(Var));
+		else
+			*Vars = (Var *) malloc (sizeof(Var));
+		Input * tmp1=args->prev;  // Holds 'type'
+		Input * tmp2=tmp1->prev;  // Holds 'varname'
+		char * value = args->name;
+		char * name = tmp2->name;
+		char * type = tmp1->name;
+// I'm setting size to 1 for now. We'll deal with arrays later, if needed
+		(*Var)[VarSize-1].size = 1;
+		if(EQSTR(type,"int")){
+// Ugh.. Too many pointers. Can't think of an easier way to do this though
+			(*Vars)[i].att = (int *) malloc ((*Vars)[VarSize-1].size*sizeof(int));
+			*((*Vars)[i].att) = atoi(value);
+		}
+			
+
+	}
+*/
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 } 
