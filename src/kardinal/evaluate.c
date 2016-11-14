@@ -20,7 +20,7 @@
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Var ** Vars, int * VarSize){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 /* At present, it works. We have a few different thigns that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
