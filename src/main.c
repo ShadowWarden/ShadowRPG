@@ -31,10 +31,10 @@ const char* MAP_DIR = "../resources/maps/"; // concatenate map instead of having
 
 // TODO:- Pass pointers instead of arrays and free memory as well
 void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer*);
-void print_map(char[], SDL_Texture *textures_holder[], SDL_Renderer*, SDL_Rect[48][64]);
+void print_map(char*, SDL_Texture *textures_holder[], SDL_Renderer*, SDL_Rect[48][64]);
 void get_input(SDL_Window* window);
 
-int main(int argc, char ** argv){
+int main(int argc, char **argv){
 
 
 	// As of now we support 128 different textures i.e ASCII Characters
@@ -63,9 +63,7 @@ int main(int argc, char ** argv){
         else{
             
         	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-        	load_all_textures(textures_holder, renderer);
-
-        	print_map("test.map", textures_holder, renderer, rect);
+        	load_all_textures(textures_holder, renderer);print_map("test.map", textures_holder, renderer, rect);
             SDL_UpdateWindowSurface(window);
            
         }
@@ -95,44 +93,71 @@ void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer* renderer){
 	textures_holder[52] = IMG_LoadTexture(renderer, "../resources/textures/carbon.png");
 }
 
-void print_map(char map[], SDL_Texture *textures_holder[], SDL_Renderer* renderer, SDL_Rect rect[48][64]){
+void print_map(char *map, SDL_Texture *textures_holder[], SDL_Renderer* renderer, SDL_Rect rect[48][64]){
 
+	// Read the max dimensions from the first two lines and
+	// then allocate a 2-D array and continue from there
+	
 	FILE *fin = fopen("../resources/maps/test.map", "r");
-	int map_element, row = 0, col = 0;
+	int row = 0, col = 0, row_count = 0, col_count = 0;
+	unsigned char map_element;
+	
+	fscanf(fin, "%d %d", &row_count, &col_count);
+	// Skipping the new line character after the map dimensions
+	fgetc(fin);
+
+
+	// Possible improvements:- Use linked lists in case the map
+	// is scarely filled
+	unsigned char map_representation[row_count][col_count];
 
 	while((map_element = fgetc(fin)) != EOF){
 
-		
-		// If it's a new line character go the next row and fill everything in this row with an empty rectangle
+		// Code to directly render to map
+	
+		// // If it's a new line character go the next row and fill everything in this row with an empty rectangle
+		// if (map_element == 10){
+
+		// 	for (; col < col_count; col++) {
+		// 		rect[row][col].x = col * 10;
+		// 		rect[row][col].y = row * 10;
+		// 		rect[row][col].w = 10;
+		// 		rect[row][col].h = 10;
+
+		// 		//TODO:- something to these empty blocks soon. Probably fill it with a cross or something
+		// 	}
+
+		// 	row++;
+		// 	col = 0;
+
+		// }
+		// else{
+
+		// 	rect[row][col].x = col * 10;
+		// 	rect[row][col].y = row * 10;
+		// 	rect[row][col].w = 10;
+		// 	rect[row][col].h = 10;
+		// 	SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &rect[row][col]);        
+	    //     SDL_RenderPresent(renderer);
+	    //     col++;
+
+		// }
+
 		if (map_element == 10){
-
-			for (; col < 64; col++) {
-				rect[row][col].x = col * 10;
-				rect[row][col].y = row * 10;
-				rect[row][col].w = 10;
-				rect[row][col].h = 10;
-
-				//TODO:- something to these empty blocks soon. Probably fill it with a cross or something
-			}
-
-			row++;
-			col = 0;
-
+			row++; col = 0;
 		}
 		else{
-
-			rect[row][col].x = col * 10;
-			rect[row][col].y = row * 10;
-			rect[row][col].w = 10;
-			rect[row][col].h = 10;
-			SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &rect[row][col]);        
-	        SDL_RenderPresent(renderer);
-	        col++;
-
+			map_representation[row][col] = map_element;
+			col++;
 		}
 	}
 
 	fclose(fin);
+
+	// Test printing the map
+	for (int i = 0; i < row_count; i++)
+		for (int j = 0; j < col_count; j++)
+			printf("%c", map_representation[i][j]);
 
 }
 
