@@ -3,6 +3,8 @@
 *  omkar.ramachandran@colorado.edu
 *
 *  (Sign in your name here if you make changes)
+*  Vishnu Sharma
+*  vishnu.rk1995@gmail.com
 *  This file contains routine that are specifically meant for creation and 
 *  function of the player character. For NPCs, use npc.c. This also includes
 *  definitions character encumberance, etc.
@@ -25,7 +27,7 @@
 
 int read_chars(Char *C){
 	int i;
-	char path[]="./data/character/char-1001.ch";
+	char path[]="../data/character/char-1001.ch";//Originally ./data/
 	FILE *fin;
 	if(!(fin = fopen(path,"r"))){
 		return 1;
