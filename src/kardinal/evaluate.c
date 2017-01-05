@@ -117,8 +117,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		printf("Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
 		strcpy(In->name,"true");			
 	}
-/*	else if(EQSTR(In->name,"setvar")){
-* This will define and set variables. Once this is done, we essentially have a programming language  
+/** This will define and set variables. Once this is done, we essentially have a programming language  
 *  Ofc, we need to define loops and conditionals, but otherwise, we've got it all
 *  setvar(varname,type,value)
 *
