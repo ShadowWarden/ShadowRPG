@@ -27,11 +27,11 @@ struct Input{
 };
 
 struct Var{
-	unsigned int id;
-	char name[20];
-	void * att;
-	int isassigned;
-	int type;
+	char varname[20];
+	char type[7];
+	char value[8];
+	Var *prev;
+	Var *selfpointer;
 };
 
 typedef struct Input Input;

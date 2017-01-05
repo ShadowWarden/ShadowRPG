@@ -23,14 +23,6 @@
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
-struct VariableDec{
-	char varname[20];
-	char type[7];
-	char value[8];
-	VariableDec *prev;
-	VariableDec *selfpointer;
-}
-
 int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec* Vars){
 /* At present, it works. We have a few different thigns that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
@@ -152,25 +144,24 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}
 */
 	else if(EQSTR(In->name, "setvar")){
-		VariableDec *Var = (VariableDec*)malloc(sizeof(VariableDec);
-		Var->prev=Vars->selfpointer;
-		Vars=Var;
-		//Extract Args here
-		Var->varname = arg->name;
+		Var *var = (Var*)malloc(sizeof(Var);
+		var->prev=vars->selfpointer;
+		vars=var;
+		var->varname = arg->name;
 		arg=arg+1;
-		Var->type = arg->name;
+		var->type = arg->name;
 		arg=arg+1;
-		Var->value = arg->name;
+		var->value = arg->name;
 		arg=arg+1;
-		switch(Var->type){
-			case "char":Var->varname=(char*)malloc(sizeof(char));break;
-			case "int":Var->varname=(int*)malloc(sizeof(int));break;
-			case "float":Var->varname=(float*)malloc(sizeof(float));break;
-			case "double":Var->varname=(double*)malloc(sizeof(double));break;
-			default: Var->varname=NULL;
+		switch(var->type){
+			case "char":var->varname=(char*)malloc(sizeof(char));break;
+			case "int":var->varname=(int*)malloc(sizeof(int));break;
+			case "float":var->varname=(float*)malloc(sizeof(float));break;
+			case "double":var->varname=(double*)malloc(sizeof(double));break;
+			default: var->varname=NULL;
 		}
-		if(strcmp(type,"char") strcpy(varname,Var->value);
-		else (Var->varname)=atoi(Var->value);
+		if(strcmp(type,"char") strcpy(varname,var->value);
+		else (var->varname)=atoi(var->value);
 	}	
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
