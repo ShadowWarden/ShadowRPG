@@ -154,12 +154,12 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		arg=arg+1;
 		var->value = arg->name;
 		arg=arg+1;
-		switch(var->type){
+		switch (var->type) {
 			case "char":var->varname=(char*)malloc(sizeof(char));break;
 			case "int":var->varname=(int*)malloc(sizeof(int));break;
 			case "float":var->varname=(float*)malloc(sizeof(float));break;
 			case "double":var->varname=(double*)malloc(sizeof(double));break;
-			default: var->varname=NULL;
+			default: var->varname=NULL;break;
 		}
 		if(strcmp(type,"char") strcpy(varname,var->value);
 		else (varname)=atoi(var->value);
