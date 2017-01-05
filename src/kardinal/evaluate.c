@@ -23,7 +23,7 @@
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec* Vars){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 /* At present, it works. We have a few different thigns that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -120,7 +120,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 /*	else if(EQSTR(In->name,"setvar")){
 * This will define and set variables. Once this is done, we essentially have a programming language  
 *  Ofc, we need to define loops and conditionals, but otherwise, we've got it all
-*  setvar(varname,type,value)
+*  setvar(varname,type,value)
 *
 		*VarSize+=1;
 		if(*VarSize > 1)
@@ -143,26 +143,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 
 	}
 */
-	else if(EQSTR(In->name, "setvar")){
-		Var *var = (Var*)malloc(sizeof(Var);
-		var->prev=vars->selfpointer;
-		vars=var;
-		var->varname = arg->name;
-		arg=arg+1;
-		var->type = arg->name;
-		arg=arg+1;
-		var->value = arg->name;
-		arg=arg+1;
-		switch(var->type){
-			case "char":var->varname=(char*)malloc(sizeof(char));break;
-			case "int":var->varname=(int*)malloc(sizeof(int));break;
-			case "float":var->varname=(float*)malloc(sizeof(float));break;
-			case "double":var->varname=(double*)malloc(sizeof(double));break;
-			default: var->varname=NULL;
-		}
-		if(strcmp(type,"char") strcpy(varname,var->value);
-		else (var->varname)=atoi(var->value);
-	}	
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
-}
+} 
