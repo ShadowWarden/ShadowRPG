@@ -68,7 +68,7 @@ Input * build(Input * In, char *in){
 //		Input * cmd;
 		if(ch == '('){
 /* If the buffer character is a (, then the word that came before it has 
-*  to be an argument (Rule 1). Hence, we give it type 1. We check for 
+*  to be a command (Rule 1). Hence, we give it type 1. We check for 
 *  flag==0 so that we can assign Node->prev to NULL (this is a bit clunky
 *  needs to be improved)
 */			

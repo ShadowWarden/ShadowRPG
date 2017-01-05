@@ -1,0 +1,1 @@
+File move.c only changes the current location to what exists one block away in a specific direction. It doesn't move the rest of the map!

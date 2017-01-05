@@ -5,6 +5,8 @@
 *  Abhirath Mahipal
 *  abhirathmahipal@hotmail.com
 *
+*  Vishnu Sharma
+*  vishnu.rk1995@gmail.com
 *
 *  (Sign in your name here if you make changes)
 *  Everything has to come together here. No big function definitions here. 
@@ -23,14 +25,14 @@
 #include "shadowengine.h"
 
 int main(int argc, char ** argv){
-	// Declerations
+	// Declarations
 	Map M;
 	Char C;
 	FILE *fin;
 	char input;	
 
 	// File pointer init
-	fin = fopen("./resources/maps/test.map","r");
+	fin = fopen("../resources/maps/test.map","r"); //Changed from ./resources/
 	map_read(fin,&M);
 	read_chars(&C);
 //	printf("%d\n",ret);
