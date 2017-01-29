@@ -149,6 +149,10 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		Vars=var;
 		//Extract Args here
 		var->varname = arg->name;
+		/* Wont work. args is a linked list! 
+		*  Use args=args->prev!
+		*  -- OHR
+		*/
 		arg=arg+1;
 		var->type = arg->name;
 		arg=arg+1;
