@@ -25,11 +25,11 @@
 #include <string.h>
 #include <stdbool.h>
 
+// TODO create an enum to map numbers with texture names.
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const char* MAP_DIR = "../resources/maps/"; // concatenate map instead of having to type it everytime
 
-// TODO:- Pass pointers instead of arrays and free memory as well
 void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer*);
 void print_map(char*, SDL_Texture *textures_holder[], SDL_Renderer*, SDL_Rect[48][64]);
 void get_input(SDL_Window* window);
@@ -38,7 +38,6 @@ int main(int argc, char **argv){
 
 
 	// As of now we support 128 different textures i.e ASCII Characters
-	// Screen size is 640 * 280 and each square is 20 X 20
 
 	// should we move the relevant stuff to the global scope?
 	SDL_Window* window;
@@ -63,7 +62,8 @@ int main(int argc, char **argv){
         else{
             
         	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-        	load_all_textures(textures_holder, renderer);print_map("test.map", textures_holder, renderer, rect);
+        	load_all_textures(textures_holder, renderer);
+			print_map("test.map", textures_holder, renderer, rect);
             SDL_UpdateWindowSurface(window);
            
         }
@@ -99,65 +99,63 @@ void print_map(char *map, SDL_Texture *textures_holder[], SDL_Renderer* renderer
 	// then allocate a 2-D array and continue from there
 	
 	FILE *fin = fopen("../resources/maps/test.map", "r");
-	int row = 0, col = 0, row_count = 0, col_count = 0;
-	unsigned char map_element;
+	int row_count = 0, col_count = 0;
+	short int map_element;
 	
-	fscanf(fin, "%d %d", &row_count, &col_count);
-	// Skipping the new line character after the map dimensions
-	fgetc(fin);
-
-
+	fscanf(fin, "%d %d\n", &row_count, &col_count);
 	// Possible improvements:- Use linked lists in case the map
 	// is scarely filled
-	unsigned char map_representation[row_count][col_count];
-
-	while((map_element = fgetc(fin)) != EOF){
-
-		// Code to directly render to map
+	short int map_representation[row_count][col_count];
 	
-		// // If it's a new line character go the next row and fill everything in this row with an empty rectangle
-		// if (map_element == 10){
-
-		// 	for (; col < col_count; col++) {
-		// 		rect[row][col].x = col * 10;
-		// 		rect[row][col].y = row * 10;
-		// 		rect[row][col].w = 10;
-		// 		rect[row][col].h = 10;
-
-		// 		//TODO:- something to these empty blocks soon. Probably fill it with a cross or something
-		// 	}
-
-		// 	row++;
-		// 	col = 0;
-
-		// }
-		// else{
-
-		// 	rect[row][col].x = col * 10;
-		// 	rect[row][col].y = row * 10;
-		// 	rect[row][col].w = 10;
-		// 	rect[row][col].h = 10;
-		// 	SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &rect[row][col]);        
-	    //     SDL_RenderPresent(renderer);
-	    //     col++;
-
-		// }
-
+	int row = 0, col = 0;
+	while((map_element = fgetc(fin)) != EOF){	
+		// Reading from file and storing it in a data structure
 		if (map_element == 10){
+			while (col < col_count)
+				map_representation[row][col++] = '0';
 			row++; col = 0;
 		}
 		else{
-			map_representation[row][col] = map_element;
-			col++;
+			map_representation[row][col++] = map_element;
 		}
 	}
+	// filling the last row with zeroes in case it's empty
+	while(col < col_count)
+		map_representation[row][col++] = '0';
 
 	fclose(fin);
 
+	for (int row_iter = 0; row_iter < row_count; row_iter++) {
+		for (int col_iter = 0; col_iter < col_count; col_iter++) {
+			rect[row_iter][col_iter].x = col_iter * 10;
+			rect[row_iter][col_iter].y = row_iter * 10;
+			rect[row_iter][col_iter].w = 10;
+			rect[row_iter][col_iter].h = 10;
+
+			map_element = map_representation[row_iter][col_iter];
+			switch (map_element) {
+				case '0':
+					break;
+
+				default:
+					SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &rect[row_iter][col_iter]);        
+	  			    SDL_RenderPresent(renderer);
+			}			
+
+		}
+	}
+
+		
+
 	// Test printing the map
-	for (int i = 0; i < row_count; i++)
+	FILE *fout = fopen("test.txt", "w");
+	fprintf(fout, "%d %d\n", row_count, col_count);
+	for (int i = 0; i < row_count; i++){
 		for (int j = 0; j < col_count; j++)
-			printf("%c", map_representation[i][j]);
+			fprintf(fout, "%c", map_representation[i][j]);
+        fprintf(fout,"\n");
+	}
+		
 
 }
 
