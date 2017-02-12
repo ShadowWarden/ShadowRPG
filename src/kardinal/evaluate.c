@@ -144,25 +144,24 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}
 */
 	else if(EQSTR(In->name, "setvar")){
-		Var *var = (Var*)malloc(sizeof(Var);
+		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec);
 		var->prev=Vars->selfpointer;
 		Vars=var;
 		//Extract Args here
 		var->varname = arg->name;
-		arg=arg+1;
+		arg=arg->prev;
 		var->type = arg->name;
-		arg=arg+1;
-		var->value = arg->name;
-		arg=arg+1;
+		arg=arg->prev;
 		switch (var->type) {
-			case "char":var->varname=(char*)malloc(sizeof(char));break;
-			case "int":var->varname=(int*)malloc(sizeof(int));break;
-			case "float":var->varname=(float*)malloc(sizeof(float));break;
-			case "double":var->varname=(double*)malloc(sizeof(double));break;
+			case "string":var->varname=(char*)malloc(sizeof(char))*strlen(var->value);size=strlen(var->value);break;
+			case "int":var->varname=(int*)malloc(sizeof(int));size=1;break;
+			case "float":var->varname=(float*)malloc(sizeof(float));size=1;break;
+			case "double":var->varname=(double*)malloc(sizeof(double));size=1;break;
 			default: var->varname=NULL;break;
 		}
-		if(strcmp(type,"char") strcpy(varname,var->value);
-		else (varname)=atoi(var->value);
+		if(strcmp(type,"string") strcpy(var->varname,arg->value);
+		else (varname)=atoi(arg->value);
+		arg=arg->prev;
 	}	
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
