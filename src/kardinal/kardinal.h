@@ -26,7 +26,7 @@ struct Input{
 //	int pos;
 };
 
-struct Var{
+struct VariableDec{
 	char varname[20];
 	char type[7];
 	char value[8];
