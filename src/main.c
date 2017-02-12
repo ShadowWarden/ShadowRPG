@@ -26,12 +26,25 @@
 #include <stdbool.h>
 
 // TODO create an enum to map numbers with texture names.
+
+// Deciding each tile's width and heigh here. It can be changed in one shot in case we 
+// decide to changed it later on
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+const int WIDTH_BLOCKS = 64;
+const int HEIGHT_BLOCKS = 48;
+const int TEXTURE_COUNT = 128; // right now equal to ASCII chars
+const short int MAP_BUFFER[2000][2000]; // holding a temporary buffer of 2K x 2k map tiles so that file operations are reduced
 const char* MAP_DIR = "../resources/maps/"; // concatenate map instead of having to type it everytime
 
+
+// print map only handles printing. not concerned with the map text file. Have to change it
+// get_map_content gets the current position of the player and gets the needed 1000 * 1000 tiles everytime
+// the user approached the end
 void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer*);
-void print_map(char*, SDL_Texture *textures_holder[], SDL_Renderer*, SDL_Rect[48][64]);
+void get_map_content(char* map_file, int current_x, int current_y);
+void print_map(char*, SDL_Texture *textures_holder[], SDL_Renderer*, SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]);
 void get_input(SDL_Window* window);
 
 int main(int argc, char **argv){
@@ -42,8 +55,9 @@ int main(int argc, char **argv){
 	// should we move the relevant stuff to the global scope?
 	SDL_Window* window;
 	SDL_Renderer* renderer;	
-	SDL_Texture* textures_holder[128];
-	SDL_Rect rect[48][64];
+	SDL_Texture* textures_holder[TEXTURE_COUNT];
+	SDL_Rect MAP_DISPLAY[WIDTH_BLOCKS][HEIGHT_BLOCKS];
+	
 
     SDL_Surface* screenSurface = NULL;
 
@@ -63,7 +77,7 @@ int main(int argc, char **argv){
             
         	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
         	load_all_textures(textures_holder, renderer);
-			print_map("test.map", textures_holder, renderer, rect);
+			print_map("test.map", textures_holder, renderer, MAP_DISPLAY);
             SDL_UpdateWindowSurface(window);
            
         }
@@ -93,7 +107,7 @@ void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer* renderer){
 	textures_holder[52] = IMG_LoadTexture(renderer, "../resources/textures/carbon.png");
 }
 
-void print_map(char *map, SDL_Texture *textures_holder[], SDL_Renderer* renderer, SDL_Rect rect[48][64]){
+void print_map(char *map, SDL_Texture *textures_holder[], SDL_Renderer* renderer, SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]){
 
 	// Read the max dimensions from the first two lines and
 	// then allocate a 2-D array and continue from there
@@ -127,10 +141,10 @@ void print_map(char *map, SDL_Texture *textures_holder[], SDL_Renderer* renderer
 
 	for (int row_iter = 0; row_iter < row_count; row_iter++) {
 		for (int col_iter = 0; col_iter < col_count; col_iter++) {
-			rect[row_iter][col_iter].x = col_iter * 10;
-			rect[row_iter][col_iter].y = row_iter * 10;
-			rect[row_iter][col_iter].w = 10;
-			rect[row_iter][col_iter].h = 10;
+			MAP_DISPLAY[row_iter][col_iter].x = col_iter * 10;
+			MAP_DISPLAY[row_iter][col_iter].y = row_iter * 10;
+			MAP_DISPLAY[row_iter][col_iter].w = 10;
+			MAP_DISPLAY[row_iter][col_iter].h = 10;
 
 			map_element = map_representation[row_iter][col_iter];
 			switch (map_element) {
@@ -138,7 +152,7 @@ void print_map(char *map, SDL_Texture *textures_holder[], SDL_Renderer* renderer
 					break;
 
 				default:
-					SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &rect[row_iter][col_iter]);        
+					SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &MAP_DISPLAY[row_iter][col_iter]);        
 	  			    SDL_RenderPresent(renderer);
 			}			
 
