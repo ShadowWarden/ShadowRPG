@@ -143,24 +143,24 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}
 */
 	else if(EQSTR(In->name, "setvar")){
-		Var *var = (Var*)malloc(sizeof(Var);
+		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec);
 		var->prev=vars->selfpointer;
-		vars=var;
+		var->selfpointer=var;
+		Vars=var;
 		var->varname = arg->name;
-		arg=arg+1;
+		arg=arg->prev;
 		var->type = arg->name;
-		arg=arg+1;
-		var->value = arg->name;
-		arg=arg+1;
+		arg=arg->prev;
 		switch(var->type){
-			case "char":var->varname=(char*)malloc(sizeof(char));break;
-			case "int":var->varname=(int*)malloc(sizeof(int));break;
-			case "float":var->varname=(float*)malloc(sizeof(float));break;
-			case "double":var->varname=(double*)malloc(sizeof(double));break;
-			default: var->varname=NULL;
+			case "string":var->varname=(char*)malloc(sizeof(char))*strlen(var->prev->name);var->size=strlen(var->prev->name);break;
+			case "int":var->varname=(int*)malloc(sizeof(int));var->size=1;break;
+			case "float":var->varname=(float*)malloc(sizeof(float));var->size=1;break;
+			case "double":var->varname=(double*)malloc(sizeof(double));var->size=1;break;
+			default: printf("Wrong Data Type")var->varname=NULL;
 		}
-		if(strcmp(type,"char") strcpy(varname,var->value);
-		else (var->varname)=atoi(var->value);
+		if(strcmp(type,"char") strcpy(car->varname,arg->name);
+		else (var->varname)=atoi(arg->name);
+		arg=arg->prev
 	}	
 	printf("Debug : Leaving Evaluate\n");
 	return 0;

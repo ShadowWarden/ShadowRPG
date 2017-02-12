@@ -30,6 +30,8 @@ struct VariableDec{
 	char varname[20];
 	char type[7];
 	char value[8];
+	int size;
+	int vartype; // 0=int, 1=float, 2=double, 3=string
 	Var *prev;
 	Var *selfpointer;
 };
