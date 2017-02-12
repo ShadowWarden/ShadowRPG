@@ -160,7 +160,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			default: var->varname=NULL;break;
 		}
 		if(strcmp(type,"string") strcpy(var->varname,arg->value);
-		else (varname)=atoi(arg->value);
+		else (var->varname)=atoi(arg->value);
 		arg=arg->prev;
 	}	
 	printf("Debug : Leaving Evaluate\n");
