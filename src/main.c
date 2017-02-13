@@ -38,8 +38,8 @@
 #define TEXTURE_COUNT 128 // right now equal to ASCII chars
 #define MAP_BUFFER_HEIGHT 2000
 #define MAP_BUFFER_WIDTH 2000
-int BUFFER_RELATIVE_TOP = 0;
-int BUFFER_RELATIVE_LEFT = 0;
+int BUFFER_RELATIVE_TOP = 0; // don't let it touch -1 or exceed the threshold
+int BUFFER_RELATIVE_LEFT = 0; // TODO:- Don't let it fall below 0 nor above BUFFER_WIDTH - WIDTH_BLOCKS
 short int MAP_BUFFER[MAP_BUFFER_HEIGHT][MAP_BUFFER_WIDTH]; // holding a temporary buffer of 2K x 2k map tiles so that file operations are reduced
 const char* MAP_DIR = "../resources/maps/"; // concatenate map instead of having to type it everytime
 int PLAYER_X = -1; // map isn't loaded yet
@@ -111,12 +111,14 @@ void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer* renderer){
 
 	// TODO find all files in the folder and load it one by one in the array
 	// shift textures holder and rendered to the global scope?
-
+	// TODO test performance between jpeg and png (also other different image formats)
 	textures_holder[49] = IMG_LoadTexture(renderer, "../resources/textures/grass.png");
 	textures_holder[50] = IMG_LoadTexture(renderer, "../resources/textures/env_grass_heather.png");
 	textures_holder[51] = IMG_LoadTexture(renderer, "../resources/textures/env_redclay.png");
 	textures_holder[52] = IMG_LoadTexture(renderer, "../resources/textures/carbon.png");
-	textures_holder[53] = IMG_LoadTexture(renderer, "../resources/textrues/water.png");
+	textures_holder[53] = IMG_LoadTexture(renderer, "../resources/textures/water.png");
+	textures_holder[54] = IMG_LoadTexture(renderer, "../resources/textures/snow.png");
+	textures_holder[55] = IMG_LoadTexture(renderer, "../resources/textures/brown_tiles.jpg");
 }
 
 void initialise_map(SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]) {
@@ -194,16 +196,6 @@ void load_map_buffer(char* map_file) {
 
 
 	fclose(fin);
-
-	// Test printing the map
-	FILE *fout = fopen("test.txt", "w");
-	//fprintf(fout, "%d %d\n", row_count, col_count);
-	for (int i = 0; i < MAP_BUFFER_WIDTH; i++){
-		for (int j = 0; j < MAP_BUFFER_WIDTH; j++)
-			fprintf(fout, "%c", MAP_BUFFER[i][j]);
-        fprintf(fout,"\n");
-	}
-
 }
 
 void get_input(SDL_Window *window){
