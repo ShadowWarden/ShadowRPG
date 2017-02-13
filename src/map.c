@@ -17,28 +17,3 @@
 #include <stdio.h>
 #include <string.h>
 #include "shadowengine.h"
-
-// int print_map(Map M){
-	
-// }
-
-// int map_read(FILE * fin,Map *M){
-// 	int i,j;
-	
-// 	fseek(fin,SEEK_SET,0);
-// 	for(i=0;i<     FILLDIMENSIONHERE DUH;i++){
-// 		for(j=0;j< XCOORDINATESHERE DUH;j++){
-// 			int cur = GRID_X*i+j;
-// 			int type;
-// 			fscanf(fin,"%c",&type);
-// 			// change texture accordingly
-// 			cur++;
-// 		}
-// 	}
-	
-// 	return 0;
-// }
-
-int print_debug(Map M){
-	// prints out the type of the texture (number/name whatever)
-}

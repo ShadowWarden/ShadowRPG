@@ -31,13 +31,15 @@
 // Deciding each tile's width and heigh here. It can be changed in one shot in case we 
 // decide to changed it later on
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-const int WIDTH_BLOCKS = 64;
-const int HEIGHT_BLOCKS = 48;
-const int TEXTURE_COUNT = 128; // right now equal to ASCII chars
-const int MAP_BUFFER_HEIGHT = 2000;
-const int MAP_BUFFER_WIDTH = 2000;
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+#define WIDTH_BLOCKS 64
+#define HEIGHT_BLOCKS 48
+#define TEXTURE_COUNT 128 // right now equal to ASCII chars
+#define MAP_BUFFER_HEIGHT 2000
+#define MAP_BUFFER_WIDTH 2000
+int BUFFER_RELATIVE_TOP = 0;
+int BUFFER_RELATIVE_LEFT = 0;
 short int MAP_BUFFER[MAP_BUFFER_HEIGHT][MAP_BUFFER_WIDTH]; // holding a temporary buffer of 2K x 2k map tiles so that file operations are reduced
 const char* MAP_DIR = "../resources/maps/"; // concatenate map instead of having to type it everytime
 int PLAYER_X = -1; // map isn't loaded yet
@@ -49,6 +51,7 @@ const char EMPTY_TILE = '0';
 // get_map_content gets the current position of the player and gets the needed 1000 * 1000 tiles everytime
 // the user approached the end
 void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer*);
+void initialise_map(SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]);
 void load_map_buffer(char* map_file);
 void print_map(SDL_Texture *textures_holder[], SDL_Renderer*, SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]);
 void get_input(SDL_Window* window);
@@ -62,7 +65,7 @@ int main(int argc, char **argv){
 	SDL_Window* window;
 	SDL_Renderer* renderer;	
 	SDL_Texture* textures_holder[TEXTURE_COUNT];
-	SDL_Rect MAP_DISPLAY[WIDTH_BLOCKS][HEIGHT_BLOCKS];
+	SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS];
 	
 
     SDL_Surface* screenSurface = NULL;
@@ -83,6 +86,7 @@ int main(int argc, char **argv){
             
         	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
         	load_all_textures(textures_holder, renderer);
+			initialise_map(MAP_DISPLAY);
 			print_map(textures_holder, renderer, MAP_DISPLAY);
             SDL_UpdateWindowSurface(window);
            
@@ -92,6 +96,7 @@ int main(int argc, char **argv){
     // main while loop
     while(true){
     	get_input(window);
+		print_map(textures_holder, renderer, MAP_DISPLAY);
     }
 
     SDL_DestroyRenderer(renderer);
@@ -111,26 +116,39 @@ void load_all_textures(SDL_Texture *textures_holder[], SDL_Renderer* renderer){
 	textures_holder[50] = IMG_LoadTexture(renderer, "../resources/textures/env_grass_heather.png");
 	textures_holder[51] = IMG_LoadTexture(renderer, "../resources/textures/env_redclay.png");
 	textures_holder[52] = IMG_LoadTexture(renderer, "../resources/textures/carbon.png");
+	textures_holder[53] = IMG_LoadTexture(renderer, "../resources/textrues/water.png");
 }
 
-void print_map(SDL_Texture *textures_holder[], SDL_Renderer* renderer, SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]){
-
-	for (int row_iter = 0; row_iter < row_count; row_iter++) {
-		for (int col_iter = 0; col_iter < col_count; col_iter++) {
+void initialise_map(SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]) {
+	// Setting the rectangle sizes and dimensions
+	for (int row_iter = 0; row_iter < HEIGHT_BLOCKS; row_iter++){
+		for (int col_iter = 0; col_iter < WIDTH_BLOCKS; col_iter++){
 			MAP_DISPLAY[row_iter][col_iter].x = col_iter * 10;
 			MAP_DISPLAY[row_iter][col_iter].y = row_iter * 10;
 			MAP_DISPLAY[row_iter][col_iter].w = 10;
 			MAP_DISPLAY[row_iter][col_iter].h = 10;
+		}
+	}
+}
 
-			map_element = map_representation[row_iter][col_iter];
-			switch (map_element) {
-				case EMPTY_TILE:
-					break;
+void print_map(SDL_Texture *textures_holder[], SDL_Renderer* renderer, SDL_Rect MAP_DISPLAY[HEIGHT_BLOCKS][WIDTH_BLOCKS]){
 
-				default:
-					SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &MAP_DISPLAY[row_iter][col_iter]);        
-	  			    SDL_RenderPresent(renderer);
-			}			
+	load_map_buffer("randomshitfornow");
+	short int map_element;
+
+	for (int row_iter = 0; row_iter < HEIGHT_BLOCKS; row_iter++) {
+		for (int col_iter = 0; col_iter < WIDTH_BLOCKS; col_iter++) {		
+
+			map_element = MAP_BUFFER[row_iter + BUFFER_RELATIVE_TOP][col_iter + BUFFER_RELATIVE_LEFT];
+			// could have used a switch case. But switch case labels have to be hard coded.
+			// We therefore cannot use EMPTY_TILE instead of '0' in a switch case
+			if (map_element == EMPTY_TILE) {
+				break;
+			}
+			else {
+				SDL_RenderCopy(renderer, textures_holder[map_element], NULL, &MAP_DISPLAY[row_iter][col_iter]);        
+	  			SDL_RenderPresent(renderer);
+			}				
 
 		}
 	}	
@@ -139,10 +157,12 @@ void print_map(SDL_Texture *textures_holder[], SDL_Renderer* renderer, SDL_Rect 
 
 void load_map_buffer(char* map_file) {
 
+	//TODO:- Check for change in map. right now just using the same test map
+
 	// Read the max dimensions from the first two lines and
 	// then allocate a 2-D array and continue from there
 	
-	FILE *fin = fopen("../resources/maps/test.map", "r");
+	FILE *fin = fopen("../resources/maps/test/2000x2000.map", "r");
 	int row_count = 0, col_count = 0;
 	short int map_element;
 	
@@ -177,7 +197,7 @@ void load_map_buffer(char* map_file) {
 
 	// Test printing the map
 	FILE *fout = fopen("test.txt", "w");
-	fprintf(fout, "%d %d\n", row_count, col_count);
+	//fprintf(fout, "%d %d\n", row_count, col_count);
 	for (int i = 0; i < MAP_BUFFER_WIDTH; i++){
 		for (int j = 0; j < MAP_BUFFER_WIDTH; j++)
 			fprintf(fout, "%c", MAP_BUFFER[i][j]);
@@ -205,22 +225,22 @@ void get_input(SDL_Window *window){
 
                     case SDLK_s:
                     case SDLK_DOWN:
-						PLAYER_Y--;
+						BUFFER_RELATIVE_TOP++;
                     break;
 
                     case SDLK_d:
                     case SDLK_RIGHT:
-						PLAYER_X++;
+						BUFFER_RELATIVE_LEFT++;
                     break;
 
                     case SDLK_a:
                     case SDLK_LEFT:
-						PLAYER_X--;
+						BUFFER_RELATIVE_LEFT--;
                     break;
 
                     case SDLK_w:
                     case SDLK_UP:
-						PLAYER_Y++;
+						BUFFER_RELATIVE_TOP--;
                     break;
 
                     case SDLK_r:
