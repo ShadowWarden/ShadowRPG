@@ -31,20 +31,20 @@ struct VariableDec{
 	char type[7];
 	char value[8];
 	int size; //Must be initialized  with 1 if no size is mentioned when accepting input from user.
-	Var *prev;
-	Var *selfpointer;
+	struct VariableDec *prev;
+	struct VariableDec *selfpointer;
 };
 
 typedef struct Input Input;
 typedef struct State State;
-typedef struct Var Var;
+typedef struct VariableDec VariableDec;
 
 Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 void print_final(Input );
 Input * parse(Input *, State **, int *);
-int evaluate(Input *, Input *, State **, int *);
+int evaluate(Input *, Input *, State **, int *, VariableDec *);
 int build_states_test(FILE *);
 int dump_states_test();
 int add_state_to_player(int, State **, int *);
