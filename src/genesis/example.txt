@@ -1,0 +1,2 @@
+Greetings!
+export SHADOwPATH=../home/omkar/programs/shadowengine/src/genesis
