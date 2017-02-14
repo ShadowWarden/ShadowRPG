@@ -26,12 +26,13 @@ struct Input{
 //	int pos;
 };
 
-struct Var{
-	unsigned int id;
-	char name[20];
-	void * att;
-	int isassigned;
-	int type;
+struct VariableDec{
+	char varname[20];
+	char type[7];
+	char value[8];
+	int size; //Must be initialized  with 1 if no size is mentioned when accepting input from user.
+	Var *prev;
+	Var *selfpointer;
 };
 
 typedef struct Input Input;
