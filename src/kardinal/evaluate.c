@@ -31,9 +31,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 *	<initialization of appropriate variables>  
 *	<command>(<args>);
 *  }
-*  If NearlyHeadless understands the code by the end of the week, then this should really be something
-*  that he should do. I'll do it otherwise - but right now, I'm only thinking about variable support
-*  -- OHR
 */
 //	char a[20] = "Result_";
 	printf("Debug : Entered Evaluate\n");
@@ -151,17 +148,33 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		arg=arg->prev;
 		var->type = arg->name;
 		arg=arg->prev;
-		switch(var->type){
-			case "string":var->varname=(char*)malloc(sizeof(char))*strlen(var->prev->name);var->size=strlen(var->prev->name);break;
-			case "int":var->varname=(int*)malloc(sizeof(int));var->size=1;break;
-			case "float":var->varname=(float*)malloc(sizeof(float));var->size=1;break;
-			case "double":var->varname=(double*)malloc(sizeof(double));var->size=1;break;
-			default: printf("Wrong Data Type")var->varname=NULL;
+		if (strcmpi(var->type, "string")==0){
+			var->varname=(char*)malloc(sizeof(char))*strlen(var->prev->name);
+			var->size=strlen(var->prev->name);
+			var->vartype=3;
+		}
+		else if(strcmpi(var->vartype,"int")){
+			var->varname=(int*)malloc(sizeof(int));
+			var->size=1;
+			var_>vartype=0;
+		}
+		else if	(strcmpi(var->type,"float")){
+			var->varname=(float*)malloc(sizeof(float));
+			var->size=1;
+			var->vartype=1;
+		}
+		else if (strcmpi(var->type,"double")){
+			var->varname=(double*)malloc(sizeof(double));
+			var->size=1;
+			var->vartype=2;
+		}
+		else {	
+			printf("Wrong Data Type")var->varname=NULL;
 		}
 		if(strcmp(type,"char") strcpy(car->varname,arg->name);
 		else (var->varname)=atoi(arg->name);
 		arg=arg->prev
-	}	
+	}
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }

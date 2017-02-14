@@ -32,8 +32,8 @@ struct VariableDec{
 	char value[8];
 	int size;
 	int vartype; // 0=int, 1=float, 2=double, 3=string
-	Var *prev;
-	Var *selfpointer;
+	VariableDec *prev;
+	VariableDec *selfpointer;
 };
 
 typedef struct Input Input;
