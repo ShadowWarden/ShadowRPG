@@ -20,8 +20,9 @@
 
 #define MAXBUF 100
 
-void header(){
-	printf("Debug : ");
+void Debug(FILE * debug, char * msg){
+	fseek(debug,SEEK_CUR,0);
+	fprintf(debug,"%s",msg);
 }
 
 int freeform_new(Input **In, Input cur, int pos){
@@ -61,7 +62,7 @@ Input * build(Input * In, char *in){
 		i++;
 		ch = in[i];
 	}
-	printf("Debug : Removed spaces\n");	
+//	Debug(debug,"Debug : Removed Spaces\n");
 	int flag = 0;
 	while(i<strlen(in)){
 		ch = in[i];
@@ -158,7 +159,9 @@ void print(Input In){
 //	printf("i : str : t : l\n");
 //	printf("Debug : tmp = %p\n",tmp);
 	while(tmp != NULL){
-		printf("Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+	//	char buf[20];
+	//	sprintf(buf,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+	//	debug(debug)
 		tmp = tmp->prev;
 		flag++;
 	}

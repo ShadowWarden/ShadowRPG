@@ -25,7 +25,7 @@ int action(Char *C, Map *M,int input){
 		case 119:
 		case KEY_UP:
 			if(M->cell[GRID_X*(C->y-1)+C->x].type == 0){
-				M->cell[GRID_X*(C->y)+C->x].type = 0;
+				M->cell[GRID_X*(C->y)+C->x].type = 1;
 				C->y -= 1;
 				place_on_map(*C,M);
 				return 0;
