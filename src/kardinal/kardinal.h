@@ -44,7 +44,7 @@ void Free(Input *);
 void print(Input );
 void print_final(Input );
 Input * parse(Input *, State **, int *);
-int evaluate(Input *, Input *, State **, int *, VariableDec *);
+int evaluate(Input *, Input *, State **, int *);
 int build_states_test(FILE *);
 int dump_states_test();
 int add_state_to_player(int, State **, int *);
