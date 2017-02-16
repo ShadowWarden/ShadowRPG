@@ -24,7 +24,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var){
 /* At present, it works. We have a few different thigns that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -143,37 +143,54 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 
 	}
 */
-/*	else if(EQSTR(In->name, "setvar")){
+	else if(EQSTR(In->name, "setvar")){
 		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
-		var->prev=Vars->selfpointer;
-		Vars=var;
-		//Extract Args here
-		var->varname = arg->name;
-		arg=arg->prev;
-		var->type = arg->name;
-		arg=arg->prev;
-		switch (var->type) {
-			case "string":	var->varname=(char*)malloc(sizeof(char))*strlen(var->value);
-					size=strlen(var->value);
-					break;
-			case "int":	var->varname=(int*)malloc(sizeof(int));
-					size=1;
-					break;
-			case "float":	var->varname=(float*)malloc(sizeof(float));
-					size=1;
-					break;
-			case "double":	var->varname=(double*)malloc(sizeof(double));
-					size=1;
-					break;
-			default: var->varname=NULL;break;
+		printf("Debug : New Variable Allocated\n");
+		if(*size_var == 0){
+			var->prev=NULL;
+		}else{
+			var->prev=*Vars;
 		}
-		if(strcmp(type,"string")) 
-			strcpy(var->varname,arg->value);
-		else 
-			(var->varname)=atoi(arg->value);
-		arg=arg->prev;
+		*Vars=var;
+		*size_var+=1;
+		//Extract Args here
+		strcpy(var->varname,args->name);
+		args=args->prev;
+		strcpy(var->type,args->name);
+		args=args->prev;
+		if(strcmp(var->type,"string")==0){
+			var->value=(char *)malloc(sizeof(char)*(strlen(args->name)+1));
+			var->size=sizeof(char)*(strlen(args->name)+1);
+		}
+/*
+		else if(strcmp(var->type,"int")==0){
+			var->value=malloc(sizeof(int));
+			var->size=sizeof(int);
+		}
+*
+*			case "float":	var->value=malloc(sizeof(float));
+					var->size=sizeof(float);
+					break;
+			case "double":	var->value=malloc(sizeof(double));
+					var->size=sizeof(double);
+					break;
+*/		else{
+			var->value=NULL;
+			var->size=0;
+		/*
+		*  NearlyHeadless,
+		*  Someone needs to do an errorcheck on the default. Ideally,
+		*  we just shouldn't allow the type variable to be empty
+		*/
+		}
+		if(strcmp(var->type,"string")==0){ 
+			printf("Debug : Assigning %s to var->value\n",args->name);
+			strcpy(var->value,args->name);
+		}		
+		strcpy(In->name,"true");
+		args=args->prev;
 	}
-*/	
+	
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }

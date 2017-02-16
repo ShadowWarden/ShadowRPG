@@ -40,6 +40,9 @@ int main(int argc, char ** argv){
 	     * fin = fopen(argv[1],"r");
 	Fsize = getsize(fin);
 
+	// Initialize variable stack
+	VariableDec * Vars;
+	int size_var = 0;
 	
 	build_states_test(state_in);
 	dump_states_test();
@@ -66,7 +69,7 @@ int main(int argc, char ** argv){
 		Input *In = (Input *) malloc (sizeof(Input));
 		In = build(In,line);
 	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-		In = parse(In,&Player,&PlayerSize);
+		In = parse(In,&Player,&PlayerSize,&Vars,&size_var);
 		printf("Debug : Command stack after parse\n");
 		print(*In);
 		printf("\nDebug : Final Result\n");
@@ -75,8 +78,13 @@ int main(int argc, char ** argv){
 		print_player_state(Player,PlayerSize);
 		Free(In);
 	}	
+	print_variable_stack(*Vars);
+	printf("Debug : Survived print_variable_stack\n");
+	Free_var(Vars);
+	printf("Debug : Survived Free_var\n");
 	free(Titles);
 	free(Player);
+	free(Vars);
 	fclose(state_in);
 	return 0;
 }

@@ -1,6 +1,6 @@
-obj=main.o parse.o evaluate.o state.o
+obj=main.o parse.o evaluate.o state.o variable.o
 
-kardinal: main.o parse.o evaluate.o state.o
+kardinal: main.o parse.o evaluate.o state.o variable.o
 	cc -o kardinal $(obj)
 
 state.o: state.c
@@ -14,6 +14,9 @@ main.o: main.c
 
 parse.o: parse.c
 	cc -c parse.c
+
+variable.o : variable.c
+	cc -c variable.c
 
 .PHONY: clean
 clean:

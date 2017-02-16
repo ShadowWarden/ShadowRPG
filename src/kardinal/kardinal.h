@@ -12,6 +12,8 @@
 *
 */
 
+#define SIZE_DOUBLE 8
+
 struct State{
 	unsigned int id;
 	char name[20];
@@ -27,12 +29,11 @@ struct Input{
 };
 
 struct VariableDec{
-	char varname[20];
-	char type[7];
-	char value[8];
-	int size; //Must be initialized  with 1 if no size is mentioned when accepting input from user.
-	struct VariableDec *prev;
-	struct VariableDec *selfpointer;
+	char varname[20]; 	// Variable Name
+	char type[7];		// Variable Type
+	char *value;		// Value
+	int size; 		// Size in bytes
+	struct VariableDec *prev;	// Pointer to the previous element
 };
 
 typedef struct Input Input;
@@ -43,13 +44,16 @@ Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 void print_final(Input );
-Input * parse(Input *, State **, int *);
-int evaluate(Input *, Input *, State **, int *);
+Input * parse(Input *, State **, int *,VariableDec **, int *);
+int evaluate(Input *, Input *, State **, int *, VariableDec **,int *);
 int build_states_test(FILE *);
 int dump_states_test();
 int add_state_to_player(int, State **, int *);
 int print_player_state(State *, int);
 int getsize(FILE *);
+int Free_var(VariableDec *);
+void print_variable_stack(VariableDec);
+
 
 // Extern variables
 extern State * Titles;
