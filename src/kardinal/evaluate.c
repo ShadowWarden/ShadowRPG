@@ -144,49 +144,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}
 */
 	else if(EQSTR(In->name, "setvar")){
-		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
-		printf("Debug : New Variable Allocated\n");
-		if(*size_var == 0){
-			var->prev=NULL;
-		}else{
-			var->prev=*Vars;
-		}
-		*Vars=var;
-		*size_var+=1;
-		//Extract Args here
-		strcpy(var->varname,args->name);
-		args=args->prev;
-		strcpy(var->type,args->name);
-		args=args->prev;
-		if(strcmp(var->type,"string")==0){
-			var->value=(char *)malloc(sizeof(char)*(strlen(args->name)+1));
-			var->size=sizeof(char)*(strlen(args->name)+1);
-		}
-/*
-		else if(strcmp(var->type,"int")==0){
-			var->value=malloc(sizeof(int));
-			var->size=sizeof(int);
-		}
-*
-*			case "float":	var->value=malloc(sizeof(float));
-					var->size=sizeof(float);
-					break;
-			case "double":	var->value=malloc(sizeof(double));
-					var->size=sizeof(double);
-					break;
-*/		else{
-			var->value=NULL;
-			var->size=0;
-		/*
-		*  NearlyHeadless,
-		*  Someone needs to do an errorcheck on the default. Ideally,
-		*  we just shouldn't allow the type variable to be empty
-		*/
-		}
-		if(strcmp(var->type,"string")==0){ 
-			printf("Debug : Assigning %s to var->value\n",args->name);
-			strcpy(var->value,args->name);
-		}		
+		args = setvar(Vars,size_var,args);
 		strcpy(In->name,"true");
 		args=args->prev;
 	}

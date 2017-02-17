@@ -37,3 +37,43 @@ void print_variable_stack(VariableDec Vars){
 	printf("\n");
 }
 
+
+/* This is STRICTLY a work in progress function! The return type is Input * 
+*  because I didn't want to pass a pointer by reference (and thus work with
+*  a pointer to a pointer which is also a struct).
+*  If ANYONE has a better implementation, please implement it and send a 
+*  pull request to VariableSupportOHR
+*/
+Input * setvar(VariableDec ** Vars, int * size_var, Input * args){
+	VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
+	printf("Debug : New Variable Allocated\n");
+	if(*size_var == 0){
+		var->prev=NULL;
+	}else{
+		var->prev=*Vars;
+	}
+	*Vars=var;
+	*size_var+=1;
+	//Extract Args here
+	strcpy(var->varname,args->name);
+	args=args->prev;
+	strcpy(var->type,args->name);
+	args=args->prev;
+	if(strcmp(var->type,"string")==0){
+		var->value=(char *)malloc(sizeof(char)*(strlen(args->name)+1));
+		var->size=sizeof(char)*(strlen(args->name)+1);
+	}else{
+		var->value=NULL;
+		var->size=0;
+/*
+*  NearlyHeadless,
+*  Someone needs to do an errorcheck on the default. Ideally,
+*  we just shouldn't allow the type variable to be empty
+*/
+	}
+	if(strcmp(var->type,"string")==0){
+		printf("Debug : Assigning %s to var->value\n",args->name);
+		strcpy(var->value,args->name);
+	}
+	return args;
+}
