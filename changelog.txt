@@ -28,5 +28,10 @@ List of known issues (v0.2)
 2. Is case sensitive. And is designed to be.
 3. No checks of number of arguments within each if stmt in evaluate (again, something NearlyHeadless should get started on)
 
+<<<<<<< HEAD
 NearlyHeadless:
 14/2/17 - Fixed a few errors. Added a provision to keep track of variable type being declared
+=======
+14/02/17 Tyronst : Created the Genesis map editor (details in the progress doc)
+17/02/17 Tyronst : setvar is now functional - only accepts strings for now - and is its own function defined in variable.c 
+>>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb

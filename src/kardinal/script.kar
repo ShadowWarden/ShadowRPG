@@ -1,4 +1,6 @@
 # This is a test example
 addttl(1)
 addttl(2)
-all(some(ttl(1),ttl(2),2))
+setvar(Hello,string,a)
+setvar(World,string,b)
+all(ttl(1),ttl(2),ttl(3))

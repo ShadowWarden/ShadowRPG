@@ -23,7 +23,8 @@
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec* Vars){
+
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var){
 /* At present, it works. We have a few different thigns that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -114,7 +115,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		printf("Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
 		strcpy(In->name,"true");			
 	}
-/** This will define and set variables. Once this is done, we essentially have a programming language  
+/* This will define and set variables. Once this is done, we essentially have a programming language  
 *  Ofc, we need to define loops and conditionals, but otherwise, we've got it all
 *  setvar(varname,type,value)
 *
@@ -140,6 +141,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}
 */
 	else if(EQSTR(In->name, "setvar")){
+<<<<<<< HEAD
 		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec);
 		var->prev=vars->selfpointer;
 		var->selfpointer=var;
@@ -175,6 +177,13 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		else (var->varname)=atoi(arg->name);
 		arg=arg->prev
 	}
+=======
+		args = setvar(Vars,size_var,args);
+		strcpy(In->name,"true");
+		args=args->prev;
+	}
+	
+>>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }

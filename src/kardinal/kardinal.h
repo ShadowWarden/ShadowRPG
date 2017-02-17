@@ -12,6 +12,8 @@
 *
 */
 
+#define SIZE_DOUBLE 8
+
 struct State{
 	unsigned int id;
 	char name[20];
@@ -27,6 +29,7 @@ struct Input{
 };
 
 struct VariableDec{
+<<<<<<< HEAD
 	char varname[20];
 	char type[7];
 	char value[8];
@@ -34,23 +37,33 @@ struct VariableDec{
 	int vartype; // 0=int, 1=float, 2=double, 3=string
 	VariableDec *prev;
 	VariableDec *selfpointer;
+=======
+	char varname[20]; 	// Variable Name
+	char type[7];		// Variable Type
+	char *value;		// Value
+	int size; 		// Size in bytes
+	struct VariableDec *prev;	// Pointer to the previous element
+>>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb
 };
 
 typedef struct Input Input;
 typedef struct State State;
-typedef struct Var Var;
+typedef struct VariableDec VariableDec;
 
 Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 void print_final(Input );
-Input * parse(Input *, State **, int *);
-int evaluate(Input *, Input *, State **, int *);
+Input * parse(Input *, State **, int *,VariableDec **, int *);
+int evaluate(Input *, Input *, State **, int *, VariableDec **,int *);
 int build_states_test(FILE *);
 int dump_states_test();
 int add_state_to_player(int, State **, int *);
 int print_player_state(State *, int);
 int getsize(FILE *);
+int Free_var(VariableDec *);
+void print_variable_stack(VariableDec);
+Input * setvar(VariableDec **, int *,Input *);
 
 // Extern variables
 extern State * Titles;
