@@ -14,6 +14,7 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
+#include <ncurses.h>
 #include "shadowengine.h"
 
 int read(FILE *){

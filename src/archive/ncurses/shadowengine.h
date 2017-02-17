@@ -100,16 +100,9 @@ typedef struct{
 
 
 // Function declarations
-<<<<<<< HEAD
-int print_map(Map); //Prints map on current window
-int map_read(FILE *,Map*); //Reads the map and collects info that can be printed
-int read_chars(Char *); //To read character information
-int place_on_map(Char, Map *); //To place the character on the right point on the map
-int action(Char *,Map *,int); //To move the character around the screen
-=======
+int print_map(Map);
 int map_read(FILE *,Map*);
 int read_chars(Char *);
 int place_on_map(Char, Map *);
 int action(Char *,Map *,int);
->>>>>>> b307c7d2fbe1cd94e45bfe732e72a5602158ae6c
 void header();
