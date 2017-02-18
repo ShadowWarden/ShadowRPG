@@ -157,6 +157,10 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		args = setvar(Vars,size_var,args);
 		strcpy(In->name,"true");
 		args=args->prev;
+	}else{
+/* Come up with a better default condition
+*/
+		strcpy(In->name,"false");
 	}
 		
 	printf("Debug : Leaving Evaluate\n");
