@@ -221,6 +221,7 @@ Input * parse(Input * In, State ** Player, int *PlayerSize){
 	Input *argsold = NULL;
 	Input *old = In;
 	Input *cur = In->prev;
+	VariableDec *Vars = (VariableDec*)malloc(sizeof(VariableDec));
 	int curlvl = old->lvl; 
 // I'm shifting the defn of curlvl here to make things a little clearer.
 
@@ -282,7 +283,7 @@ Input * parse(Input * In, State ** Player, int *PlayerSize){
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
 			printf("Debug : Survived the selective_free\n");
-			evaluate(cur,args,Player,PlayerSize);
+			evaluate(cur,args,Player,PlayerSize,Vars);
 			Free(args);
 			printf("Debug : Freed args\n");
 			curlvl = cur->lvl;

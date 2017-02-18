@@ -32,7 +32,7 @@ int main(int argc, char ** argv){
 	char input;	
 
 	// File pointer init
-	fin = fopen("../resources/maps/test.map","r"); //Changed from ./resources/
+	fin = fopen("./resources/maps/test.map","r"); 
 	map_read(fin,&M);
 	read_chars(&C);
 //	printf("%d\n",ret);

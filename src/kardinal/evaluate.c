@@ -134,46 +134,47 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 // Ugh.. Too many pointers. Can't think of an easier way to do this though
 			(*Vars)[i].att = (int *) malloc ((*Vars)[VarSize-1].size*sizeof(int));
 			*((*Vars)[i].att) = atoi(value);
-		}
 			
 
 	}
 */
 	else if(EQSTR(In->name, "setvar")){
-		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec);
-		var->prev=vars->selfpointer;
-		var->selfpointer=var;
+		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
+		Vars->selfpointer=Vars;
+		var->prev=Vars->selfpointer;
+		var->selfpointer=NULL;
 		Vars=var;
-		var->varname = arg->name;
-		arg=arg->prev;
-		var->type = arg->name;
-		arg=arg->prev;
-		if (strcmpi(var->type, "string")==0){
-			var->varname=(char*)malloc(sizeof(char))*strlen(var->prev->name);
-			var->size=strlen(var->prev->name);
-			var->vartype=3;
+		strcpy(var->varname,args->name);
+		args=args->prev;
+		strcpy(var->type,args->name);
+		args=args->prev;
+		if (strcmp(var->type, "string")==0){
+			var->addrs=(char*)malloc(sizeof(char)*strlen(args->name));
+			var->addri=NULL;
+			var->addrd=NULL;
+			var->size=strlen(args->name);
+			strcpy(var->addrs,args->name);
 		}
-		else if(strcmpi(var->vartype,"int")){
-			var->varname=(int*)malloc(sizeof(int));
-			var->size=1;
-			var_>vartype=0;
+		else if(strcmp(var->type,"int")==0){
+			var->addri=(int*)malloc(sizeof(int));
+			var->addrs=NULL;
+			var->addrd=NULL;
+			*(var->addri)=atoi(args->name);
 		}
-		else if	(strcmpi(var->type,"float")){
-			var->varname=(float*)malloc(sizeof(float));
+		else if	(strcmp(var->type,"float")==0||strcmp(var->type,"double")==0){
+			var->addrd=(double*)malloc(sizeof(double));
+			var->addrs=NULL;
+			var->addri=NULL;
 			var->size=1;
-			var->vartype=1;
-		}
-		else if (strcmpi(var->type,"double")){
-			var->varname=(double*)malloc(sizeof(double));
-			var->size=1;
-			var->vartype=2;
+			*(var->addrd)=atof(args->name);
 		}
 		else {	
-			printf("Wrong Data Type")var->varname=NULL;
+			printf("Wrong Data Type");
+			var->addrs=NULL;
+			var->addri=NULL;
+			var->addrd=NULL;
 		}
-		if(strcmp(type,"char") strcpy(car->varname,arg->name);
-		else (var->varname)=atoi(arg->name);
-		arg=arg->prev
+		args=args->prev;
 	}
 	printf("Debug : Leaving Evaluate\n");
 	return 0;

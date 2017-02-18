@@ -27,7 +27,7 @@
 
 int read_chars(Char *C){
 	int i;
-	char path[]="../data/character/char-1001.ch";//Originally ./data/
+	char path[]="./data/character/char-1001.ch";
 	FILE *fin;
 	if(!(fin = fopen(path,"r"))){
 		return 1;
