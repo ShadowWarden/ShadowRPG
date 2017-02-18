@@ -80,14 +80,15 @@ int main(int argc, char ** argv){
 		print_player_state(Player,PlayerSize);
 		Free(In);
 	}	
-	print_variable_stack(*Vars);
-	printf("Debug : Survived print_variable_stack\n");
-	Free_var(Vars);
+	if(size_var!=0){
+		print_variable_stack(*Vars);
+		printf("Debug : Survived print_variable_stack\n");
+		Free_var(Vars);
+		free(Vars);
+	}
 	printf("Debug : Survived Free_var\n");
 	free(Titles);
-	if(PlayerSize!=0)
-		free(Player);
-	free(Vars);
+	free(Player);
 	fclose(state_in);
 	return 0;
 }

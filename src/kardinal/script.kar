@@ -1,6 +1,6 @@
 # This is a test example
 addttl(1)
 addttl(2)
-setvar(Hello,string,a)
+#setvar(Hello,string,a)
 rmttl(2)
 all(ttl(1),ttl(2))
