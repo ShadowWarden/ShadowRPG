@@ -79,6 +79,35 @@ int add_state_to_player(int StateId, State ** Player, int *PlayerSize){
 	return 0;
 }
 
+int remove_state_from_player(int StateId, State ** Player, int *PlayerSize){
+/* Assume sorted, do insertion sort of 1 element to keep the array sorted
+*  Error checks need to be done. Check max stateid and so on
+*/
+	int i,j;
+	int flag = 0;	
+
+	printf("Debug : PlayerSize = %d\n",*PlayerSize);
+	for(i=0;i<*PlayerSize;i++){
+		printf("Debug : Player[%d].id = %d\n",i,((*Player)+i)->id);
+		if((*Player)[i].id == StateId){
+			for(j=i;j<*PlayerSize;j++){
+				Statecpy((*Player)+j,*((*Player)+j+1));
+			}
+			break;
+		}
+	}
+	*PlayerSize -= 1;
+	if(*PlayerSize>0){
+		(*Player) = (State *) realloc((*Player),sizeof(State)*(*PlayerSize)); 
+	}else{
+		free(*Player);
+	}
+// Very very IMPORTANT. Come up with a way by which we can avoid a double free
+// here. If PlayerSize is indeed zero, we need to free player here and avoid
+// an overlap in main	
+	return 0;
+}
+
 int dump_states_test(){
 	int i=0;
 	printf("Debug : Dump of global states\n");
@@ -96,4 +125,5 @@ int print_player_state(State* P, int PlayerSize){
 	for(i=0;i<PlayerSize;i++){	
 		printf("Debug : %d %s %d\n",P[i].id,P[i].name,P[i].attribute);
 	}
+	printf("Debug : Exiting print_player_state\n");
 }
