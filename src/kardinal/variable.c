@@ -25,6 +25,7 @@ int Free_var(VariableDec * Vars){
 		Vars = Vars->prev;
 		free(tmp);
 	}
+	free(Vars);
 }
 
 void print_variable_stack(VariableDec Vars){

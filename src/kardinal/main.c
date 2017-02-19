@@ -65,6 +65,7 @@ int main(int argc, char ** argv){
 		// Comment
 			continue;
 		}		
+		printf("Debug : Command = %s\n",line);
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
 		In = build(In,line);
@@ -75,16 +76,19 @@ int main(int argc, char ** argv){
 		printf("\nDebug : Final Result\n");
 		print_final(*In);
 	//	scanf("%c",&junk);	
+		printf("\nDebug : Size of Player state stack : %d\n",PlayerSize);
 		print_player_state(Player,PlayerSize);
 		Free(In);
 	}	
-	print_variable_stack(*Vars);
-	printf("Debug : Survived print_variable_stack\n");
-	Free_var(Vars);
+	if(size_var!=0){
+		print_variable_stack(*Vars);
+		printf("Debug : Survived print_variable_stack\n");
+		Free_var(Vars);
+		free(Vars);
+	}
 	printf("Debug : Survived Free_var\n");
 	free(Titles);
 	free(Player);
-	free(Vars);
 	fclose(state_in);
 	return 0;
 }

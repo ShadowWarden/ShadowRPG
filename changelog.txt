@@ -34,4 +34,8 @@ NearlyHeadless:
 =======
 14/02/17 Tyronst : Created the Genesis map editor (details in the progress doc)
 17/02/17 Tyronst : setvar is now functional - only accepts strings for now - and is its own function defined in variable.c 
+<<<<<<< HEAD
 >>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb
+=======
+18/02/17 Tyronst : Created rmttl() and put a rudimentary error check in place when freeing variable stack/Player state array
+>>>>>>> c4ec68b383fe0fb50d73c09d8b5ef91f93babd3d

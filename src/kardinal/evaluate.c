@@ -114,6 +114,16 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		add_state_to_player(atoi(args->name),Player,PlayerSize);
 		printf("Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
 		strcpy(In->name,"true");			
+	}else if(EQSTR(In->name,"rmttl")){
+/* Remove title by ID from the player's stack
+*/
+		int result;
+		result = remove_state_from_player(atoi(args->name),Player,PlayerSize);
+		if(result){
+			strcpy(In->name,"true");
+		}else{
+			strcpy(In->name,"false");
+		}
 	}
 /* This will define and set variables. Once this is done, we essentially have a programming language  
 *  Ofc, we need to define loops and conditionals, but otherwise, we've got it all
@@ -181,9 +191,17 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		args = setvar(Vars,size_var,args);
 		strcpy(In->name,"true");
 		args=args->prev;
+	}else{
+/* Come up with a better default condition
+*/
+		strcpy(In->name,"false");
 	}
+<<<<<<< HEAD
 	
 >>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb
+=======
+		
+>>>>>>> c4ec68b383fe0fb50d73c09d8b5ef91f93babd3d
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }
