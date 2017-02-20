@@ -148,33 +148,15 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		args=args->prev;
 		strcpy(var->type,args->name);
 		args=args->prev;
-		if (strcmp(var->type, "string")==0){
-			var->addrs=(char*)malloc(sizeof(char)*strlen(args->name));
-			var->addri=NULL;
-			var->addrd=NULL;
-			var->size=strlen(args->name);
+		if (strcmp(var->type, "string")==0||strcmp(var->type,"int")||strcmp(var->type,"double")){
+			var->varname=(char*)malloc(sizeof(char)*strlen(var->varname));
+			var->size=strlen(var->varname);
 			strcpy(var->addrs,args->name);
 		}
-		else if(strcmp(var->type,"int")==0){
-			var->addri=(int*)malloc(sizeof(int));
-			var->addrs=NULL;
-			var->addrd=NULL;
-			*(var->addri)=atoi(args->name);
-		}
-		else if	(strcmp(var->type,"float")==0||strcmp(var->type,"double")==0){
-			var->addrd=(double*)malloc(sizeof(double));
-			var->addrs=NULL;
-			var->addri=NULL;
-			var->size=1;
-			*(var->addrd)=atof(args->name);
-		}
 		else {	
-			printf("Wrong Data Type");
-			var->addrs=NULL;
-			var->addri=NULL;
-			var->addrd=NULL;
+			printf("Error:Primitive Data Type doesn't exist!");
+			return NULL;
 		}
-		args=args->prev;
 	}
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
