@@ -24,7 +24,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var){
 /* At present, it works. We have a few different thigns that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -117,6 +117,16 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 		add_state_to_player(atoi(args->name),Player,PlayerSize);
 		printf("Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
 		strcpy(In->name,"true");			
+	}else if(EQSTR(In->name,"rmttl")){
+/* Remove title by ID from the player's stack
+*/
+		int result;
+		result = remove_state_from_player(atoi(args->name),Player,PlayerSize);
+		if(result){
+			strcpy(In->name,"true");
+		}else{
+			strcpy(In->name,"false");
+		}
 	}
 /* This will define and set variables. Once this is done, we essentially have a programming language  
 *  Ofc, we need to define loops and conditionals, but otherwise, we've got it all
@@ -143,37 +153,16 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize){
 
 	}
 */
-/*	else if(EQSTR(In->name, "setvar")){
-		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
-		var->prev=Vars->selfpointer;
-		Vars=var;
-		//Extract Args here
-		var->varname = arg->name;
-		arg=arg->prev;
-		var->type = arg->name;
-		arg=arg->prev;
-		switch (var->type) {
-			case "string":	var->varname=(char*)malloc(sizeof(char))*strlen(var->value);
-					size=strlen(var->value);
-					break;
-			case "int":	var->varname=(int*)malloc(sizeof(int));
-					size=1;
-					break;
-			case "float":	var->varname=(float*)malloc(sizeof(float));
-					size=1;
-					break;
-			case "double":	var->varname=(double*)malloc(sizeof(double));
-					size=1;
-					break;
-			default: var->varname=NULL;break;
-		}
-		if(strcmp(type,"string")) 
-			strcpy(var->varname,arg->value);
-		else 
-			(var->varname)=atoi(arg->value);
-		arg=arg->prev;
+	else if(EQSTR(In->name, "setvar")){
+		args = setvar(Vars,size_var,args);
+		strcpy(In->name,"true");
+		args=args->prev;
+	}else{
+/* Come up with a better default condition
+*/
+		strcpy(In->name,"false");
 	}
-*/	
+		
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }

@@ -1,0 +1,296 @@
+==2683== Memcheck, a memory error detector
+==2683== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==2683== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==2683== Command: ./kardinal script.kar titles.txt --show-leaks-full
+==2683== 
+==2683== Conditional jump or move depends on uninitialised value(s)
+==2683==    at 0x4E814CE: vfprintf (vfprintf.c:1660)
+==2683==    by 0x4E8B3D8: printf (printf.c:33)
+==2683==    by 0x401FA7: add_state_to_player (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401C35: evaluate (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401724: parse (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400C09: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+==2683== Use of uninitialised value of size 8
+==2683==    at 0x4E8099B: _itoa_word (_itoa.c:179)
+==2683==    by 0x4E84636: vfprintf (vfprintf.c:1660)
+==2683==    by 0x4E8B3D8: printf (printf.c:33)
+==2683==    by 0x401FA7: add_state_to_player (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401C35: evaluate (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401724: parse (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400C09: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+==2683== Conditional jump or move depends on uninitialised value(s)
+==2683==    at 0x4E809A5: _itoa_word (_itoa.c:179)
+==2683==    by 0x4E84636: vfprintf (vfprintf.c:1660)
+==2683==    by 0x4E8B3D8: printf (printf.c:33)
+==2683==    by 0x401FA7: add_state_to_player (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401C35: evaluate (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401724: parse (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400C09: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+==2683== Conditional jump or move depends on uninitialised value(s)
+==2683==    at 0x4E84682: vfprintf (vfprintf.c:1660)
+==2683==    by 0x4E8B3D8: printf (printf.c:33)
+==2683==    by 0x401FA7: add_state_to_player (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401C35: evaluate (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401724: parse (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400C09: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+==2683== Conditional jump or move depends on uninitialised value(s)
+==2683==    at 0x4E81599: vfprintf (vfprintf.c:1660)
+==2683==    by 0x4E8B3D8: printf (printf.c:33)
+==2683==    by 0x401FA7: add_state_to_player (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401C35: evaluate (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401724: parse (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400C09: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+==2683== Conditional jump or move depends on uninitialised value(s)
+==2683==    at 0x4E8161C: vfprintf (vfprintf.c:1660)
+==2683==    by 0x4E8B3D8: printf (printf.c:33)
+==2683==    by 0x401FA7: add_state_to_player (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401C35: evaluate (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401724: parse (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400C09: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+==2683== Conditional jump or move depends on uninitialised value(s)
+==2683==    at 0x401FD0: add_state_to_player (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401C35: evaluate (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x401724: parse (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400C09: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+Debug : Entered build_states_test
+Debug : Survived getsize
+Debug : Malloced Titles
+Debug : Dump of global states
+Debug : TitleSize=2
+Debug : 1 title01 1
+Debug : 2 title02 2
+
+Debug : ch = #
+Debug : ch = a
+Debug : Entered parse
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : PlayerSize = 1
+Debug : Player[0].id = 0
+Debug : 1 title01 1
+Debug : State title01 added to player
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 1 : true : 0 : 0
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : ch = a
+Debug : Entered parse
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : PlayerSize = 2
+Debug : Player[0].id = 1
+Debug : Player[1].id = 0
+Debug : 2 title02 2
+Debug : State title02 added to player
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 1 : true : 0 : 0
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : 2 title02 2
+Debug : ch = s
+Debug : Entered parse
+Debug : Entered if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : Survived freeform_new() if stmt 3
+Debug : Leaving if stmt 3
+
+Debug : Entered if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : Survived freeform_new() if stmt 3
+Debug : Leaving if stmt 3
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : New Variable Allocated
+Debug : Assigning Hello to var->value
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 3 : true : 0 : 0
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : 2 title02 2
+Debug : ch = s
+Debug : Entered parse
+Debug : Entered if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : Survived freeform_new() if stmt 3
+Debug : Leaving if stmt 3
+
+Debug : Entered if stmt 3
+Debug : Survived Realloc if stmt 3
+Debug : Survived freeform_new() if stmt 3
+Debug : Leaving if stmt 3
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : New Variable Allocated
+Debug : Assigning World to var->value
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 3 : true : 0 : 0
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : 2 title02 2
+Debug : ch = a
+Debug : Entered parse
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 2
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Player[i].id=1
+Debug : Player[i].id=2
+Debug : State 3 not found
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Entered if stmt 1
+Debug : Survived freeform_new()
+Debug : Leaving if stmt 1
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 2
+Debug : Survived the args loop
+Debug : Argsold in if stmt 2
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Player[i].id=1
+Debug : Player[i].id=2
+Debug : State 2 found at i=1
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Lea==2683== Invalid free() / delete / delete[] / realloc()
+==2683==    at 0x4C2BDEC: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2683==    by 0x400D75: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==  Address 0x51fd3b0 is 0 bytes inside a block of size 56 free'd
+==2683==    at 0x4C2BDEC: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2683==    by 0x40234A: Free_var (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683==    by 0x400D3E: main (in /home/omkar/programs/shadowengine/src/kardinal/kardinal)
+==2683== 
+ving if stmt 2
+
+Debug : Entered if stmt 1
+Debug : Survived freeform_new()
+Debug : Leaving if stmt 1
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 2
+Debug : Survived the args loop
+Debug : Argsold in if stmt 2
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Player[i].id=1
+Debug : State 1 found at i=0
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Command is 'all'
+Debug : false is not true
+Debug : Flag=1, In.name=false
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 6 : false : 0 : 0
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : 2 title02 2
+Debug : Printing current variable stack
+Debug : b : string : World : 6
+Debug : a : string : Hello : 6
+
+Debug : Survived print_variable_stack
+Debug : Survived Free_var
+==2683== 
+==2683== HEAP SUMMARY:
+==2683==     in use at exit: 568 bytes in 1 blocks
+==2683==   total heap usage: 56 allocs, 56 frees, 3,280 bytes allocated
+==2683== 
+==2683== LEAK SUMMARY:
+==2683==    definitely lost: 0 bytes in 0 blocks
+==2683==    indirectly lost: 0 bytes in 0 blocks
+==2683==      possibly lost: 0 bytes in 0 blocks
+==2683==    still reachable: 568 bytes in 1 blocks
+==2683==         suppressed: 0 bytes in 0 blocks
+==2683== Rerun with --leak-check=full to see details of leaked memory
+==2683== 
+==2683== For counts of detected and suppressed errors, rerun with: -v
+==2683== Use --track-origins=yes to see where uninitialised values come from
+==2683== ERROR SUMMARY: 15 errors from 8 contexts (suppressed: 0 from 0)

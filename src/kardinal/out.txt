@@ -6,25 +6,20 @@ Debug : TitleSize=2
 Debug : 1 title01 1
 Debug : 2 title02 2
 
-Debug : PlayerSize = 1
-Debug : Player[0].id = 0
-Debug : 2 title02 2
-Debug : Cmd = addttl(1)
+Debug : ch = #
+Debug : ch = a
+Debug : Command = addttl(1)
 
-
-Debug : Removed spaces
 Debug : Entered parse
 Debug : Argsold at the start of if stmt 2
-Debug : 0 : 1 : 0 : 1
 Debug : Entered if stmt 2
 Debug : curlvl if stmt 2 : 1
 Debug : Survived the args loop
 Debug : Survived the selective_free
 Debug : Entered Evaluate
 Debug : Printing arguments
-Debug : 0 : 1 : 0 : 1
-Debug : PlayerSize = 2
-Debug : Player[0].id = 2
+Debug : PlayerSize = 1
+Debug : Player[0].id = 0
 Debug : 1 title01 1
 Debug : State title01 added to player
 Debug : Leaving Evaluate
@@ -34,86 +29,30 @@ Debug : Leaving if stmt 2
 Debug : Freed argsold
 Debug : Survived the parse loop!
 Debug : Command stack after parse
-Debug : 0 : 1 : 0 : 1
-Debug : 1 : true : 0 : 0
 
 Debug : Final Result
 Debug : 1 : true : 0 : 0
+
+Debug : Size of Player state stack : 1
 Debug : Printing current Player state array
 Debug : 1 title01 1
-Debug : 2 title02 2
-Debug : Cmd = all(all(ttl(1),ttl(2)))
+Debug : Exiting print_player_state
+Debug : ch = a
+Debug : Command = addttl(2)
 
-
-Debug : Removed spaces
 Debug : Entered parse
 Debug : Argsold at the start of if stmt 2
-Debug : 0 : 2 : 0 : 3
-Debug : Entered if stmt 2
-Debug : curlvl if stmt 2 : 3
-Debug : Survived the args loop
-Debug : Survived the selective_free
-Debug : Entered Evaluate
-Debug : Printing arguments
-Debug : 0 : 2 : 0 : 3
-Debug : Player[i].id=1
-Debug : Player[i].id=2
-Debug : State 2 found at i=1
-Debug : Leaving Evaluate
-Debug : Freed args
-Debug : Leaving if stmt 2
-
-Debug : Entered if stmt 1
-Debug : Survived freeform_new()
-Debug : 0 : true : 0 : 2
-Debug : Leaving if stmt 1
-
-Debug : Argsold at the start of if stmt 2
-Debug : 0 : 1 : 0 : 3
-Debug : 1 : true : 0 : 2
-Debug : Entered if stmt 2
-Debug : curlvl if stmt 2 : 3
-Debug : Survived the args loop
-Debug : Argsold in if stmt 2
-Debug : 0 : true : 0 : 2
-Debug : Survived the selective_free
-Debug : Entered Evaluate
-Debug : Printing arguments
-Debug : 0 : 1 : 0 : 3
-Debug : Player[i].id=1
-Debug : State 1 found at i=0
-Debug : Leaving Evaluate
-Debug : Freed args
-Debug : Leaving if stmt 2
-
-Debug : Argsold at the start of if stmt 2
-Debug : 0 : true : 0 : 2
-Debug : 1 : true : 0 : 2
-Debug : Entered if stmt 2
-Debug : curlvl if stmt 2 : 2
-Debug : Survived the args loop
-Debug : Survived the selective_free
-Debug : Entered Evaluate
-Debug : Printing arguments
-Debug : 0 : true : 0 : 2
-Debug : 1 : true : 0 : 2
-Debug : Command is 'all'
-Debug : Flag=0, In.name=true
-Debug : Leaving Evaluate
-Debug : Freed args
-Debug : Leaving if stmt 2
-
-Debug : Argsold at the start of if stmt 2
-Debug : 0 : true : 0 : 1
 Debug : Entered if stmt 2
 Debug : curlvl if stmt 2 : 1
 Debug : Survived the args loop
 Debug : Survived the selective_free
 Debug : Entered Evaluate
 Debug : Printing arguments
-Debug : 0 : true : 0 : 1
-Debug : Command is 'all'
-Debug : Flag=0, In.name=true
+Debug : PlayerSize = 2
+Debug : Player[0].id = 1
+Debug : Player[1].id = 0
+Debug : 2 title02 2
+Debug : State title02 added to player
 Debug : Leaving Evaluate
 Debug : Freed args
 Debug : Leaving if stmt 2
@@ -121,15 +60,143 @@ Debug : Leaving if stmt 2
 Debug : Freed argsold
 Debug : Survived the parse loop!
 Debug : Command stack after parse
-Debug : 0 : 2 : 0 : 3
-Debug : 1 : true : 0 : 2
-Debug : 2 : 1 : 0 : 3
-Debug : 3 : true : 0 : 2
-Debug : 4 : true : 0 : 1
-Debug : 5 : true : 0 : 0
 
 Debug : Final Result
-Debug : 5 : true : 0 : 0
+Debug : 1 : true : 0 : 0
+
+Debug : Size of Player state stack : 2
 Debug : Printing current Player state array
 Debug : 1 title01 1
 Debug : 2 title02 2
+Debug : Exiting print_player_state
+Debug : ch = #
+Debug : ch = r
+Debug : Command = rmttl(2)
+
+Debug : Entered parse
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : PlayerSize = 2
+Debug : Player[0].id = 1
+Debug : Player[1].id = 2
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 1 : false : 0 : 0
+
+Debug : Size of Player state stack : 1
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : Exiting print_player_state
+Debug : ch = a
+Debug : Command = all(ttl(1),ttl(2))
+
+Debug : Entered parse
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 2
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Player[i].id=1
+Debug : State 2 not found
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Entered if stmt 1
+Debug : Survived freeform_new()
+Debug : Leaving if stmt 1
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 2
+Debug : Survived the args loop
+Debug : Argsold in if stmt 2
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Player[i].id=1
+Debug : State 1 found at i=0
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Command is 'all'
+Debug : false is not true
+Debug : Flag=1, In.name=false
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 4 : false : 0 : 0
+
+Debug : Size of Player state stack : 1
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : Exiting print_player_state
+Debug : ch = a
+Debug : Command = all(random(shit))
+
+Debug : Entered parse
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 2
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Argsold at the start of if stmt 2
+Debug : Entered if stmt 2
+Debug : curlvl if stmt 2 : 1
+Debug : Survived the args loop
+Debug : Survived the selective_free
+Debug : Entered Evaluate
+Debug : Printing arguments
+Debug : Command is 'all'
+Debug : false is not true
+Debug : Flag=1, In.name=false
+Debug : Leaving Evaluate
+Debug : Freed args
+Debug : Leaving if stmt 2
+
+Debug : Freed argsold
+Debug : Survived the parse loop!
+Debug : Command stack after parse
+
+Debug : Final Result
+Debug : 2 : false : 0 : 0
+
+Debug : Size of Player state stack : 1
+Debug : Printing current Player state array
+Debug : 1 title01 1
+Debug : Exiting print_player_state
+Debug : Survived Free_var
