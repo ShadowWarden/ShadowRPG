@@ -128,10 +128,10 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		}
 	}else if(EQSTR(In->name, "setvar")){
 		int result = -setvar(Vars,size_var,&args);
-		if(result == 1){
-			strcpy(In->name,"true");
-		}else if(result == 0){
+		if(result != 0){
 			strcpy(In->name,"false");
+		}else{
+			strcpy(In->name,"true");
 		}
 		args=args->prev;
 	}else{
