@@ -36,17 +36,17 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 *  -- OHR
 */
 //	char a[20] = "Result_";
-	printf("Debug : Entered Evaluate\n");
-	printf("Debug : Printing arguments\n");
+	fprintf(stderr,"Debug : Entered Evaluate\n");
+	fprintf(stderr,"Debug : Printing arguments\n");
 	print(*args);
 	In->type = 0;
 	if(EQSTR(In->name,"all")){
-		printf("Debug : Command is 'all'\n");
+		fprintf(stderr,"Debug : Command is 'all'\n");
 		int flag = 0;
 		do{
 			if(!EQSTR(args->name,"true")){
 				flag++;
-				printf("Debug : %s is not true\n",args->name);
+				fprintf(stderr,"Debug : %s is not true\n",args->name);
 				strcpy(In->name,"false");
 				break;
 			}
@@ -55,15 +55,15 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		if(flag==0){
 			strcpy(In->name,"true");	
 		}
-		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
+		fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
 	}else if(EQSTR(In->name,"some")){
-		printf("Debug : Command is 'some'\n");
+		fprintf(stderr,"Debug : Command is 'some'\n");
 		int flag = 0;
 		int lim = atoi(args->name);
 		do{
 			if(EQSTR(args->name,"true")){
 				flag++;
-				printf("Debug : %s is true\n",args->name);	
+				fprintf(stderr,"Debug : %s is true\n",args->name);	
 			}
 			args = args->prev;	
 		}while(args!=NULL);
@@ -72,7 +72,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		}else{
 			strcpy(In->name,"false");		
 		}
-		printf("Debug : Flag=%d, In.name=%s\n",flag,In->name);
+		fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
 	}else if(EQSTR(In->name,"not")){
 /* Note to NearlyHeadless : Do an errorcheck for number of arguments here. 
 *  There should be exactly 1 and no more. I'm just spitting out a warning in
@@ -80,17 +80,17 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 */
 		printf("Debug : Command is 'not'\n");
 		if(args->prev!=NULL){
-			printf("Warning : Too many arguments. The code will act only on the last argument\n");
+			fprintf(stderr,"Warning : Too many arguments. The code will act only on the last argument\n");
 		}
 		if(EQSTR(args->name,"true")){
-			printf("Debug : arg=%s\n",args->name);
+			fprintf(stderr,"Debug : arg=%s\n",args->name);
 			strcpy(In->name,"false");
 		}else if(EQSTR(args->name,"false")){
-			printf("Debug : arg=%s\n",args->name);
+			fprintf(stderr,"Debug : arg=%s\n",args->name);
 			strcpy(In->name,"true");
 		}
 	// Do an error check here if argument name is neither true or false
-		printf("Debug : Arg=%s, In.name=%s\n",args->name,In->name);
+		fprintf(stderr,"Debug : Arg=%s, In.name=%s\n",args->name,In->name);
 	}else if(EQSTR(In->name,"ttl")){
 /* Only looking at last arg again. NearlyHeadless : Error check. In addition,
 *  Replace this with binary search (O(N) vs O(log N))
@@ -100,21 +100,21 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		for(i=0;i<*PlayerSize;i++){
 			printf("Debug : Player[i].id=%d\n",((*Player)+i)->id);
 			if(id == ((*Player)+i)->id){
-				printf("Debug : State %d found at i=%d\n",id,i);
+				fprintf(stderr,"Debug : State %d found at i=%d\n",id,i);
 				strcpy(In->name,"true");			
 				flag++;
 				break;
 			}
 		}
 		if(flag == 0){
-			printf("Debug : State %d not found\n",id);
+			fprintf(stderr,"Debug : State %d not found\n",id);
 			strcpy(In->name,"false");			
 		}
 	}else if(EQSTR(In->name,"addttl")){
 /* Again. This only accepts exactly one argument. Error checks
 */
 		add_state_to_player(atoi(args->name),Player,PlayerSize);
-		printf("Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
+		fprintf(stderr,"Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
 		strcpy(In->name,"true");			
 	}else if(EQSTR(In->name,"rmttl")){
 /* Remove title by ID from the player's stack
@@ -129,6 +129,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}else if(EQSTR(In->name, "setvar")){
 		int result = -setvar(Vars,size_var,&args);
 		if(result != 0){
+			fprintf(stderr,"Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",result);
 			strcpy(In->name,"false");
 		}else{
 			strcpy(In->name,"true");
