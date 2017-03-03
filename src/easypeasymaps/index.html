@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link href="css/style.css" type="text/css" rel="stylesheet" />
+    <title>Map Editor</title>
+</head>
+<body>
+    <div id="map-main">
+        <canvas id="map-view">
+
+        </canvas>
+    </div>
+
+    <div id="textures-controllers">
+        <img src="img/grass.jpg" height="40px" width="40px" />
+    </div>
+
+    <script>
+    var image_path = "img/grass.jpg";
+    var canvas = document.getElementById("map-view");
+    canvas.setAttribute('width', '640');
+    canvas.setAttribute('height', '480');
+    var context = canvas.getContext("2d");
+    document.getElementById("map-view").addEventListener("click", paint);
+
+    function paint(event) {
+        // event.clientX , event.clientY
+        var img=new Image(); 
+        img.src = image_path;
+        context.drawImage(img,20,20);
+        
+    };
+
+    function init_canvas() {
+
+        for (var i = 0; i <=480; i+=20) {
+            for (var j = 0; j <= 640; j+=20) {
+                context.beginPath();
+                context.lineWidth="1";
+                context.strokeStyle="#DDDDDD"
+                context.rect(j, i, 20, 20);
+                context.stroke();
+            }
+        }
+    };
+
+    init_canvas();
+
+    </script>
+</html>
