@@ -95,26 +95,18 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 /* Only looking at last arg again. NearlyHeadless : Error check. In addition,
 *  Replace this with binary search (O(N) vs O(log N))
 */
-		int i,flag=0;
 		int id = atoi(args->name);
-		for(i=0;i<*PlayerSize;i++){
-			printf("Debug : Player[i].id=%d\n",((*Player)+i)->id);
-			if(id == ((*Player)+i)->id){
-				fprintf(stderr,"Debug : State %d found at i=%d\n",id,i);
-				strcpy(In->name,"true");			
-				flag++;
-				break;
-			}
-		}
-		if(flag == 0){
-			fprintf(stderr,"Debug : State %d not found\n",id);
+		int result = -find_ttl(id,Player,PlayerSize);
+		if(result){
 			strcpy(In->name,"false");			
+		}else{
+			strcpy(In->name,"true");	
 		}
 	}else if(EQSTR(In->name,"addttl")){
 /* Again. This only accepts exactly one argument. Error checks
 */
 		add_state_to_player(atoi(args->name),Player,PlayerSize);
-		fprintf(stderr,"Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
+		fprintf(stderr,"(addttl) Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
 		strcpy(In->name,"true");			
 	}else if(EQSTR(In->name,"rmttl")){
 /* Remove title by ID from the player's stack
@@ -129,7 +121,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}else if(EQSTR(In->name, "setvar")){
 		int result = -setvar(Vars,size_var,&args);
 		if(result != 0){
-			fprintf(stderr,"Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",result);
+			fprintf(stderr,"(setvar) Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",-result);
 			strcpy(In->name,"false");
 		}else{
 			strcpy(In->name,"true");

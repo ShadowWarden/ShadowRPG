@@ -36,11 +36,11 @@ int build_states_test(FILE * in){
 *
 *
 */
-	printf("Debug : Entered build_states_test\n");
+	fprintf(stderr,"(build_states_test) Debug : Entered build_states_test\n");
 	TitleSize = getsize(in);	
-	printf("Debug : Survived getsize\n");	
+	fprintf(stderr,"(build_states_test) Debug : Survived getsize\n");	
 	Titles = (State *) malloc (sizeof(State)*TitleSize);
-	printf("Debug : Malloced Titles\n");
+	fprintf(stderr,"(build_states_test) Debug : Malloced Titles\n");
 	int i=0;
 
 	for(i=0;i<TitleSize;i++){
@@ -50,6 +50,24 @@ int build_states_test(FILE * in){
 		strcpy(Titles[i].name,name);
 		Titles[i].attribute = att;
 		Titles[i].id = i+1;
+	}
+}
+
+int find_ttl(int StateId, State ** Player, int * PlayerSize){
+	int i,flag=0;
+	for(i=0;i<*PlayerSize;i++){
+		if(StateId == ((*Player)+i)->id){
+			fprintf(stderr,"(find_ttl) Debug : State %d found at i=%d\n",StateId,i);
+			flag++;
+			break;
+		}
+	}
+	if(flag == 0){
+		// State not Found
+		fprintf(stderr,"(find_ttl) Debug : State %d not found\n",StateId);
+		return -1; 
+	}else{
+		return 0;
 	}
 }
 
@@ -64,9 +82,9 @@ int add_state_to_player(int StateId, State ** Player, int *PlayerSize){
 		(*Player) = (State *) malloc(sizeof(State)*(*PlayerSize+1)); 
 	}
 	*PlayerSize+=1;
-	printf("Debug : PlayerSize = %d\n",*PlayerSize);
+	fprintf(stderr,"(add_state_to_player) Debug : PlayerSize = %d\n",*PlayerSize);
 	for(i=0;i<*PlayerSize;i++){
-		printf("Debug : Player[%d].id = %d\n",i,((*Player)+i)->id);
+		fprintf(stderr,"(add_state_to_player) Debug : Player[%d].id = %d\n",i,((*Player)+i)->id);
 		if(((*Player)+i)->id>=StateId || (*PlayerSize==1 && i==0) || i==*PlayerSize-1){
 			for(j=*PlayerSize-1;j>i;j--){
 				Statecpy((*Player)+j,*((*Player)+j-1));
@@ -75,7 +93,6 @@ int add_state_to_player(int StateId, State ** Player, int *PlayerSize){
 			break;
 		}
 	}
-	printf("Debug : %d %s %d\n",((*Player)+i)->id,((*Player)+i)->name,((*Player)+i)->attribute);	
 	return 0;
 }
 
@@ -86,9 +103,9 @@ int remove_state_from_player(int StateId, State ** Player, int *PlayerSize){
 	int i,j;
 	int flag = 0;	
 
-	printf("Debug : PlayerSize = %d\n",*PlayerSize);
+	fprintf(stderr,"(remove_state_from_player) Debug : PlayerSize = %d\n",*PlayerSize);
 	for(i=0;i<*PlayerSize;i++){
-		printf("Debug : Player[%d].id = %d\n",i,((*Player)+i)->id);
+		fprintf(stderr,"(remove_state_from_player) Debug : Player[%d].id = %d\n",i,((*Player)+i)->id);
 		if((*Player)[i].id == StateId){
 			for(j=i;j<*PlayerSize;j++){
 				Statecpy((*Player)+j,*((*Player)+j+1));
@@ -110,10 +127,10 @@ int remove_state_from_player(int StateId, State ** Player, int *PlayerSize){
 
 int dump_states_test(){
 	int i=0;
-	printf("Debug : Dump of global states\n");
-	printf("Debug : TitleSize=%d\n",TitleSize);
+	fprintf(stderr,"(dump_states_test) Debug : Dump of global states\n");
+	fprintf(stderr,"(dump_states_test) Debug : TitleSize=%d\n",TitleSize);
 	for(i=0;i<TitleSize;i++){
-		printf("Debug : %d %s %d\n",Titles[i].id,Titles[i].name,Titles[i].attribute);
+		fprintf(stderr,"(dump_states_test) Debug : %d %s %d\n",Titles[i].id,Titles[i].name,Titles[i].attribute);
 	}
 	printf("\n");
 	return 0;
@@ -121,9 +138,9 @@ int dump_states_test(){
 
 int print_player_state(State* P, int PlayerSize){
 	int i;
-	printf("Debug : Printing current Player state array\n");
+	fprintf(stderr,"(print_player_states) Debug : Printing current Player state array\n");
 	for(i=0;i<PlayerSize;i++){	
 		printf("Debug : %d %s %d\n",P[i].id,P[i].name,P[i].attribute);
 	}
-	printf("Debug : Exiting print_player_state\n");
+	fprintf(stderr,"(print_player_states) Debug : Exiting print_player_state\n");
 }
