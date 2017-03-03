@@ -63,7 +63,7 @@ int print_player_state(State *, int);
 int getsize(FILE *);
 int Free_var(VariableDec *);
 void print_variable_stack(VariableDec);
-Input * setvar(VariableDec **, int *,Input *);
+int setvar(VariableDec **, int *,Input **);
 
 // Extern variables
 extern State * Titles;

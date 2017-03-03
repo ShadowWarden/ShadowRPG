@@ -1,7 +1,22 @@
-# This is a test example
+# kardinal/script.kar
+# Omkar H. Ramachandran
+# omkar.ramachandran@colorado.edu
+#  
+# Enter in your name if you make any changes here
+#
+# Prototype Kardinal code. Every function that we put in will be tested here.
+# To run, simply use 
+# $ ./kardinal script.kar titles.txt
+# 
+# This project is under the GNU General GPL version 3.0 license. For more 
+# information about the license, refer the LICENCE file in the root directory 
+# or go online to <http://www.gnu.org/licenses>
+#  
+# Any redistribution of this code must contain this header in its entirety
+#
 addttl(1)
 addttl(2)
-#setvar(Hello,string,a)
+setvar(a,Hello)
 rmttl(2)
 all(ttl(1),ttl(2))
 all(random(shit))
