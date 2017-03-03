@@ -135,7 +135,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			
 
 	}
-*/
 	else if(EQSTR(In->name, "setvar")){
 <<<<<<< HEAD
 		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec);
