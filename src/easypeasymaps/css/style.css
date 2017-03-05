@@ -22,9 +22,23 @@
     margin: 0;
 }
 
+.map-box img {
+    height: 23px;
+    width: 23px;
+}
+
 .map-row {
     height: 23px;
     margin: 0;
     border-top: 1px grey dotted;
     border-bottom: 1px grey dotted;
+}
+
+#texture-controller {
+
+}
+
+.texture {
+    height: 20px;
+    width: 20px;
 }

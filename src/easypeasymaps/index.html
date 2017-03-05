@@ -11,14 +11,22 @@
         </div>
     </div>
 
-    <div id="textures-controllers">
-        <img src="img/grass.jpg" height="40px" width="40px" />
+    <div id="textures-controller">
+        <!--use python to dynamically render all these images-->
+        <img src="img/grass.jpg"  class="texture" />
+        <img src="img/carbon.png" class="texture" />
+        <img src="img/snow.png" class="texture" />
+        <img src="img/redclay.png" class="texture" />
     </div>
 
     <script>
-    var image_path = "img/grass.jpg"; // default texture grass
+    var texture_path = "img/grass.jpg"; // default texture grass
+    var is_mouse_down = false;
     var map_grid = document.getElementById("map-grid");
-    
+    window.addEventListener("mouseup", function() {
+        is_mouse_down = false;
+    });
+
     function create_grid_row(row_number) {
         var row = document.createElement('div');
         row.className = 'map-row';
@@ -35,11 +43,23 @@
         box.className = 'map-box';        
         box.setAttribute("row-number", row_number);
         box.setAttribute("col-number", col_number);
+        box.appendChild(document.createElement('img'));
+        box.addEventListener("click", change_box_image);
+        box.addEventListener("mouseenter", change_box_image);
         
         return box;
     }
 
-    function change_image(box_element, image_path) {
+    // very buggy fix this. (mouse drag shoud also paint)
+    function change_box_image(event) {
+        if(event.type === "click") {
+            event.srcElement.src = texture_path;
+            is_mouse_down = true;
+        }         
+        else if (event.type === "mouseenter" && is_mouse_down) {
+            console.log(event.srcElement);
+            event.srcElement.src = texture_path;
+        }
 
     }
 
@@ -49,6 +69,10 @@
 
     function add_columns(how_many) {
         
+    }
+
+    function change_texture_path(event) {
+        texture_path = event.srcElement.src;        
     }
 
     function init_grid() {
@@ -62,7 +86,16 @@
         }
     };
 
+    function init_textures() {
+        var textures = document.getElementsByClassName("texture");
+
+        for (var i = 0; i < textures.length; i++) {
+            textures[i].addEventListener("click", change_texture_path);
+        }
+    }
+
     init_grid();
+    init_textures();
 
     </script>
 </html>
