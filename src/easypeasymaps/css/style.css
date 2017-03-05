@@ -1,14 +1,30 @@
 #map-main {
     width: 100%;
     height: auto;
-    text-align: center;
     background-color: #EEEEEE;
 }
 
-#map-view {
-    /*width: 640px; 
-    height: 480px; */
+#map-grid {
+    width: 800px; 
+    height: 600px; 
     border: 2px black solid;
-    margin: 20px auto 20px auto;
+    margin: 0;
     background-color: #FFFFFF;
+}
+
+.map-box {
+    height: 23px;
+    width: 23px;
+    background-color: #FFFFFF;
+    border-left: 1px grey dotted;
+    border-right: 1px grey dotted;
+    display: inline-block;
+    margin: 0;
+}
+
+.map-row {
+    height: 23px;
+    margin: 0;
+    border-top: 1px grey dotted;
+    border-bottom: 1px grey dotted;
 }

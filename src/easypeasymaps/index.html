@@ -6,9 +6,9 @@
 </head>
 <body>
     <div id="map-main">
-        <canvas id="map-view">
+        <div id="map-grid">
 
-        </canvas>
+        </div>
     </div>
 
     <div id="textures-controllers">
@@ -16,35 +16,53 @@
     </div>
 
     <script>
-    var image_path = "img/grass.jpg";
-    var canvas = document.getElementById("map-view");
-    canvas.setAttribute('width', '640');
-    canvas.setAttribute('height', '480');
-    var context = canvas.getContext("2d");
-    document.getElementById("map-view").addEventListener("click", paint);
+    var image_path = "img/grass.jpg"; // default texture grass
+    var map_grid = document.getElementById("map-grid");
+    
+    function create_grid_row(row_number) {
+        var row = document.createElement('div');
+        row.className = 'map-row';
 
-    function paint(event) {
-        // event.clientX , event.clientY
-        var img=new Image(); 
-        img.src = image_path;
-        context.drawImage(img,20,20);
+        // row number isn't required (we can use access via array index)
+        // might be handy in the future so might as well put it
+        row.setAttribute("row-number", row_number);
+
+        return row;
+    }
+
+    function create_individual_box(row_number, col_number) {
+        var box = document.createElement('div');
+        box.className = 'map-box';        
+        box.setAttribute("row-number", row_number);
+        box.setAttribute("col-number", col_number);
         
-    };
+        return box;
+    }
 
-    function init_canvas() {
+    function change_image(box_element, image_path) {
 
-        for (var i = 0; i <=480; i+=20) {
-            for (var j = 0; j <= 640; j+=20) {
-                context.beginPath();
-                context.lineWidth="1";
-                context.strokeStyle="#DDDDDD"
-                context.rect(j, i, 20, 20);
-                context.stroke();
+    }
+
+    function clear_image(box_element) {
+
+    }
+
+    function add_columns(how_many) {
+        
+    }
+
+    function init_grid() {
+
+        for (var i = 1; i <= 24; i++) {
+            var row = create_grid_row(i);
+            for (var j = 1; j <= 32; j++) {
+                row.appendChild(create_individual_box(i, j));
             }
+            map_grid.appendChild(row);
         }
     };
 
-    init_canvas();
+    init_grid();
 
     </script>
 </html>
