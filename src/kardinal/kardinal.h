@@ -67,5 +67,3 @@ int setvar(VariableDec **, int *,Input **);
 // Extern variables
 extern State * Titles;
 extern int TitleSize;
-extern State * Players;
-extern int PlayerSize;
