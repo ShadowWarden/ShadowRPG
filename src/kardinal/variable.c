@@ -30,7 +30,7 @@ int Free_var(VariableDec * Vars){
 
 void print_variable_stack(VariableDec Vars){
 	VariableDec * tmp = &Vars;
-	printf("Debug : Printing current variable stack\n");
+	fprintf(stderr,"Debug : Printing current variable stack\n");
 	while(tmp!=NULL){
 		printf("Debug : %s : %s : %s : %d\n",tmp->varname,tmp->type,tmp->value,tmp->size);
 		tmp=tmp->prev;
@@ -45,9 +45,13 @@ void print_variable_stack(VariableDec Vars){
 *  If ANYONE has a better implementation, please implement it and send a 
 *  pull request to VariableSupportOHR
 */
-Input * setvar(VariableDec ** Vars, int * size_var, Input * args){
+int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 	VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
-	printf("Debug : New Variable Allocated\n");
+	if(var == NULL){
+		fprintf(stderr,"Error : Malloc returned NULL. Is there any memory left?\n");
+		return -1;
+	}
+	fprintf(stderr,"Debug : New Variable Allocated\n");
 	if(*size_var == 0){
 		var->prev=NULL;
 	}else{
@@ -56,16 +60,17 @@ Input * setvar(VariableDec ** Vars, int * size_var, Input * args){
 	*Vars=var;
 	*size_var+=1;
 	//Extract Args here
-	strcpy(var->varname,args->name);
-	args=args->prev;
-	strcpy(var->type,args->name);
-	args=args->prev;
+	strcpy(var->type,(*args)->name);
+	(*args)=(*args)->prev;
+	
 	if(strcmp(var->type,"string")==0){
-		var->value=(char *)malloc(sizeof(char)*(strlen(args->name)+1));
-		var->size=sizeof(char)*(strlen(args->name)+1);
+		var->value=(char *)malloc(sizeof(char)*(strlen((*args)->name)+1));
+		var->size=sizeof(char)*(strlen((*args)->name)+1);
 	}else{
 		var->value=NULL;
 		var->size=0;
+		fprintf(stderr,"Type not mentioned. Check documentation for syntax\n");
+		return -2;
 /*
 *  NearlyHeadless,
 *  Someone needs to do an errorcheck on the default. Ideally,
@@ -73,8 +78,11 @@ Input * setvar(VariableDec ** Vars, int * size_var, Input * args){
 */
 	}
 	if(strcmp(var->type,"string")==0){
-		printf("Debug : Assigning %s to var->value\n",args->name);
-		strcpy(var->value,args->name);
+		fprintf(stderr,"Debug : Assigning %s to var->value\n",(*args)->name);
+		strcpy(var->value,(*args)->name);
+		(*args) = (*args)->prev;
 	}
-	return args;
+	strcpy(var->varname,(*args)->name);
+	
+	return 0;
 }

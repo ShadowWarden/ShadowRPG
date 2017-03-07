@@ -40,23 +40,30 @@ typedef struct Input Input;
 typedef struct State State;
 typedef struct VariableDec VariableDec;
 
+// parse.c
 Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 void print_final(Input );
 Input * parse(Input *, State **, int *,VariableDec **, int *);
+
+// evaluate.c
 int evaluate(Input *, Input *, State **, int *, VariableDec **,int *);
+
+// state.c
 int build_states_test(FILE *);
 int dump_states_test();
+int find_ttl(int, State **, int *);
 int add_state_to_player(int, State **, int *);
+int remove_state_from_player(int, State **, int *);
 int print_player_state(State *, int);
+
+// variable.c
 int getsize(FILE *);
 int Free_var(VariableDec *);
 void print_variable_stack(VariableDec);
-Input * setvar(VariableDec **, int *,Input *);
+int setvar(VariableDec **, int *,Input **);
 
 // Extern variables
 extern State * Titles;
 extern int TitleSize;
-extern State * Players;
-extern int PlayerSize;

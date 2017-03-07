@@ -84,7 +84,6 @@ int main(int argc, char ** argv){
 		print_variable_stack(*Vars);
 		printf("Debug : Survived print_variable_stack\n");
 		Free_var(Vars);
-		free(Vars);
 	}
 	printf("Debug : Survived Free_var\n");
 	free(Titles);

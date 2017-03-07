@@ -1,7 +1,7 @@
 obj=main.o parse.o evaluate.o state.o variable.o
 
 kardinal: main.o parse.o evaluate.o state.o variable.o
-	cc -o kardinal $(obj)
+	cc -Wall -o kardinal -O3 $(obj)
 
 state.o: state.c
 	cc -c state.c
