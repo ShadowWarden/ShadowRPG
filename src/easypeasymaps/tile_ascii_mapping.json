@@ -1,9 +1,7 @@
-// Mapping from tile file name (without extension) to ASCII code
-// 49 will map to 1, 50 to 2 and so on
 {
-    "browntiles": 49,
-    "carbon": 50,
-    "grass": 51,
-    "redclay": 52,
-    "snow": 53
+    "mapping": [["browntiles.jpg", 49],
+               ["carbon.png", 50],
+               ["grass.jpg", 51],
+               ["redclay.png", 52],
+               ["snow.png", 53]]
 }

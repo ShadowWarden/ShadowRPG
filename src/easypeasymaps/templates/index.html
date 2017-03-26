@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <link href="css/style.css" type="text/css" rel="stylesheet" />
+    <link href="static/css/style.css" type="text/css" rel="stylesheet" />
     <title>Map Editor</title>
 </head>
 <body>
@@ -9,18 +9,22 @@
         <div id="map-grid">
 
         </div>
-    </div>
+        <!--add a button and write some function to create the text in the file-->
+        <a id="save" download="new.map" href="data:text/plain,">Save</a>
 
+    </div>
     <div id="textures-controller">
-        <!--use python to dynamically render all these images-->
-        <img src="img/grass.jpg"  class="texture" />
-        <img src="img/carbon.png" class="texture" />
-        <img src="img/snow.png" class="texture" />
-        <img src="img/redclay.png" class="texture" />
+
+        {% for tile_object in mapping.mapping %}
+        <img src="static/img/{{ tile_object[0] }}"  class="texture" data-ascii="{{tile_object[1]}}" />
+
+        {% endfor %}
+
     </div>
 
     <script>
-    var texture_path = "img/grass.jpg"; // default texture grass
+    var texture_path = "static/img/grass.jpg"; // default texture grass
+    var ascii_code = "51"; //default ASCII for grass
     var is_mouse_down = false;
     var map_grid = document.getElementById("map-grid");
     window.addEventListener("mouseup", function() {
@@ -43,22 +47,26 @@
         box.className = 'map-box';        
         box.setAttribute("row-number", row_number);
         box.setAttribute("col-number", col_number);
+        box.setAttribute("data-ascii", "");
         box.appendChild(document.createElement('img'));
-        box.addEventListener("click", change_box_image);
-        box.addEventListener("mouseenter", change_box_image);
+        box.addEventListener("click", change_box_tile);
+        box.addEventListener("mouseenter", change_box_tile);
         
         return box;
     }
 
     // very buggy fix this. (mouse drag shoud also paint)
-    function change_box_image(event) {
+    function change_box_tile(event) {
+        var parent_div = event.srcElement.parentNode;
         if(event.type === "click") {
             event.srcElement.src = texture_path;
+            parent_div.dataset.ascii = ascii_code;           
             is_mouse_down = true;
         }         
         else if (event.type === "mouseenter" && is_mouse_down) {
             console.log(event.srcElement);
             event.srcElement.src = texture_path;
+            parent_div.dataset.ascii = ascii_code;
         }
 
     }
@@ -71,8 +79,9 @@
         
     }
 
-    function change_texture_path(event) {
-        texture_path = event.srcElement.src;        
+    function change_texture_in_hand(event) {
+        texture_path = event.srcElement.src;
+        ascii_code = event.srcElement.dataset.ascii;        
     }
 
     function init_grid() {
@@ -90,7 +99,7 @@
         var textures = document.getElementsByClassName("texture");
 
         for (var i = 0; i < textures.length; i++) {
-            textures[i].addEventListener("click", change_texture_path);
+            textures[i].addEventListener("click", change_texture_in_hand);
         }
     }
 
