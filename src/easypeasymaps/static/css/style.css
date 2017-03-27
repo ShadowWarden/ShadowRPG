@@ -1,0 +1,44 @@
+#map-main {
+    width: 100%;
+    height: auto;
+    background-color: #EEEEEE;
+}
+
+#map-grid {
+    width: 800px; 
+    height: 600px; 
+    border: 2px black solid;
+    margin: 0;
+    background-color: #FFFFFF;
+}
+
+.map-box {
+    height: 23px;
+    width: 23px;
+    background-color: #FFFFFF;
+    border-left: 1px grey dotted;
+    border-right: 1px grey dotted;
+    display: inline-block;
+    margin: 0;
+}
+
+.map-box img {
+    height: 23px;
+    width: 23px;
+}
+
+.map-row {
+    height: 23px;
+    margin: 0;
+    border-top: 1px grey dotted;
+    border-bottom: 1px grey dotted;
+}
+
+#texture-controller {
+
+}
+
+.texture {
+    height: 20px;
+    width: 20px;
+}

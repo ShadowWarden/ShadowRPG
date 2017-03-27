@@ -1,0 +1,4 @@
+Mouse drag should also paint
+create text file out of map
+create binary file in the future usin python as the backend
+change mouse pointer to mimic paint when inside the box
