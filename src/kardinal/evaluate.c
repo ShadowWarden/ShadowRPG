@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "kardinal.h"
+#include "logical.c"
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
@@ -31,9 +32,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 *	<initialization of appropriate variables>  
 *	<command>(<args>);
 *  }
-*  If NearlyHeadless understands the code by the end of the week, then this should really be something
-*  that he should do. I'll do it otherwise - but right now, I'm only thinking about variable support
-*  -- OHR
 */
 //	char a[20] = "Result_";
 	fprintf(stderr,"Debug : Entered Evaluate\n");
@@ -41,7 +39,9 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	print(*args);
 	In->type = 0;
 	if(EQSTR(In->name,"all")){
-		fprintf(stderr,"Debug : Command is 'all'\n");
+		all(In,args);
+	}
+	/*	fprintf(stderr,"Debug : Command is 'all'\n");
 		int flag = 0;
 		do{
 			if(!EQSTR(args->name,"true")){
@@ -56,8 +56,11 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			strcpy(In->name,"true");	
 		}
 		fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
-	}else if(EQSTR(In->name,"some")){
-		fprintf(stderr,"Debug : Command is 'some'\n");
+	}*/
+	else if(EQSTR(In->name,"some")){
+		some(In,args);
+	}
+	/*	fprintf(stderr,"Debug : Command is 'some'\n");
 		int flag = 0;
 		int lim = atoi(args->name);
 		do{
@@ -73,12 +76,10 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			strcpy(In->name,"false");		
 		}
 		fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
-	}else if(EQSTR(In->name,"not")){
-/* Note to NearlyHeadless : Do an errorcheck for number of arguments here. 
-*  There should be exactly 1 and no more. I'm just spitting out a warning in
-*  this version of the code here :
-*/
-		printf("Debug : Command is 'not'\n");
+	}*/else if(EQSTR(In->name,"not")){
+		not(In,args);
+	}
+	/*	printf("Debug : Command is 'not'\n");
 		if(args->prev!=NULL){
 			fprintf(stderr,"Warning : Too many arguments. The code will act only on the last argument\n");
 		}
@@ -91,7 +92,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		}
 	// Do an error check here if argument name is neither true or false
 		fprintf(stderr,"Debug : Arg=%s, In.name=%s\n",args->name,In->name);
-	}else if(EQSTR(In->name,"ttl")){
+	}*/else if(EQSTR(In->name,"ttl")){
 /* Only looking at last arg again. NearlyHeadless : Error check. In addition,
 *  Replace this with binary search (O(N) vs O(log N))
 */
@@ -126,13 +127,64 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		}else{
 			strcpy(In->name,"true");
 		}
+<<<<<<< HEAD
+			
+
+	}
+	else if(EQSTR(In->name, "setvar")){
+<<<<<<< HEAD
+		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec);
+		var->prev=vars->selfpointer;
+		var->selfpointer=var;
+		Vars=var;
+		var->varname = arg->name;
+		arg=arg->prev;
+		var->type = arg->name;
+		arg=arg->prev;
+		if (strcmpi(var->type, "string")==0){
+			var->varname=(char*)malloc(sizeof(char))*strlen(var->prev->name);
+			var->size=strlen(var->prev->name);
+			var->vartype=3;
+		}
+		else if(strcmpi(var->vartype,"int")){
+			var->varname=(int*)malloc(sizeof(int));
+			var->size=1;
+			var_>vartype=0;
+		}
+		else if	(strcmpi(var->type,"float")){
+			var->varname=(float*)malloc(sizeof(float));
+			var->size=1;
+			var->vartype=1;
+		}
+		else if (strcmpi(var->type,"double")){
+			var->varname=(double*)malloc(sizeof(double));
+			var->size=1;
+			var->vartype=2;
+		}
+		else {	
+			printf("Wrong Data Type")var->varname=NULL;
+		}
+		if(strcmp(type,"char") strcpy(car->varname,arg->name);
+		else (var->varname)=atoi(arg->name);
+		arg=arg->prev
+	}
+=======
+		args = setvar(Vars,size_var,args);
+		strcpy(In->name,"true");
+=======
+>>>>>>> fe746101848cfe7eb89af302b50edd1fea778f52
 		args=args->prev;
 	}else{
 /* Come up with a better default condition
 */
 		strcpy(In->name,"false");
 	}
+<<<<<<< HEAD
+	
+>>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb
+=======
 		
+>>>>>>> c4ec68b383fe0fb50d73c09d8b5ef91f93babd3d
 	printf("Debug : Leaving Evaluate\n");
 	return 0;
 }

@@ -2,6 +2,9 @@
 *  Omkar H. Ramachandran
 *  omkar.ramachandran@colorado.edu
 * 
+*  Abhirath Mahipal
+*  abhirathmahipal@hotmail.com
+*
 *  (Sign in your name here if you make changes)
 *  Player/NPC movement functions
 *  
@@ -14,22 +17,15 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
+#include <ncurses.h>
+#include "shadowengine.h"
 
-<<<<<<< HEAD
-
-
-
-
-
-
-
-=======
 int action(Char *C, Map *M,int input){
 	switch(input){
 		case 119:
 		case KEY_UP:
 			if(M->cell[GRID_X*(C->y-1)+C->x].type == 0){
-				M->cell[GRID_X*(C->y)+C->x].type = 1;
+				M->cell[GRID_X*(C->y)+C->x].type = 0;
 				C->y -= 1;
 				place_on_map(*C,M);
 				return 0;
@@ -70,4 +66,3 @@ int action(Char *C, Map *M,int input){
 			return 1;
 	}
 }
->>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb

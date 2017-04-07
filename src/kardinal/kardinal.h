@@ -29,11 +29,21 @@ struct Input{
 };
 
 struct VariableDec{
+<<<<<<< HEAD
+	char varname[20];
+	char type[7];
+	char value[8];
+	int size;
+	int vartype; // 0=int, 1=float, 2=double, 3=string
+	VariableDec *prev;
+	VariableDec *selfpointer;
+=======
 	char varname[20]; 	// Variable Name
 	char type[7];		// Variable Type
 	char *value;		// Value
 	int size; 		// Size in bytes
 	struct VariableDec *prev;	// Pointer to the previous element
+>>>>>>> 2cf73144002bf8eee37580d3554533f596b217fb
 };
 
 typedef struct Input Input;
