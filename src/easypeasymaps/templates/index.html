@@ -10,7 +10,8 @@
 
         </div>
         <!--add a button and write some function to create the text in the file-->
-        <a id="save" download="new.map" href="data:text/plain,">Save</a>
+        <a id="save" download="new.map" href="data:text/plain,"></a>
+        <button id="save-button">Save</button>
 
     </div>
     <div id="textures-controller">
@@ -30,6 +31,19 @@
     window.addEventListener("mouseup", function() {
         is_mouse_down = false;
     });
+    document.getElementById("save-button").addEventListener("click", download_map);
+
+    function download_map() {
+        var map_boxes = document.getElementsByClassName("map-box");
+        var save_element = document.getElementById("save");
+
+        for (var i = 0; i < map_boxes.length; i++) {
+            save_element.href += String.fromCharCode(map_boxes[i].dataset.ascii);
+        }
+
+        save_element.click();
+
+    }
 
     function create_grid_row(row_number) {
         var row = document.createElement('div');
