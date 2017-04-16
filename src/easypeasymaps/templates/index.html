@@ -61,8 +61,10 @@
         box.className = 'map-box';        
         box.setAttribute("row-number", row_number);
         box.setAttribute("col-number", col_number);
-        box.setAttribute("data-ascii", "");
-        box.appendChild(document.createElement('img'));
+        box.setAttribute("data-ascii", "51");
+        var default_grass = document.createElement('img');
+        default_grass.src = 'static/img/grass.jpg';
+        box.appendChild(default_grass);
         box.addEventListener("click", change_box_tile);
         box.addEventListener("mouseenter", change_box_tile);
         
