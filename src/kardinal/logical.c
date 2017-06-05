@@ -1,9 +1,9 @@
 #include<stdio.h>
-#include<kardinal.h>
+#include"kardinal.h"
 #include<stdlib.h>
 #include<string.h>
 
-int all(Input *In, Input *args){
+int All(Input *In, Input *args){
 	fprintf(stderr,"Debug : Command is 'all'\n");
 	int flag = 0;
 	do{
@@ -23,7 +23,7 @@ int all(Input *In, Input *args){
 	return 0;
 }
 
-int some(Input *In, Input *args){
+int Some(Input *In, Input *args){
 	fprintf(stderr,"Debug : Command is 'some'\n");
 	int flag = 0;
 	int lim = atoi(args->name);
@@ -44,7 +44,7 @@ int some(Input *In, Input *args){
 	return 0;
 }
 	
-int not(Input *In, Input *args){
+int Not(Input *In, Input *args){
 	printf("Debug : Command is 'not'\n");
 	if(args->prev!=NULL){
 		fprintf(stderr,"Warning : Too many arguments. The code will act only on the last argument\n");

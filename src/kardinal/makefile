@@ -18,8 +18,11 @@ parse.o: parse.c
 variable.o : variable.c
 	cc -c variable.c
 
+logical.o : logical.c
+	cc -c logical.c
+
 .PHONY: debug
-debug: main.o parse.o evaluate.o state.o variable.o
+debug: main.o parse.o evaluate.o state.o variable.o logical.o
 	cc -g -o kardinal $(obj)
 
 .PHONY: clean

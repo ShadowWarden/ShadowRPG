@@ -64,6 +64,11 @@ int Free_var(VariableDec *);
 void print_variable_stack(VariableDec);
 int setvar(VariableDec **, int *,Input **);
 
+// logical.c
+int All(Input *, Input *);
+int Some(Input *, Input *);
+int Not(Input *, Input *);
+
 // Extern variables
 extern State * Titles;
 extern int TitleSize;
