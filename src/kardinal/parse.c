@@ -158,7 +158,7 @@ void print(Input In){
 //	printf("Debug : tmp = %p\n",tmp);
 	while(tmp != NULL){
 	//	char buf[20];
-	//	sprintf(buf,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+		fprintf(stderr,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
 	//	debug(debug)
 		tmp = tmp->prev;
 		flag++;
@@ -283,9 +283,12 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
 			fprintf(stderr,"Debug : Survived the selective_free\n");
-			VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
-			var=*Vars;
-			evaluate(cur,args,Player,PlayerSize,Vars,size_var,var->prev,var);
+//			VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
+//			var=*Vars;
+//			fprintf(stderr,"Debug : Survived variable malloc\n");
+		
+//			print(*args);
+			evaluate(cur,args,Player,PlayerSize,Vars,size_var);
 			Free(args);
 			fprintf(stderr,"Debug : Freed args\n");
 			curlvl = cur->lvl;

@@ -23,7 +23,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var, VariableDec *Var1, VariableDec *Var2){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var){
 /* At present, it works. We have a few different things that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -37,7 +37,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 */
 	fprintf(stderr,"Debug : Entered Evaluate\n");
 	fprintf(stderr,"Debug : Printing arguments\n");
-	print(*args);
+//	print(*args);
 	In->type = 0;
 	if(EQSTR(In->name,"all")){
 		All(In,args);
@@ -86,11 +86,35 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		}
 		args=args->prev;
 	}else if(EQSTR(In->name, "EQ")){
-		EQ(Var1,Var2);
-	}else if(EQSTR(In->name, "GE_or_EQ")){
-		GE_or_EQ(Var1,Var2);
-	}else if(EQSTR(In->name, "LE_or_EQ")){
-		LE_or_EQ(Var1,Var2);
+		VariableDec * Var1 = *Vars;
+		VariableDec * Var2 = Var1->prev;
+		int res = EQ(Var1,Var2);
+		if(res == 0)
+			strcpy(In->name,"true");
+		else
+			strcpy(In->name,"false");
+		/* Need to do an error condition here */
+	}else if(EQSTR(In->name, "GE")){
+		VariableDec * Var1 = *Vars;
+		VariableDec * Var2 = Var1->prev;
+	
+		int res = GE(Var1,Var2);
+		if(res == 0)
+			strcpy(In->name,"true");
+		else
+			strcpy(In->name,"false");
+		/* Need to do an error condition here */
+
+	}else if(EQSTR(In->name, "LE")){
+		VariableDec * Var1 = *Vars;
+		VariableDec * Var2 = Var1->prev;
+	
+		int res = LE(Var1,Var2);
+		if(res == 0)
+			strcpy(In->name,"true");
+		else
+			strcpy(In->name,"false");
+		/* Need to do an error condition here */
 	}else{
 /* Come up with a better default condition
 */

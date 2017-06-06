@@ -48,7 +48,7 @@ void print_final(Input );
 Input * parse(Input *, State **, int *,VariableDec **, int *);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, VariableDec **,int *, VariableDec *,VariableDec *);
+int evaluate(Input *, Input *, State **, int *, VariableDec **,int *);
 
 // state.c
 int build_states_test(FILE *);
@@ -71,8 +71,9 @@ int Not(Input *, Input *);
 
 //relational.c
 int EQ(VariableDec *,VariableDec *);
-int GE_or_EQ(VariableDec *,VariableDec *);
-int LE_or_EQ(VariableDec *,VariableDec *);
+int GE(VariableDec *,VariableDec *);
+int LE(VariableDec *,VariableDec *);
+
 // Extern variables
 extern State * Titles;
 extern int TitleSize;

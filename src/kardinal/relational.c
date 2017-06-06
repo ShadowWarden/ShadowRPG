@@ -57,7 +57,7 @@ int EQ(VariableDec *A, VariableDec *B){
 	}
 }
 
-int GE_or_EQ(VariableDec *A, VariableDec *B){
+int GE(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if A greater than or equal to B
 	fprintf(stderr,"Debug : Command is 'GE_or_EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
 	if(A->value == NULL){
@@ -71,7 +71,7 @@ int GE_or_EQ(VariableDec *A, VariableDec *B){
 	else{
 		if(strcmp(A->type,B->type)==0){
 			if(strcmp(A->type,"string")==0){
-				if(*A->value >= *B->value){
+				if(*A->value > *B->value){
 					fprintf(stderr,"Debug : The first value is greater than or equal to the second!\n");
 					return 0;
 				}
@@ -92,7 +92,7 @@ int GE_or_EQ(VariableDec *A, VariableDec *B){
 	}
 }
 
-int LE_or_EQ(VariableDec *A, VariableDec *B){
+int LE(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if A lesser than or equal B
 	fprintf(stderr,"Debug : Command is 'LE_or_EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
 	if(A->value == NULL){
@@ -106,7 +106,7 @@ int LE_or_EQ(VariableDec *A, VariableDec *B){
 	else{
 		if(strcmp(A->type,B->type)==0){
 			if(strcmp(A->type,"string")==0){
-				if(*A->value <= *B->value){
+				if(*A->value < *B->value){
 					fprintf(stderr,"Debug : The first value is lesser than or equal to the second!\n");
 					return 0;
 				}

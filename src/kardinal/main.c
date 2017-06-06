@@ -87,7 +87,7 @@ int main(int argc, char ** argv){
 	}
 	printf("Debug : Survived Free_var\n");
 	free(Titles);
-	free(Player);
+//	free(Player);
 	fclose(state_in);
 	return 0;
 }
