@@ -3,6 +3,8 @@
 #include<stdlib.h>
 #include<string.h>
 
+#define EQSTR(a,b) (strcmp(a,b)==0)
+
 int All(Input *In, Input *args){
 	fprintf(stderr,"Debug : Command is 'all'\n");
 	int flag = 0;

@@ -16,7 +16,8 @@
 #
 addttl(1)
 addttl(2)
-setvar(a,Hello)
+setvar(a,Hello,string)
+setvar(b,World,string)
 rmttl(2)
 all(ttl(1),ttl(2))
 all(random(shit))

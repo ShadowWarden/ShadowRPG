@@ -35,62 +35,20 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 *  that he should do. I'll do it otherwise - but right now, I'm only thinking about variable support
 *  -- OHR
 */
-//	char a[20] = "Result_";
 	fprintf(stderr,"Debug : Entered Evaluate\n");
 	fprintf(stderr,"Debug : Printing arguments\n");
 	print(*args);
 	In->type = 0;
 	if(EQSTR(In->name,"all")){
-		fprintf(stderr,"Debug : Command is 'all'\n");
-		int flag = 0;
-		do{
-			if(!EQSTR(args->name,"true")){
-				flag++;
-				fprintf(stderr,"Debug : %s is not true\n",args->name);
-				strcpy(In->name,"false");
-				break;
-			}
-			args = args->prev;
-		}while(args!=NULL);
-		if(flag==0){
-			strcpy(In->name,"true");	
-		}
-		fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
+		All(In,args);
 	}else if(EQSTR(In->name,"some")){
-		fprintf(stderr,"Debug : Command is 'some'\n");
-		int flag = 0;
-		int lim = atoi(args->name);
-		do{
-			if(EQSTR(args->name,"true")){
-				flag++;
-				fprintf(stderr,"Debug : %s is true\n",args->name);	
-			}
-			args = args->prev;	
-		}while(args!=NULL);
-		if(flag==lim){
-			strcpy(In->name,"true");	
-		}else{
-			strcpy(In->name,"false");		
-		}
-		fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
+		Some(In,args);
 	}else if(EQSTR(In->name,"not")){
 /* Note to NearlyHeadless : Do an errorcheck for number of arguments here. 
 *  There should be exactly 1 and no more. I'm just spitting out a warning in
 *  this version of the code here :
 */
-		printf("Debug : Command is 'not'\n");
-		if(args->prev!=NULL){
-			fprintf(stderr,"Warning : Too many arguments. The code will act only on the last argument\n");
-		}
-		if(EQSTR(args->name,"true")){
-			fprintf(stderr,"Debug : arg=%s\n",args->name);
-			strcpy(In->name,"false");
-		}else if(EQSTR(args->name,"false")){
-			fprintf(stderr,"Debug : arg=%s\n",args->name);
-			strcpy(In->name,"true");
-		}
-	// Do an error check here if argument name is neither true or false
-		fprintf(stderr,"Debug : Arg=%s, In.name=%s\n",args->name,In->name);
+		Not(In,args);
 	}else if(EQSTR(In->name,"ttl")){
 /* Only looking at last arg again. NearlyHeadless : Error check. In addition,
 *  Replace this with binary search (O(N) vs O(log N))
