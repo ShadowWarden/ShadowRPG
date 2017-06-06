@@ -48,7 +48,7 @@ void print_final(Input );
 Input * parse(Input *, State **, int *,VariableDec **, int *);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, VariableDec **,int *);
+int evaluate(Input *, Input *, State **, int *, VariableDec **,int *, VariableDec *,VariableDec *);
 
 // state.c
 int build_states_test(FILE *);

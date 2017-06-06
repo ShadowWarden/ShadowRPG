@@ -16,8 +16,11 @@
 #
 addttl(1)
 addttl(2)
-setvar(a,4.0f,string)
-setvar(b,3.0f,string)
+setvar(a,3.0f,string)
+setvar(b,4.0f,string)
+EQ(a,b)
+GE_or_EQ(a,b)
+LE_or_EQ(a,b)
 rmttl(2)
 all(ttl(1),ttl(2))
 all(random(shit))

@@ -24,7 +24,7 @@
 
 int EQ(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if equal
-	fprintf(stderr,"Debug : Comman is 'Equal'\n");
+	fprintf(stderr,"Debug : Command is 'EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
 	if(A->value == NULL){
 		fprintf(stderr,"Debug : First argument does not exist! Exiting\n");
 		return -4;
@@ -35,14 +35,14 @@ int EQ(VariableDec *A, VariableDec *B){
 	}
 	else{
 		if(strcmp(A->type,B->type)==0){
-			if(strcmp(A->type,"float")==0){
+			if(strcmp(A->type,"string")==0){
 				if(*A->value == *B->value){
 					fprintf(stderr,"Debug : The values are equal!\n");
 					return 0;
 				}
 				else{
-					fprintf(stderr,"Debug : The values are not equal!\n");
-					return 0;
+					fprintf(stderr,"Debug : The values fail the comparison!\n");
+					return -1;
 				}
 			}
 			else{
@@ -52,14 +52,14 @@ int EQ(VariableDec *A, VariableDec *B){
 		}
 		else{
 			fprintf(stderr,"Debug : Type mismatch. Check inputs\n");
-			return -1;
+			return -2;
 		}
 	}
 }
 
 int GE_or_EQ(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if A greater than or equal to B
-	fprintf(stderr,"Debug : Comman is 'Equal'\n");
+	fprintf(stderr,"Debug : Command is 'GE_or_EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
 	if(A->value == NULL){
 		fprintf(stderr,"Debug : First argument does not exist! Exiting\n");
 		return -4;
@@ -70,14 +70,14 @@ int GE_or_EQ(VariableDec *A, VariableDec *B){
 	}
 	else{
 		if(strcmp(A->type,B->type)==0){
-			if(strcmp(A->type,"float")==0){
+			if(strcmp(A->type,"string")==0){
 				if(*A->value >= *B->value){
 					fprintf(stderr,"Debug : The first value is greater than or equal to the second!\n");
 					return 0;
 				}
 				else{
-					fprintf(stderr,"Debug : The values are not equal!\n");
-					return 0;
+					fprintf(stderr,"Debug : The values fail the comparison!\n");
+					return -1;
 				}
 			}
 			else{
@@ -87,14 +87,14 @@ int GE_or_EQ(VariableDec *A, VariableDec *B){
 		}
 		else{
 			fprintf(stderr,"Debug : Type mismatch. Check inputs\n");
-			return -1;
+			return -2;
 		}
 	}
 }
 
 int LE_or_EQ(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if A lesser than or equal B
-	fprintf(stderr,"Debug : Comman is 'Equal'\n");
+	fprintf(stderr,"Debug : Command is 'LE_or_EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
 	if(A->value == NULL){
 		fprintf(stderr,"Debug : First argument does not exist! Exiting\n");
 		return -4;
@@ -105,14 +105,14 @@ int LE_or_EQ(VariableDec *A, VariableDec *B){
 	}
 	else{
 		if(strcmp(A->type,B->type)==0){
-			if(strcmp(A->type,"float")==0){
+			if(strcmp(A->type,"string")==0){
 				if(*A->value <= *B->value){
 					fprintf(stderr,"Debug : The first value is lesser than or equal to the second!\n");
 					return 0;
 				}
 				else{
-					fprintf(stderr,"Debug : The values are not equal!\n");
-					return 0;
+					fprintf(stderr,"Debug : The values fail the comparison!\n");
+					return -1;
 				}
 			}
 			else{
@@ -122,7 +122,7 @@ int LE_or_EQ(VariableDec *A, VariableDec *B){
 		}
 		else{
 			fprintf(stderr,"Debug : Type mismatch. Check inputs\n");
-			return -1;
+			return -2;
 		}
 	}
 }

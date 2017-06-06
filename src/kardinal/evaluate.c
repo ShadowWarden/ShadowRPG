@@ -23,7 +23,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var, VariableDec *Var1, VariableDec *Var2){
 /* At present, it works. We have a few different things that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -85,6 +85,12 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			strcpy(In->name,"true");
 		}
 		args=args->prev;
+	}else if(EQSTR(In->name, "EQ")){
+		EQ(Var1,Var2);
+	}else if(EQSTR(In->name, "GE_or_EQ")){
+		GE_or_EQ(Var1,Var2);
+	}else if(EQSTR(In->name, "LE_or_EQ")){
+		LE_or_EQ(Var1,Var2);
 	}else{
 /* Come up with a better default condition
 */

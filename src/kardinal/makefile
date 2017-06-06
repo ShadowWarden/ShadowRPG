@@ -1,4 +1,4 @@
-obj=main.o parse.o evaluate.o state.o variable.o logical.o
+obj=main.o parse.o evaluate.o state.o variable.o logical.o relational.o
 
 kardinal: $(obj)
 	cc -Wall -o kardinal -O3 $(obj)
@@ -21,7 +21,7 @@ variable.o : variable.c
 logical.o : logical.c
 	cc -c logical.c
 
-relational.0 : relational.c
+relational.o : relational.c
 	cc -c relational.c
 
 .PHONY: debug
