@@ -1,3 +1,20 @@
+/* kardinal/evaluate.c
+*  Omkar H. Ramachandran
+*  omkar.ramachandran@colorado.edu
+*
+*  Vishnu Sharma
+*  vishnu.rk1995@gmail.com
+*
+*  Logic interface of the game. All available script
+*  functions should be defined here in if statements
+*
+*  This project is under the GNU General GPL version 3.0 license. For more 
+*  information about the license, refer the LICENCE file in the root directory 
+*  or go online to <http://www.gnu.org/licenses>
+*  
+*  Any redistribution of this code must contain this header in its entirety
+*/
+
 #include<stdio.h>
 #include"kardinal.h"
 #include<stdlib.h>

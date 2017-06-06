@@ -69,6 +69,10 @@ int All(Input *, Input *);
 int Some(Input *, Input *);
 int Not(Input *, Input *);
 
+//relational.c
+int EQ(VariableDec *,VariableDec *);
+int GE_or_EQ(VariableDec *,VariableDec *);
+int LE_or_EQ(VariableDec *,VariableDec *);
 // Extern variables
 extern State * Titles;
 extern int TitleSize;

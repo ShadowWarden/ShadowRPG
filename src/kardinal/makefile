@@ -21,8 +21,11 @@ variable.o : variable.c
 logical.o : logical.c
 	cc -c logical.c
 
+relational.0 : relational.c
+	cc -c relational.c
+
 .PHONY: debug
-debug: main.o parse.o evaluate.o state.o variable.o logical.o
+debug: main.o parse.o evaluate.o state.o variable.o logical.o relational.o
 	cc -g -o kardinal $(obj)
 
 .PHONY: clean
