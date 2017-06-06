@@ -64,7 +64,7 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 	(*args)=(*args)->prev;
 
 	if(strcmp(var->type,"string")==0){
-		var->value=(char *)malloc(sizeof(char)*(strlen((*args)->name)+1));
+		var->value=(char *)malloc(sizeof(float));
 		var->size=sizeof(char)*(strlen((*args)->name)+1);
 	}else{
 		var->value=NULL;
@@ -77,9 +77,14 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 		 *  we just shouldn't allow the type variable to be empty
 		 */
 	}
+	// Compatible only for single float values
 	if(strcmp(var->type,"string")==0){
 		fprintf(stderr,"Debug : Assigning %s to var->value\n",(*args)->name);
-		strcpy(var->value,(*args)->name);
+		//strcpy(var->value,(*args)->name);	
+		float intermediate_buffer;
+		intermediate_buffer=atof((*args)->name);
+		*var->value = intermediate_buffer;
+		fprintf(stderr,"Debug: Assigned %f successfully\n",(float)*var->value);
 		(*args) = (*args)->prev;
 	}
 	strcpy(var->varname,(*args)->name);
