@@ -32,10 +32,10 @@ void print_variable_stack(VariableDec Vars){
 	VariableDec * tmp = &Vars;
 	fprintf(stderr,"Debug : Printing current variable stack\n");
 	while(tmp!=NULL){
-		printf("Debug : %s : %s : %s : %d\n",tmp->varname,tmp->type,tmp->value,tmp->size);
+		fprintf(stderr,"Debug : %s : %s : %f : %d\n",tmp->varname,tmp->type,(float)*tmp->value,tmp->size);
 		tmp=tmp->prev;
 	}
-	printf("\n");
+	fprintf(stderr,"\n");
 }
 
 
