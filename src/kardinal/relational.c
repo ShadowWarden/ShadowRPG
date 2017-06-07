@@ -24,7 +24,7 @@
 
 int EQ(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if equal
-	fprintf(stderr,"Debug : Command is 'EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
+	fprintf(stderr,"Debug : Command is 'EQ'. Comparing %d and %d\n",(int)*A->value,(int)*B->value);
 	if(A->value == NULL){
 		fprintf(stderr,"Debug : First argument does not exist! Exiting\n");
 		return -4;
@@ -59,7 +59,7 @@ int EQ(VariableDec *A, VariableDec *B){
 
 int GE(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if A greater than or equal to B
-	fprintf(stderr,"Debug : Command is 'GE_or_EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
+	fprintf(stderr,"Debug : Command is 'GE'. Comparing %d and %d\n",(int)*A->value,(int)*B->value);
 	if(A->value == NULL){
 		fprintf(stderr,"Debug : First argument does not exist! Exiting\n");
 		return -4;
@@ -94,7 +94,7 @@ int GE(VariableDec *A, VariableDec *B){
 
 int LE(VariableDec *A, VariableDec *B){
 	// Compares A, B and returns 0 if A lesser than or equal B
-	fprintf(stderr,"Debug : Command is 'LE_or_EQ'. Comparing %f and %f\n",(float)*A->value,(float)*B->value);
+	fprintf(stderr,"Debug : Command is 'LE'. Comparing %d and %d\n",(int)*A->value,(int)*B->value);
 	if(A->value == NULL){
 		fprintf(stderr,"Debug : First argument does not exist! Exiting\n");
 		return -4;

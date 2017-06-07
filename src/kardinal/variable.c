@@ -26,13 +26,14 @@ int Free_var(VariableDec * Vars){
 		free(tmp);
 	}
 	free(Vars);
+	return 0;
 }
 
 void print_variable_stack(VariableDec Vars){
 	VariableDec * tmp = &Vars;
 	fprintf(stderr,"Debug : Printing current variable stack\n");
 	while(tmp!=NULL){
-		fprintf(stderr,"Debug : %s : %s : %f : %d\n",tmp->varname,tmp->type,(float)*tmp->value,tmp->size);
+		fprintf(stderr,"Debug : %s : %s : %d : %d\n",tmp->varname,tmp->type,(int)*tmp->value,tmp->size);
 		tmp=tmp->prev;
 	}
 	fprintf(stderr,"\n");
@@ -64,7 +65,7 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 	(*args)=(*args)->prev;
 
 	if(strcmp(var->type,"string")==0){
-		var->value=(char *)malloc(sizeof(float));
+		var->value=(char *)malloc(sizeof(int));
 		var->size=sizeof(char)*(strlen((*args)->name)+1);
 	}else{
 		var->value=NULL;
@@ -84,7 +85,7 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 		float intermediate_buffer;
 		intermediate_buffer=atof((*args)->name);
 		*var->value = intermediate_buffer;
-		fprintf(stderr,"Debug: Assigned %f successfully\n",(float)*var->value);
+		fprintf(stderr,"Debug: Assigned %d successfully\n",(int)*var->value);
 		(*args) = (*args)->prev;
 	}
 	strcpy(var->varname,(*args)->name);
