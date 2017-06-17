@@ -63,7 +63,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}else if(EQSTR(In->name,"addttl")){
 /* Again. This only accepts exactly one argument. Error checks
 */
-		add_state_to_player(atoi(args->name),Player,PlayerSize);
+		add_state_to_player(atoi(args->name),Player,PlayerSize,debug);
 		(debug==1) ? fprintf(stderr,"(addttl) Debug : State %s added to player\n",Titles[atoi(args->name)-1].name) : 0;
 		strcpy(In->name,"true");			
 	}else if(EQSTR(In->name,"rmttl")){
