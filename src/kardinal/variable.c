@@ -26,6 +26,7 @@ int Free_var(VariableDec * Vars){
 		free(tmp);
 	}
 	free(Vars);
+	return 0;
 }
 
 void print_variable_stack(VariableDec Vars, int debug){
@@ -45,7 +46,7 @@ void print_variable_stack(VariableDec Vars, int debug){
  *  If ANYONE has a better implementation, please implement it and send a 
  *  pull request to VariableSupportOHR
  */
-int setvar(VariableDec ** Vars, int * size_var, Input ** args){
+int setvar(VariableDec ** Vars, int * size_var, Input ** args, int debug){
 	VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
 	if(var == NULL){
 		(debug==1) ? fprintf(stderr,"Error : Malloc returned NULL. Is there any memory left?\n") : 0;
@@ -64,7 +65,7 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 	(*args)=(*args)->prev;
 
 	if(strcmp(var->type,"string")==0){
-		var->value=(char *)malloc(sizeof(float));
+		var->value=(char *)malloc(sizeof(int));
 		var->size=sizeof(char)*(strlen((*args)->name)+1);
 	}else{
 		var->value=NULL;

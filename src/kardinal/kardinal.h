@@ -43,22 +43,22 @@ typedef struct VariableDec VariableDec;
 // parse.c
 Input * build(Input *, char *);
 void Free(Input *);
-void print(Input );
-void print_final(Input );
+void print(Input, int);
+void print_final(Input, int);
 Input * parse(Input *, State **, int *,VariableDec **, int *, int);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, VariableDec **,int *, VariableDec *,VariableDec *, int);
+int evaluate(Input *, Input *, State **, int *, VariableDec **,int *, int);
 
 // state.c
 int build_states_test(FILE *i, int);
 int dump_states_test(int);
 int find_ttl(int, State **, int *, int);
-int add_state_to_player(int, State **, int *);
+int add_state_to_player(int, State **, int *, int);
 int remove_state_from_player(int, State **, int *, int);
 int print_player_state(State *, int, int);
 int getsize(FILE *);
-int Statecpy(State *, State *);
+//int Statecpy(State *, State *);
 
 //variable.c
 int Free_var(VariableDec *);
@@ -72,8 +72,8 @@ int Not(Input *, Input *, int);
 
 //relational.c
 int EQ(VariableDec *,VariableDec *, int);
-int GE_or_EQ(VariableDec *,VariableDec *, int);
-int LE_or_EQ(VariableDec *,VariableDec *, int);
+int GE(VariableDec *,VariableDec *, int);
+int LE(VariableDec *,VariableDec *, int);
 // Extern variables
 extern State * Titles;
 extern int TitleSize;

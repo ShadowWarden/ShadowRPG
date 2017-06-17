@@ -42,8 +42,13 @@ int main(int argc, char ** argv){
 
 	int debug=0;
 	if(argc>3){
-		if(strcmp(argv[3],"--debug")){
+		if(strcmp(argv[3],"--debug")==0){
+			printf("Yay\n");
 			debug=1;
+		}
+		else{
+			printf("Unidentifiable argument %s\n", argv[3]);
+			exit(2);
 		}
 	}
 	// Initialize variable stack
@@ -78,9 +83,9 @@ int main(int argc, char ** argv){
 	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 		In = parse(In,&Player,&PlayerSize,&Vars,&size_var,debug);
 		(debug == 1) ? printf("Debug : Command stack after parse\n") : 0;
-		print(*In);
+		print(*In,debug);
 		(debug==1) ? printf("\nDebug : Final Result\n") : 0;
-		print_final(*In);
+		print_final(*In, debug);
 	//	scanf("%c",&junk);	
 		(debug==1) ? printf("\nDebug : Size of Player state stack : %d\n",PlayerSize) : 0;
 		print_player_state(Player,PlayerSize,debug);
@@ -93,7 +98,7 @@ int main(int argc, char ** argv){
 	}
 	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
 	free(Titles);
-	free(Player);
+//	free(Player);
 	fclose(state_in);
 	return 0;
 }

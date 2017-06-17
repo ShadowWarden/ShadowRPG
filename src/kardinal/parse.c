@@ -150,7 +150,7 @@ int find_maxlvl(Input In){
 	return maxlvl;
 }
 
-void print(Input In){
+void print(Input In, int debug){
 	Input *tmp = &In;
 //	printf("%d\n",strcmp(In.name,"def\0"));
 	int flag = 0;
@@ -158,19 +158,19 @@ void print(Input In){
 //	printf("Debug : tmp = %p\n",tmp);
 	while(tmp != NULL){
 	//	char buf[20];
-	//	sprintf(buf,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+		(debug==1) ? fprintf(stderr,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl) : 0;
 	//	debug(debug)
 		tmp = tmp->prev;
 		flag++;
 	}
 }
 
-void print_final(Input In){
+void print_final(Input In, int debug){
 	Input *tmp = &In;
 	int flag = 0;
 	while(tmp != NULL){
 		if(tmp->prev==NULL){
-			fprintf(stderr,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl);
+			(debug==1) ? fprintf(stderr,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl) : 0;
 		}
 		flag++;
 		tmp=tmp->prev;
@@ -205,11 +205,11 @@ int write(Input *In1, Input *In2){
 	In1->prev = In2->prev;
 }
 
-void sequential_print(Input *In, char *name){
+void sequential_print(Input *In, char *name, int debug){
 	int i=0;
 	Input *tmp = In;
 	do{
-		fprintf(stderr,"Debug : %s[%d].name = %s\n",name,i,tmp->name);
+		(debug==1) ? fprintf(stderr,"Debug : %s[%d].name = %s\n",name,i,tmp->name) : 0;
 		tmp = tmp->prev;
 		i++;
 	}while(tmp!=NULL);
@@ -238,7 +238,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 			(debug==1) ? fprintf(stderr,"Debug : Survived freeform_new()\n") : 0;
 //			size_argsold++;
 //			write(&argsold[size_argsold],old);
-			print(*argsold);
+			print(*argsold, debug);
 		//	old = cur;
 			pos++;
 			curlvl = cur->lvl;
@@ -254,7 +254,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 			freeform_new(&argsold,*old,pos);
 			pos++;
 			(debug==1) ? fprintf(stderr,"Debug : Argsold at the start of if stmt 2\n") : 0;
-			print(*argsold);
+			print(*argsold, debug);
 			int size_args = 0;
 			(debug==1) ? fprintf(stderr,"Debug : Entered if stmt 2\n") : 0;
 			Input *tmp = argsold;
@@ -275,7 +275,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 		//	printf("Debug : tmp = %p\n",argsold);	
 			if(argsold!=NULL){
 				(debug==1) ? fprintf(stderr,"Debug : Argsold in if stmt 2\n") : 0;
-				print(*argsold);
+				print(*argsold, debug);
 			}
 /* 
 *  Note : Author : OHR
@@ -283,9 +283,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
-			VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
-			var=*Vars;
-			evaluate(cur,args,Player,PlayerSize,Vars,size_var,var->prev,var,debug);
+			evaluate(cur,args,Player,PlayerSize,Vars,size_var,debug);
 			Free(args);
 			(debug==1) ? fprintf(stderr,"Debug : Freed args\n") : 0;
 			curlvl = cur->lvl;
@@ -299,7 +297,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 			freeform_new(&argsold,*old,pos);
 			(debug==1) ? fprintf(stderr,"Debug : Survived freeform_new() if stmt 3\n") : 0;
 			pos++;
-			print(*argsold);
+			print(*argsold, debug);
 			curlvl = cur->lvl;
 			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 3\n\n") : 0;
 		}

@@ -53,7 +53,7 @@ int build_states_test(FILE * in, int debug){
 	}
 }
 
-int find_ttl(int StateId, State ** Player, int * PlayerSize){
+int find_ttl(int StateId, State ** Player, int * PlayerSize, int debug){
 	int i,flag=0;
 	for(i=0;i<*PlayerSize;i++){
 		if(StateId == ((*Player)+i)->id){
@@ -101,7 +101,7 @@ int remove_state_from_player(int StateId, State ** Player, int *PlayerSize, int 
 *  Error checks need to be done. Check max stateid and so on
 */
 	int i,j;
-	int flag = 0;	
+	//int flag = 0;	
 
 	(debug==1) ? fprintf(stderr,"(remove_state_from_player) Debug : PlayerSize = %d\n",*PlayerSize) : 0;
 	for(i=0;i<*PlayerSize;i++){
@@ -138,7 +138,7 @@ int dump_states_test(int debug){
 
 int print_player_state(State* P, int PlayerSize, int debug){
 	int i;
-	fprintf(stderr,"(print_player_states) Debug : Printing current Player state array\n")(debug==1) ?  : 0;
+	(debug==1) ? fprintf(stderr,"(print_player_states) Debug : Printing current Player state array\n") : 0;
 	for(i=0;i<PlayerSize;i++){	
 		printf("Debug : %d %s %d\n",P[i].id,P[i].name,P[i].attribute);
 	}
