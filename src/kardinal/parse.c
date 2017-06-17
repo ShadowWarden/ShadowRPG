@@ -215,7 +215,7 @@ void sequential_print(Input *In, char *name){
 	}while(tmp!=NULL);
 }
 
-Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, int *size_var){
+Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, int *size_var, int debug){
 	int i,j;
 	int maxlvl = find_maxlvl(*In);
 	int pos = 0;	
@@ -225,7 +225,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 	int curlvl = old->lvl; 
 // I'm shifting the defn of curlvl here to make things a little clearer.
 
-	fprintf(stderr,"Debug : Entered parse\n");
+	(debug==1) ? fprintf(stderr,"Debug : Entered parse\n") : 0;
 
 	while(cur!=NULL){
 		if(cur->lvl > curlvl){
@@ -233,16 +233,16 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 * command. Something like ..cur),old.. As a result, we need to add old to 
 * argsold and we should be done.
 */
-			fprintf(stderr,"Debug : Entered if stmt 1\n");
+			(debug==1) ? fprintf(stderr,"Debug : Entered if stmt 1\n") : 0;
 			freeform_new(&argsold,*old,pos);
-			fprintf(stderr,"Debug : Survived freeform_new()\n");
+			(debug==1) ? fprintf(stderr,"Debug : Survived freeform_new()\n") : 0;
 //			size_argsold++;
 //			write(&argsold[size_argsold],old);
 			print(*argsold);
 		//	old = cur;
 			pos++;
 			curlvl = cur->lvl;
-			fprintf(stderr,"Debug : Leaving if stmt 1\n\n");
+			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 1\n\n") : 0;
 		}else if(cur->lvl < curlvl){
 /* If stmt 2 in the gameplan. If cur->lvl < curlvl, then we are going from
 *  argument to command - Only possible way in which this can happen, 
@@ -253,13 +253,13 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 */
 			freeform_new(&argsold,*old,pos);
 			pos++;
-			fprintf(stderr,"Debug : Argsold at the start of if stmt 2\n");
+			(debug==1) ? fprintf(stderr,"Debug : Argsold at the start of if stmt 2\n") : 0;
 			print(*argsold);
 			int size_args = 0;
-			fprintf(stderr,"Debug : Entered if stmt 2\n");
+			(debug==1) ? fprintf(stderr,"Debug : Entered if stmt 2\n") : 0;
 			Input *tmp = argsold;
 			Input *args=NULL;
-			fprintf(stderr,"Debug : curlvl if stmt 2 : %d\n",curlvl);
+			(debug==1) ? fprintf(stderr,"Debug : curlvl if stmt 2 : %d\n",curlvl) : 0;
 			while(tmp!=NULL){
 	//			printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
 				if(tmp->lvl == curlvl){
@@ -270,11 +270,11 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 //				printf("Debug : tmp --> tmp->prev\n");
 			}
 
-			fprintf(stderr,"Debug : Survived the args loop\n");
+			(debug==1) ? fprintf(stderr,"Debug : Survived the args loop\n") : 0;
 			argsold = selective_free(argsold,curlvl);
 		//	printf("Debug : tmp = %p\n",argsold);	
 			if(argsold!=NULL){
-				fprintf(stderr,"Debug : Argsold in if stmt 2\n");
+				(debug==1) ? fprintf(stderr,"Debug : Argsold in if stmt 2\n") : 0;
 				print(*argsold);
 			}
 /* 
@@ -282,33 +282,33 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 *  For some reason, passing a null pointer to a function just leads straight to
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
-			fprintf(stderr,"Debug : Survived the selective_free\n");
+			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
 			VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
 			var=*Vars;
-			evaluate(cur,args,Player,PlayerSize,Vars,size_var,var->prev,var);
+			evaluate(cur,args,Player,PlayerSize,Vars,size_var,var->prev,var,debug);
 			Free(args);
-			fprintf(stderr,"Debug : Freed args\n");
+			(debug==1) ? fprintf(stderr,"Debug : Freed args\n") : 0;
 			curlvl = cur->lvl;
-			fprintf(stderr,"Debug : Leaving if stmt 2\n\n");
+			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 2\n\n") : 0;
 		}else{
 /* If stmt 3 in the gameplan. If curlvl doesn't change, then we're looking at
 *  another argument. Write to argsold and get on with life ;-)
 */
-			fprintf(stderr,"Debug : Entered if stmt 3\n");
-			fprintf(stderr,"Debug : Survived Realloc if stmt 3\n");
+			(debug==1) ? fprintf(stderr,"Debug : Entered if stmt 3\n") : 0;
+			(debug==1) ? fprintf(stderr,"Debug : Survived Realloc if stmt 3\n") : 0;
 			freeform_new(&argsold,*old,pos);
-			fprintf(stderr,"Debug : Survived freeform_new() if stmt 3\n");
+			(debug==1) ? fprintf(stderr,"Debug : Survived freeform_new() if stmt 3\n") : 0;
 			pos++;
 			print(*argsold);
 			curlvl = cur->lvl;
-			fprintf(stderr,"Debug : Leaving if stmt 3\n\n");
+			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 3\n\n") : 0;
 		}
 //		sequential_print(argsold,size_argsold);
 		old = cur;
 		cur = cur->prev;	
 	}
 	Free(argsold);
-	fprintf(stderr,"Debug : Freed argsold\n");
-	fprintf(stderr,"Debug : Survived the parse loop!\n");
+	(debug==1) ? fprintf(stderr,"Debug : Freed argsold\n") : 0;
+	(debug==1) ? fprintf(stderr,"Debug : Survived the parse loop!\n") : 0;
 	return In;	
 }

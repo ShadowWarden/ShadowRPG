@@ -28,14 +28,14 @@ int Free_var(VariableDec * Vars){
 	free(Vars);
 }
 
-void print_variable_stack(VariableDec Vars){
+void print_variable_stack(VariableDec Vars, int debug){
 	VariableDec * tmp = &Vars;
-	fprintf(stderr,"Debug : Printing current variable stack\n");
+	(debug==1) ? fprintf(stderr,"Debug : Printing current variable stack\n") : 0;
 	while(tmp!=NULL){
-		fprintf(stderr,"Debug : %s : %s : %f : %d\n",tmp->varname,tmp->type,(float)*tmp->value,tmp->size);
+		(debug==1) ? fprintf(stderr,"Debug : %s : %s : %f : %d\n",tmp->varname,tmp->type,(float)*tmp->value,tmp->size) : 0;
 		tmp=tmp->prev;
 	}
-	fprintf(stderr,"\n");
+	(debug==1) ? fprintf(stderr,"\n") : 0;
 }
 
 
@@ -48,10 +48,10 @@ void print_variable_stack(VariableDec Vars){
 int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 	VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
 	if(var == NULL){
-		fprintf(stderr,"Error : Malloc returned NULL. Is there any memory left?\n");
+		(debug==1) ? fprintf(stderr,"Error : Malloc returned NULL. Is there any memory left?\n") : 0;
 		return -1;
 	}
-	fprintf(stderr,"Debug : New Variable Allocated\n");
+	(debug==1) ? fprintf(stderr,"Debug : New Variable Allocated\n") : 0;
 	if(*size_var == 0){
 		var->prev=NULL;
 	}else{
@@ -69,7 +69,7 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 	}else{
 		var->value=NULL;
 		var->size=0;
-		fprintf(stderr,"Type not mentioned. Check documentation for syntax\n");
+		(debug==1) ? fprintf(stderr,"Type not mentioned. Check documentation for syntax\n") : 0;
 		return -2;
 		/*
 		 *  NearlyHeadless,
@@ -79,12 +79,12 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args){
 	}
 	// Compatible only for single float values
 	if(strcmp(var->type,"string")==0){
-		fprintf(stderr,"Debug : Assigning %s to var->value\n",(*args)->name);
+		(debug==1) ? fprintf(stderr,"Debug : Assigning %s to var->value\n",(*args)->name) : 0;
 		//strcpy(var->value,(*args)->name);	
 		float intermediate_buffer;
 		intermediate_buffer=atof((*args)->name);
 		*var->value = intermediate_buffer;
-		fprintf(stderr,"Debug: Assigned %f successfully\n",(float)*var->value);
+		(debug==1) ? fprintf(stderr,"Debug: Assigned %f successfully\n",(float)*var->value) : 0;
 		(*args) = (*args)->prev;
 	}
 	strcpy(var->varname,(*args)->name);

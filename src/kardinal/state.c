@@ -31,16 +31,16 @@ int getsize(FILE * in){
 	return N;
 }
 
-int build_states_test(FILE * in){
+int build_states_test(FILE * in, int debug){
 /*
 *
 *
 */
-	fprintf(stderr,"(build_states_test) Debug : Entered build_states_test\n");
+	(debug==1) ? fprintf(stderr,"(build_states_test) Debug : Entered build_states_test\n") : 0;
 	TitleSize = getsize(in);	
-	fprintf(stderr,"(build_states_test) Debug : Survived getsize\n");	
+	(debug==1) ? fprintf(stderr,"(build_states_test) Debug : Survived getsize\n") : 0;	
 	Titles = (State *) malloc (sizeof(State)*TitleSize);
-	fprintf(stderr,"(build_states_test) Debug : Malloced Titles\n");
+	(debug==1) ? fprintf(stderr,"(build_states_test) Debug : Malloced Titles\n") : 0;
 	int i=0;
 
 	for(i=0;i<TitleSize;i++){
@@ -57,21 +57,21 @@ int find_ttl(int StateId, State ** Player, int * PlayerSize){
 	int i,flag=0;
 	for(i=0;i<*PlayerSize;i++){
 		if(StateId == ((*Player)+i)->id){
-			fprintf(stderr,"(find_ttl) Debug : State %d found at i=%d\n",StateId,i);
+			(debug==1) ? fprintf(stderr,"(find_ttl) Debug : State %d found at i=%d\n",StateId,i) : 0;
 			flag++;
 			break;
 		}
 	}
 	if(flag == 0){
 		// State not Found
-		fprintf(stderr,"(find_ttl) Debug : State %d not found\n",StateId);
+		(debug==1) ? fprintf(stderr,"(find_ttl) Debug : State %d not found\n",StateId) : 0;
 		return -1; 
 	}else{
 		return 0;
 	}
 }
 
-int add_state_to_player(int StateId, State ** Player, int *PlayerSize){
+int add_state_to_player(int StateId, State ** Player, int *PlayerSize, int debug){
 /* Assume sorted, do insertion sort of 1 element to keep the array sorted
 *  Error checks need to be done. Check max stateid and so on
 */
@@ -82,9 +82,9 @@ int add_state_to_player(int StateId, State ** Player, int *PlayerSize){
 		(*Player) = (State *) malloc(sizeof(State)*(*PlayerSize+1)); 
 	}
 	*PlayerSize+=1;
-	fprintf(stderr,"(add_state_to_player) Debug : PlayerSize = %d\n",*PlayerSize);
+	(debug==1) ? fprintf(stderr,"(add_state_to_player) Debug : PlayerSize = %d\n",*PlayerSize) : 0;
 	for(i=0;i<*PlayerSize;i++){
-		fprintf(stderr,"(add_state_to_player) Debug : Player[%d].id = %d\n",i,((*Player)+i)->id);
+		(debug==1) ? fprintf(stderr,"(add_state_to_player) Debug : Player[%d].id = %d\n",i,((*Player)+i)->id) : 0;
 		if(((*Player)+i)->id>=StateId || (*PlayerSize==1 && i==0) || i==*PlayerSize-1){
 			for(j=*PlayerSize-1;j>i;j--){
 				Statecpy((*Player)+j,*((*Player)+j-1));
@@ -96,16 +96,16 @@ int add_state_to_player(int StateId, State ** Player, int *PlayerSize){
 	return 0;
 }
 
-int remove_state_from_player(int StateId, State ** Player, int *PlayerSize){
+int remove_state_from_player(int StateId, State ** Player, int *PlayerSize, int debug){
 /* Assume sorted, do insertion sort of 1 element to keep the array sorted
 *  Error checks need to be done. Check max stateid and so on
 */
 	int i,j;
 	int flag = 0;	
 
-	fprintf(stderr,"(remove_state_from_player) Debug : PlayerSize = %d\n",*PlayerSize);
+	(debug==1) ? fprintf(stderr,"(remove_state_from_player) Debug : PlayerSize = %d\n",*PlayerSize) : 0;
 	for(i=0;i<*PlayerSize;i++){
-		fprintf(stderr,"(remove_state_from_player) Debug : Player[%d].id = %d\n",i,((*Player)+i)->id);
+		(debug==1) ? fprintf(stderr,"(remove_state_from_player) Debug : Player[%d].id = %d\n",i,((*Player)+i)->id) : 0;
 		if((*Player)[i].id == StateId){
 			for(j=i;j<*PlayerSize;j++){
 				Statecpy((*Player)+j,*((*Player)+j+1));
@@ -125,22 +125,22 @@ int remove_state_from_player(int StateId, State ** Player, int *PlayerSize){
 	return 0;
 }
 
-int dump_states_test(){
+int dump_states_test(int debug){
 	int i=0;
-	fprintf(stderr,"(dump_states_test) Debug : Dump of global states\n");
-	fprintf(stderr,"(dump_states_test) Debug : TitleSize=%d\n",TitleSize);
+	(debug==1) ? fprintf(stderr,"(dump_states_test) Debug : Dump of global states\n") : 0;
+	(debug==1) ? fprintf(stderr,"(dump_states_test) Debug : TitleSize=%d\n",TitleSize) : 0;
 	for(i=0;i<TitleSize;i++){
-		fprintf(stderr,"(dump_states_test) Debug : %d %s %d\n",Titles[i].id,Titles[i].name,Titles[i].attribute);
+		(debug==1) ? fprintf(stderr,"(dump_states_test) Debug : %d %s %d\n",Titles[i].id,Titles[i].name,Titles[i].attribute) : 0;
 	}
 	printf("\n");
 	return 0;
 }
 
-int print_player_state(State* P, int PlayerSize){
+int print_player_state(State* P, int PlayerSize, int debug){
 	int i;
-	fprintf(stderr,"(print_player_states) Debug : Printing current Player state array\n");
+	fprintf(stderr,"(print_player_states) Debug : Printing current Player state array\n")(debug==1) ?  : 0;
 	for(i=0;i<PlayerSize;i++){	
 		printf("Debug : %d %s %d\n",P[i].id,P[i].name,P[i].attribute);
 	}
-	fprintf(stderr,"(print_player_states) Debug : Exiting print_player_state\n");
+	(debug==1) ? fprintf(stderr,"(print_player_states) Debug : Exiting print_player_state\n") : 0;
 }

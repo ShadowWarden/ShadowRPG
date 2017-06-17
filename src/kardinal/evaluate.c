@@ -64,7 +64,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 /* Again. This only accepts exactly one argument. Error checks
 */
 		add_state_to_player(atoi(args->name),Player,PlayerSize);
-		fprintf(stderr,"(addttl) Debug : State %s added to player\n",Titles[atoi(args->name)-1].name);
+		(debug==1) ? fprintf(stderr,"(addttl) Debug : State %s added to player\n",Titles[atoi(args->name)-1].name) : 0;
 		strcpy(In->name,"true");			
 	}else if(EQSTR(In->name,"rmttl")){
 /* Remove title by ID from the player's stack
@@ -79,7 +79,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 	}else if(EQSTR(In->name, "setvar")){
 		int result = -setvar(Vars,size_var,&args);
 		if(result != 0){
-			fprintf(stderr,"(setvar) Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",-result);
+			(debug==1) ? fprintf(stderr,"(setvar) Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",-result) : 0;
 			strcpy(In->name,"false");
 		}else{
 			strcpy(In->name,"true");
@@ -97,6 +97,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		strcpy(In->name,"false");
 	}
 		
-	printf("Debug : Leaving Evaluate\n");
+	(debug==1) ? printf("Debug : Leaving Evaluate\n") : 0;
 	return 0;
 }

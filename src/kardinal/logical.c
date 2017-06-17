@@ -22,13 +22,13 @@
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
-int All(Input *In, Input *args){
-	fprintf(stderr,"Debug : Command is 'all'\n");
+int All(Input *In, Input *args, int debug){
+	(debug==1) ? fprintf(stderr,"Debug : Command is 'all'\n") : 0;
 	int flag = 0;
 	do{
 		if(!EQSTR(args->name,"true")){
 			flag++;
-			fprintf(stderr,"Debug : %s is not true\n",args->name);
+			(debug==1) ? fprintf(stderr,"Debug : %s is not true\n",args->name) : 0;
 			strcpy(In->name,"false");
 			//break;
 			return -1;
@@ -38,18 +38,18 @@ int All(Input *In, Input *args){
 	if(flag==0){
 		strcpy(In->name,"true");	
 	}
-	fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
+	(debug==1) ? fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name) : 0;
 	return 0;
 }
 
-int Some(Input *In, Input *args){
-	fprintf(stderr,"Debug : Command is 'some'\n");
+int Some(Input *In, Input *args, int debug){
+	(debug==1) ? fprintf(stderr,"Debug : Command is 'some'\n") : 0;
 	int flag = 0;
 	int lim = atoi(args->name);
 	do{
 		if(EQSTR(args->name,"true")){
 			flag++;
-			fprintf(stderr,"Debug : %s is true\n",args->name);	
+			(debug==1) ? fprintf(stderr,"Debug : %s is true\n",args->name) : 0;	
 		}
 		args = args->prev;	
 	}while(args!=NULL);
@@ -59,26 +59,26 @@ int Some(Input *In, Input *args){
 		strcpy(In->name,"false");
 		return -1;
 	}
-	fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name);
+	(debug==1) ? fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name) : 0;
 	return 0;
 }
 	
-int Not(Input *In, Input *args){
+int Not(Input *In, Input *args, int debug){
 	printf("Debug : Command is 'not'\n");
 	if(args->prev!=NULL){
-		fprintf(stderr,"Warning : Too many arguments. The code will act only on the last argument\n");
+		(debug==1) ? fprintf(stderr,"Warning : Too many arguments. The code will act only on the last argument\n") : 0;
 	}
 	if(EQSTR(args->name,"true")){
-		fprintf(stderr,"Debug : arg=%s\n",args->name);
+		(debug==1) ? fprintf(stderr,"Debug : arg=%s\n",args->name) : 0;
 		strcpy(In->name,"false");
 	}else if(EQSTR(args->name,"false")){
-		fprintf(stderr,"Debug : arg=%s\n",args->name);
+		(debug==1) ? fprintf(stderr,"Debug : arg=%s\n",args->name) : 0;
 		strcpy(In->name,"true");
 	}
 	else{
-		fprintf(stderr,"Argument value neither true nor false");
+		(debug==1) ? fprintf(stderr,"Argument value neither true nor false") : 0;
 		return -1;
 	}	
-	fprintf(stderr,"Debug : Arg=%s, In.name=%s\n",args->name,In->name);
+	(debug==1) ? fprintf(stderr,"Debug : Arg=%s, In.name=%s\n",args->name,In->name) : 0;
 	return 0;
 }

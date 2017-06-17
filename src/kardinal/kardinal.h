@@ -45,34 +45,35 @@ Input * build(Input *, char *);
 void Free(Input *);
 void print(Input );
 void print_final(Input );
-Input * parse(Input *, State **, int *,VariableDec **, int *);
+Input * parse(Input *, State **, int *,VariableDec **, int *, int);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, VariableDec **,int *, VariableDec *,VariableDec *);
+int evaluate(Input *, Input *, State **, int *, VariableDec **,int *, VariableDec *,VariableDec *, int);
 
 // state.c
-int build_states_test(FILE *);
-int dump_states_test();
-int find_ttl(int, State **, int *);
+int build_states_test(FILE *i, int);
+int dump_states_test(int);
+int find_ttl(int, State **, int *, int);
 int add_state_to_player(int, State **, int *);
-int remove_state_from_player(int, State **, int *);
-int print_player_state(State *, int);
-
-// variable.c
+int remove_state_from_player(int, State **, int *, int);
+int print_player_state(State *, int, int);
 int getsize(FILE *);
+int Statecpy(State *, State *);
+
+//variable.c
 int Free_var(VariableDec *);
-void print_variable_stack(VariableDec);
-int setvar(VariableDec **, int *,Input **);
+void print_variable_stack(VariableDec, int);
+int setvar(VariableDec **, int *,Input **, int);
 
 // logical.c
-int All(Input *, Input *);
-int Some(Input *, Input *);
-int Not(Input *, Input *);
+int All(Input *, Input *, int);
+int Some(Input *, Input *, int);
+int Not(Input *, Input *, int);
 
 //relational.c
-int EQ(VariableDec *,VariableDec *);
-int GE_or_EQ(VariableDec *,VariableDec *);
-int LE_or_EQ(VariableDec *,VariableDec *);
+int EQ(VariableDec *,VariableDec *, int);
+int GE_or_EQ(VariableDec *,VariableDec *, int);
+int LE_or_EQ(VariableDec *,VariableDec *, int);
 // Extern variables
 extern State * Titles;
 extern int TitleSize;
