@@ -14,9 +14,8 @@
 #  
 # Any redistribution of this code must contain this header in its entirety
 #
-addttl(1)
-addttl(2)
-setvar(a,Hello)
-rmttl(2)
-all(ttl(1),ttl(2))
-all(random(shit))
+# Do NOT use addttl yet on this branch. We're only testing setvar and have commented out the
+# Free(Player) in main.c
+setvar(a,3,string)
+setvar(b,4,string)
+all(EQ(a,b),GE(a,b))

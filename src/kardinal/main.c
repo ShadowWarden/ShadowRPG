@@ -40,12 +40,23 @@ int main(int argc, char ** argv){
 	     * fin = fopen(argv[1],"r");
 	Fsize = getsize(fin);
 
+	int debug=0;
+	if(argc>3){
+		if(strcmp(argv[3],"--debug")==0){
+			printf("Yay\n");
+			debug=1;
+		}
+		else{
+			printf("Unidentifiable argument %s\n", argv[3]);
+			exit(2);
+		}
+	}
 	// Initialize variable stack
 	VariableDec * Vars;
 	int size_var = 0;
 	
-	build_states_test(state_in);
-	dump_states_test();
+	build_states_test(state_in, debug);
+	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	while(fgets(line,MAX_INPUT,fin)){
@@ -60,34 +71,34 @@ int main(int argc, char ** argv){
 			i++;
 			ch = line[i];
 		}
-		printf("Debug : ch = %c\n",ch);
+		(debug==1) ? printf("Debug : ch = %c\n",ch) : 0;
 		if(ch == '#'){
 		// Comment
 			continue;
 		}		
-		printf("Debug : Command = %s\n",line);
+		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
 		In = build(In,line);
 	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-		In = parse(In,&Player,&PlayerSize,&Vars,&size_var);
-		printf("Debug : Command stack after parse\n");
-		print(*In);
-		printf("\nDebug : Final Result\n");
-		print_final(*In);
+		In = parse(In,&Player,&PlayerSize,&Vars,&size_var,debug);
+		(debug == 1) ? printf("Debug : Command stack after parse\n") : 0;
+		print(*In,debug);
+		(debug==1) ? printf("\nDebug : Final Result\n") : 0;
+		print_final(*In, debug);
 	//	scanf("%c",&junk);	
-		printf("\nDebug : Size of Player state stack : %d\n",PlayerSize);
-		print_player_state(Player,PlayerSize);
+		(debug==1) ? printf("\nDebug : Size of Player state stack : %d\n",PlayerSize) : 0;
+		print_player_state(Player,PlayerSize,debug);
 		Free(In);
 	}	
 	if(size_var!=0){
-		print_variable_stack(*Vars);
-		printf("Debug : Survived print_variable_stack\n");
+		print_variable_stack(*Vars, debug);
+		(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 		Free_var(Vars);
 	}
-	printf("Debug : Survived Free_var\n");
+	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
 	free(Titles);
-	free(Player);
+//	free(Player);
 	fclose(state_in);
 	return 0;
 }
