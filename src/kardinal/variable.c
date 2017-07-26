@@ -18,27 +18,35 @@
 #include <string.h>
 #include "kardinal.h"
 
-int Free_var(VariableDec * Vars){
-	while(Vars!=NULL){
-		free(Vars->value);
-		VariableDec * tmp = Vars;
-		Vars = Vars->prev;
-		free(tmp);
+int Free_var(SymTable S){
+	int i;
+	for(i=0;i<CAP;i++){
+		if(S.Vars[i]!=NULL){
+			VariableDec * var = S.Vars[i];
+			while(var != NULL){
+				VariableDec *tmp = var;
+				var = var->prev;
+				free(tmp->value);
+				free(tmp);
+			}
+		}
 	}
-	free(Vars);
 	return 0;
 }
 
-void print_variable_stack(VariableDec Vars, int debug){
-	VariableDec * tmp = &Vars;
-	(debug==1) ? fprintf(stderr,"Debug : Printing current variable stack\n") : 0;
-	while(tmp!=NULL){
-		(debug==1) ? fprintf(stderr,"Debug : %s : %s : %f : %d\n",tmp->varname,tmp->type,(float)*tmp->value,tmp->size) : 0;
-		tmp=tmp->prev;
+void print_variable_stack(SymTable S){
+	int i;
+	for(i=0;i<CAP;i++){
+		if(S.Vars[i]!=NULL){
+			VariableDec * tmp = S.Vars[i];
+			while(tmp != NULL){
+	//			int value = atoi(tmp->value);
+				printf("%d:%s:%s:%d:%d\n",i,tmp->varname,tmp->type,(int)*tmp->value,tmp->size);
+				tmp = tmp->prev;
+			}
+		}
 	}
-	(debug==1) ? fprintf(stderr,"\n") : 0;
 }
-
 
 /* This is STRICTLY a work in progress function! The return type is Input * 
  *  because I didn't want to pass a pointer by reference (and thus work with
@@ -46,25 +54,20 @@ void print_variable_stack(VariableDec Vars, int debug){
  *  If ANYONE has a better implementation, please implement it and send a 
  *  pull request to VariableSupportOHR
  */
-int setvar(VariableDec ** Vars, int * size_var, Input ** args, int debug){
+int setvar(SymTable * S, Input ** args, int debug){
 	VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
 	if(var == NULL){
 		(debug==1) ? fprintf(stderr,"Error : Malloc returned NULL. Is there any memory left?\n") : 0;
 		return -1;
 	}
 	(debug==1) ? fprintf(stderr,"Debug : New Variable Allocated\n") : 0;
-	if(*size_var == 0){
-		var->prev=NULL;
-	}else{
-		var->prev=*Vars;
-	}
-	*Vars=var;
-	*size_var+=1;
-	//Extract Args here
+
 	strcpy(var->type,(*args)->name);
 	(*args)=(*args)->prev;
+	(debug==1) ? fprintf(stderr,"Debug : Type = %s\n",var->type) : 0;
 
-	if(strcmp(var->type,"string")==0){
+	//Extract Args here
+	if(strcmp(var->type,"int")==0){
 		var->value=(char *)malloc(sizeof(int));
 		var->size=sizeof(char)*(strlen((*args)->name)+1);
 	}else{
@@ -77,18 +80,55 @@ int setvar(VariableDec ** Vars, int * size_var, Input ** args, int debug){
 		 *  Someone needs to do an errorcheck on the default. Ideally,
 		 *  we just shouldn't allow the type variable to be empty
 		 */
-	}
-	// Compatible only for single float values
-	if(strcmp(var->type,"string")==0){
-		(debug==1) ? fprintf(stderr,"Debug : Assigning %s to var->value\n",(*args)->name) : 0;
+	}	// Compatible only for single float values
+	if(strcmp(var->type,"int")==0){
 		//strcpy(var->value,(*args)->name);	
-		float intermediate_buffer;
-		intermediate_buffer=atof((*args)->name);
+		int intermediate_buffer = atoi((*args)->name);
 		*var->value = intermediate_buffer;
-		(debug==1) ? fprintf(stderr,"Debug: Assigned %f successfully\n",(float)*var->value) : 0;
+		(debug==1) ? fprintf(stderr,"Debug: Assigned %d successfully\n",(int)*var->value) : 0;
 		(*args) = (*args)->prev;
 	}
 	strcpy(var->varname,(*args)->name);
+	
+	int hashkey = createhash(var->varname);
+	fprintf(stderr,"Debug: Hashkey = %d\n",hashkey);
 
+	if(S->Vars[hashkey] == NULL){	
+		S->Vars[hashkey]=var;
+	}else{
+		VariableDec * tmp = S->Vars[hashkey];
+		while(tmp->prev != NULL){
+			tmp = tmp->prev;
+		}
+		tmp->prev = var;
+	}
 	return 0;
+}
+
+int createhash(char * a){
+	/* Simple hashing function
+	 * For each letter, do
+	 * 	sum += ascii(a[i]) + prime offset
+	 *
+	 */
+	int i;
+	int len = strlen(a);
+	int sum = 0;
+	for(i=0;i<len;i++){
+		sum += (int) a[i] + OFFSET;
+	}
+	return sum%CAP;
+}
+
+VariableDec * find_in_hash(SymTable S, char * varname){
+	int hashkey = createhash(varname);
+	VariableDec * vars =  S.Vars[hashkey];
+	do{
+		if(strcmp(vars->varname,varname) == 0){
+			return vars;		
+		}else{
+			vars = vars->prev;
+		}
+	}while(vars!=NULL);
+	return vars;
 }

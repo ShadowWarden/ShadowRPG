@@ -215,7 +215,7 @@ void sequential_print(Input *In, char *name, int debug){
 	}while(tmp!=NULL);
 }
 
-Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, int *size_var, int debug){
+Input * parse(Input *In, State **Player, int *PlayerSize, SymTable *S, int debug){
 	int i,j;
 	int maxlvl = find_maxlvl(*In);
 	int pos = 0;	
@@ -283,7 +283,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
-			evaluate(cur,args,Player,PlayerSize,Vars,size_var,debug);
+			evaluate(cur,args,Player,PlayerSize,S,debug);
 			Free(args);
 			(debug==1) ? fprintf(stderr,"Debug : Freed args\n") : 0;
 			curlvl = cur->lvl;

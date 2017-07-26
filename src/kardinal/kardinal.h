@@ -13,6 +13,8 @@
 */
 
 #define SIZE_DOUBLE 8
+#define CAP 13
+#define OFFSET 133
 
 struct State{
 	unsigned int id;
@@ -28,27 +30,30 @@ struct Input{
 //	int pos;
 };
 
-struct VariableDec{
+typedef struct VariableDec{
 	char varname[20]; 	// Variable Name
 	char type[7];		// Variable Type
 	char *value;		// Value
 	int size; 		// Size in bytes
 	struct VariableDec *prev;	// Pointer to the previous element
-};
+}VariableDec;
+
+typedef struct SymbolTable{
+	VariableDec *Vars[CAP];
+}SymTable;
 
 typedef struct Input Input;
 typedef struct State State;
-typedef struct VariableDec VariableDec;
 
 // parse.c
 Input * build(Input *, char *);
 void Free(Input *);
 void print(Input, int);
 void print_final(Input, int);
-Input * parse(Input *, State **, int *,VariableDec **, int *, int);
+Input * parse(Input *, State **, int *,SymTable *, int);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, VariableDec **,int *, int);
+int evaluate(Input *, Input *, State **, int *, SymTable *, int);
 
 // state.c
 int build_states_test(FILE *i, int);
@@ -61,9 +66,12 @@ int getsize(FILE *);
 //int Statecpy(State *, State *);
 
 //variable.c
-int Free_var(VariableDec *);
-void print_variable_stack(VariableDec, int);
-int setvar(VariableDec **, int *,Input **, int);
+int Free_var(SymTable);
+void print_variable_stack(SymTable);
+int setvar(SymTable *,Input **, int);
+int createhash(char *);
+int add_to_table(SymTable *, VariableDec *);
+VariableDec * find_in_hash(SymTable, char *);
 
 // logical.c
 int All(Input *, Input *, int);

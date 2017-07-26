@@ -52,9 +52,12 @@ int main(int argc, char ** argv){
 		}
 	}
 	// Initialize variable stack
-	VariableDec * Vars;
-	int size_var = 0;
-	
+	SymTable S;
+	int j;
+	for(j=0;j<CAP;j++){
+		S.Vars[j] = NULL;
+	}
+
 	build_states_test(state_in, debug);
 	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
@@ -81,7 +84,7 @@ int main(int argc, char ** argv){
 		Input *In = (Input *) malloc (sizeof(Input));
 		In = build(In,line);
 	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-		In = parse(In,&Player,&PlayerSize,&Vars,&size_var,debug);
+		In = parse(In,&Player,&PlayerSize,&S,debug);
 		(debug == 1) ? printf("Debug : Command stack after parse\n") : 0;
 		print(*In,debug);
 		(debug==1) ? printf("\nDebug : Final Result\n") : 0;
@@ -91,11 +94,9 @@ int main(int argc, char ** argv){
 		print_player_state(Player,PlayerSize,debug);
 		Free(In);
 	}	
-	if(size_var!=0){
-		print_variable_stack(*Vars, debug);
-		(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
-		Free_var(Vars);
-	}
+	print_variable_stack(S);
+	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
+	Free_var(S);
 	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
 	free(Titles);
 //	free(Player);

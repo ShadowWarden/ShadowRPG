@@ -23,7 +23,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var, int debug){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTable *S, int debug){
 /* At present, it works. We have a few different things that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -37,7 +37,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 */
 	(debug==1) ? fprintf(stderr,"Debug : Entered Evaluate\n") : 0;
 	(debug==1) ? fprintf(stderr,"Debug : Printing arguments\n") : 0;
-//	print(*args);
+	print(*args,debug);
 	In->type = 0;
 	if(EQSTR(In->name,"all")){
 		All(In,args,debug);
@@ -77,7 +77,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			strcpy(In->name,"false");
 		}
 	}else if(EQSTR(In->name, "setvar")){
-		int result = -setvar(Vars,size_var,&args,debug);
+		int result = -setvar(S,&args,debug);
 		if(result != 0){
 			(debug==1) ? fprintf(stderr,"(setvar) Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",-result) : 0;
 			strcpy(In->name,"false");
@@ -86,8 +86,15 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		}
 		args=args->prev;
 	}else if(EQSTR(In->name, "EQ")){
-		VariableDec * Var1 = *Vars;
-		VariableDec * Var2 = Var1->prev;
+//		print_variable_stack(S);
+		VariableDec * Var1 = find_in_hash(*S,args->name);
+		(debug == 1) ? fprintf(stderr,"%s\n",args->name):0;
+		(debug == 1) ? fprintf(stderr,"(EQ) Found Var1\n"):0;
+		args = args->prev;
+		VariableDec * Var2 = find_in_hash(*S,args->name);
+		(debug == 1) ? fprintf(stderr,"(EQ) Found Var2\n"):0;
+		(debug == 1) ? fprintf(stderr,"%s:%s\n",Var1->varname,Var2->varname):0;
+		
 		int res = EQ(Var1,Var2,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
@@ -95,9 +102,9 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			strcpy(In->name,"false");
 		/* Need to do an error condition here */
 	}else if(EQSTR(In->name, "GE")){
-		VariableDec * Var1 = *Vars;
-		VariableDec * Var2 = Var1->prev;
-	
+		VariableDec * Var1 = find_in_hash(*S,args->name);
+		args = args->prev;
+		VariableDec * Var2 = find_in_hash(*S,args->name);
 		int res = GE(Var1,Var2,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
@@ -106,9 +113,10 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 		/* Need to do an error condition here */
 
 	}else if(EQSTR(In->name, "LE")){
-		VariableDec * Var1 = *Vars;
-		VariableDec * Var2 = Var1->prev;
-	
+//		print_variable_stack(S);
+		VariableDec * Var1 = find_in_hash(*S,args->name);
+		args = args->prev;
+		VariableDec * Var2 = find_in_hash(*S,args->name);
 		int res = LE(Var1,Var2,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
