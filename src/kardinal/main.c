@@ -28,7 +28,6 @@ int main(int argc, char ** argv){
 	char line[MAX_INPUT];
 //	char ** result;
 //	char input[MAX_INPUT];
-	int Fsize;
 	State *Player;
 	int PlayerSize = 0;
 	
