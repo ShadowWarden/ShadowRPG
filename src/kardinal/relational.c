@@ -71,7 +71,7 @@ int GE(VariableDec *A, VariableDec *B, int debug){
 	else{
 		if(strcmp(A->type,B->type)==0){
 			if(strcmp(A->type,"int")==0){
-				if(*A->value >= *B->value){
+				if(*A->value < *B->value){
 					(debug==1) ? fprintf(stderr,"Debug : The first value is greater than the second!\n") : 0;
 					return 0;
 				}
@@ -106,7 +106,7 @@ int LE(VariableDec *A, VariableDec *B, int debug){
 	else{
 		if(strcmp(A->type,B->type)==0){
 			if(strcmp(A->type,"int")==0){
-				if(*A->value <= *B->value){
+				if(*A->value > *B->value){
 					(debug==1) ? fprintf(stderr,"Debug : The first value is lesser than the second!\n") : 0;
 					return 0;
 				}

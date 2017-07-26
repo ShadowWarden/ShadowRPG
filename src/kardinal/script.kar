@@ -16,6 +16,7 @@
 #
 # Do NOT use addttl yet on this branch. We're only testing setvar and have commented out the
 # Free(Player) in main.c
-setvar(a,3,int)
+setvar(a,4,int)
 setvar(b,4,int)
-all(EQ(a,b))
+setvar(c,5,int)
+all(EQ(a,a),GE(c,b))
