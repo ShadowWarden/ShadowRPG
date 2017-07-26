@@ -38,8 +38,6 @@ int main(int argc, char ** argv){
 	}
 	FILE * state_in = fopen(argv[2],"r"),
 	     * fin = fopen(argv[1],"r");
-	Fsize = getsize(fin);
-
 	int debug=0;
 	if(argc>3){
 		if(strcmp(argv[3],"--debug")==0){
@@ -64,7 +62,7 @@ int main(int argc, char ** argv){
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	while(fgets(line,MAX_INPUT,fin)){
 	//	In->prev = NULL;
-		int i=0,err,maxlvl;
+		int i=0;
 		char ch=line[i];
 /* Pretty sure my beautiful conditional operator is no longer necessary
 *  :'-( - OHR

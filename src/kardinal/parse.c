@@ -88,7 +88,7 @@ Input * build(Input * In, char *in){
 			flag ++;
 			index = 0;
 			lvl+=1;
-		}else if(ch == ',' || ch == ')' && index!=0){
+		}else if(ch == ',' || (ch == ')' && index!=0)){
 /* If the buffer character is a ',' or a ')', then the word that came 
 *  before it has to be an argument. The if statements below are to avoid 
 *  corner cases that occur when you have a ) followed by a , and when you're
@@ -147,15 +147,7 @@ void Free(Input * In){
 	free(In);
 }
 
-int find_maxlvl(Input In){
-	Input *tmp = &In;
-	int maxlvl = 0;	
-	while(tmp!=NULL){
-		maxlvl = (tmp->lvl>maxlvl)?tmp->lvl:maxlvl;	
-		tmp = tmp->prev;
-	}
-	return maxlvl;
-}
+
 
 void print(Input In, int debug){
 	Input *tmp = &In;
@@ -210,6 +202,7 @@ int write(Input *In1, Input *In2){
 	In1->type = In2->type;
 	In1->lvl = In2->lvl;
 	In1->prev = In2->prev;
+	return 0;
 }
 
 void sequential_print(Input *In, char *name, int debug){
@@ -223,8 +216,6 @@ void sequential_print(Input *In, char *name, int debug){
 }
 
 Input * parse(Input *In, State **Player, int *PlayerSize, SymTable *S, int debug){
-	int i,j;
-	int maxlvl = find_maxlvl(*In);
 	int pos = 0;	
 	Input *argsold = NULL;
 	Input *old = In;

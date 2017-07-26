@@ -46,7 +46,7 @@ int Print(Input * args, SymTable S, int debug){
 		}else{
 			VariableDec *Found = find_in_hash(S,args->name);
 			Vars = (VariableDec *) malloc (sizeof(VariableDec)); 
-			Vars->value = (int *) malloc (sizeof(int));
+			Vars->value = (char *) malloc (sizeof(int));
 			*(Vars->value) = *(Found->value);
 			strcpy(Vars->type,"int");
 		}
