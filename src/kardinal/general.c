@@ -22,17 +22,47 @@
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
-int Print(VariableDec *A, int debug){
-	// Compares A, B and returns 0 if equal
-	if(A->value == NULL){
-		(debug==1) ?fprintf(stderr,"Debug : First argument does not exist! Exiting\n") : 0;
-		return -4;
-	}else{
-		if(strcmp(A->type,"int") == 0){
-			fprintf(stdout,"%d",(int)*A->value);
-		}else if(strcmp(A->type,"string")==0){
-			printf("%s",*A->value);
-		}	
+int Print(Input * args, SymTable S, int debug){
+	/* Change print so that it does pattern matching.
+	 * The final syntax should look as follows:
+	 * Print("Value of A is ",A,"\n")
+	 */
+	VariableDec * Vars = NULL;	
+	while(args!=NULL){
+		VariableDec *tmp = Vars; 
+		if(args->name[0]=='"'){
+			Vars = (VariableDec *) malloc (sizeof(VariableDec)); 
+			Vars->value = (char *) malloc (sizeof(char)*(strlen(args->name)-2));
+			int i;
+			for(i=1;i<strlen(args->name)-1;i++){
+				if(args->name[i]=='\\'){
+					Vars->value[i-1]='\n';
+					i++;
+				}else
+					Vars->value[i-1]=args->name[i];
+			}
+			Vars->value[i-1]='\0';
+			strcpy(Vars->type,"string");			
+		}else{
+			VariableDec *Found = find_in_hash(S,args->name);
+			Vars = (VariableDec *) malloc (sizeof(VariableDec)); 
+			Vars->value = (int *) malloc (sizeof(int));
+			*(Vars->value) = *(Found->value);
+			strcpy(Vars->type,"int");
+		}
+		Vars->prev = tmp;
+		args = args->prev;
+	}
+	while(Vars != NULL){
+		if(strcmp(Vars->type,"int") == 0){
+			printf("%d",*(Vars->value));
+		}else{
+			printf("%s",(Vars->value));
+		}
+		VariableDec *tmp = Vars;
+		Vars = Vars->prev;
+		free(tmp->value);
+		free(tmp);
 	}
 	return 0;
 }

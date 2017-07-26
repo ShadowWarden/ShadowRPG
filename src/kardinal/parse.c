@@ -53,8 +53,8 @@ Input * build(Input * In, char *in){
 	int index = 0;
 	int lvl = 0;
 	int maxlvl = 0;
-	char ch = in[i];
-		
+	int flag_space = 0;
+	char ch = in[i];	
 	// Remove preceding spaces
 	while(ch == ' '){
 		i++;
@@ -121,9 +121,16 @@ Input * build(Input * In, char *in){
 /* If the character looked at is neither a ',' nor a bracket, then it must
 *  be a word (either arg or cmd). Write to buffer.
 */
+			if(ch == '"'){
+				flag_space = (flag_space == 1)? 0 : 1;
+			}
 			buf[index] = ch;
 			index++;
 		//	printf("buf : %s\n",buf);
+		}
+		if(flag_space && ch == ' '){
+			buf[index] = ch;
+			index++;
 		}
 		i++;
 	}

@@ -59,7 +59,7 @@ int main(int argc, char ** argv){
 	}
 
 	build_states_test(state_in, debug);
-	dump_states_test(debug);
+//	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	while(fgets(line,MAX_INPUT,fin)){
@@ -83,7 +83,7 @@ int main(int argc, char ** argv){
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
 		In = build(In,line);
-	//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
+//		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 		In = parse(In,&Player,&PlayerSize,&S,debug);
 		(debug == 1) ? printf("Debug : Command stack after parse\n") : 0;
 		print(*In,debug);

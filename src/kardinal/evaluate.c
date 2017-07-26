@@ -124,8 +124,7 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 			strcpy(In->name,"false");
 		/* Need to do an error condition here */
 	}else if(EQSTR(In->name, "print")){
-		VariableDec *Var = find_in_hash(*S,args->name);
-		int res = Print(Var,debug);
+		int res = Print(args,*S,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
 		else

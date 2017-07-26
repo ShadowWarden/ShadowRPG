@@ -84,7 +84,7 @@ int GE(VariableDec *,VariableDec *, int);
 int LE(VariableDec *,VariableDec *, int);
 
 //general.c
-int Print(VariableDec *, int);
+int Print(Input *, SymTable , int);
 
 // Extern variables
 extern State * Titles;
