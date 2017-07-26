@@ -91,7 +91,7 @@ int setvar(SymTable * S, Input ** args, int debug){
 	strcpy(var->varname,(*args)->name);
 	
 	int hashkey = createhash(var->varname);
-	fprintf(stderr,"Debug: Hashkey = %d\n",hashkey);
+	//fprintf(stderr,"Debug: Hashkey = %d\n",hashkey);
 
 	if(S->Vars[hashkey] == NULL){	
 		S->Vars[hashkey]=var;

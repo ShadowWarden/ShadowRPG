@@ -19,4 +19,6 @@
 setvar(a,4,int)
 setvar(b,4,int)
 setvar(c,5,int)
+#setvar(str,"This is an example\n",string);
 all(EQ(a,a),GE(c,b))
+print(a)

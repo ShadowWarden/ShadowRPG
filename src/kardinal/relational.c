@@ -1,4 +1,4 @@
-/* kardinal/evaluate.c
+/* kardinal/relational.c
 *  Omkar H. Ramachandran
 *  omkar.ramachandran@colorado.edu
 *

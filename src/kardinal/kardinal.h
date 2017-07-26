@@ -82,6 +82,10 @@ int Not(Input *, Input *, int);
 int EQ(VariableDec *,VariableDec *, int);
 int GE(VariableDec *,VariableDec *, int);
 int LE(VariableDec *,VariableDec *, int);
+
+//general.c
+int Print(VariableDec *, int);
+
 // Extern variables
 extern State * Titles;
 extern int TitleSize;
