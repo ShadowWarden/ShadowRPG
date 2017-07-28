@@ -41,6 +41,8 @@ typedef struct VariableDec{
 
 typedef struct SymbolTable{
 	VariableDec *Vars[CAP];
+	int level;
+	struct SymbolTable * next;
 }SymTable;
 
 typedef struct Input Input;

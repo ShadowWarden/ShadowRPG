@@ -52,11 +52,7 @@ int main(int argc, char ** argv){
 		}
 	}
 	// Initialize variable stack
-	SymTable S;
-	int j;
-	for(j=0;j<CAP;j++){
-		S.Vars[j] = NULL;
-	}
+	SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
 	build_states_test(state_in, debug);
 //	dump_states_test(debug);
@@ -88,7 +84,7 @@ int main(int argc, char ** argv){
 //		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 		
 		
-		int res = parse(&In,&Player,&PlayerSize,&S,line_number,debug);
+		int res = parse(&In,&Player,&PlayerSize,S,line_number,debug);
 		
 		if(res == 201){
 			if_false_flag = 1;
@@ -97,7 +93,8 @@ int main(int argc, char ** argv){
 		}else if(res){
 		/* There was an error. Exit */
 				Free(In);
-				Free_var(S);
+				Free_var(*S);
+				free(S);
 				free(Titles);
 				return -1;
 		
@@ -114,7 +111,8 @@ int main(int argc, char ** argv){
 	}	
 //	print_variable_stack(S);
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
-	Free_var(S);
+	Free_var(*S);
+	free(S);
 	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
 	free(Titles);
 //	free(Player);
