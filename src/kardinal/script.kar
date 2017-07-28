@@ -18,9 +18,9 @@
 # Free(Player) in main.c
 setvar(a,4)
 setvar(b,"5")
+GE(c,a)
 #setvar(c,"5")
 #random(shit,"shit2")
 #setvar(str,"This is a string")
 #setvar(str,"This is an example\n",string);
 print("The value of a is ",a,"\n")
-print("The value of c is ",c,"\n")

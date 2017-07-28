@@ -86,15 +86,20 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		}
 		args=args->prev;
 	}else if(EQSTR(In->name, "EQ")){
-		VariableDec * Var1 = find_in_hash(*S,args->name);
-		(debug == 1) ? fprintf(stderr,"%s\n",args->name):0;
-		(debug == 1) ? fprintf(stderr,"(EQ) Found Var1\n"):0;
+		VariableDec * Var1, * Var2; 
+		int res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
-		VariableDec * Var2 = find_in_hash(*S,args->name);
-		(debug == 1) ? fprintf(stderr,"(EQ) Found Var2\n"):0;
-		(debug == 1) ? fprintf(stderr,"%s:%s\n",Var1->varname,Var2->varname):0;
-		
-		int res = EQ(Var1,Var2,debug);
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if(!res1 && !res2)	
+			res = EQ(Var1,Var2,debug);
+		else{
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+			fprintf(stderr,"Error in EQ (Line %d): EQ failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
 		if(res == 0)
 			strcpy(In->name,"true");
 		else if(res == -1){
@@ -105,10 +110,20 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		}
 		/* Need to do an error condition here */
 	}else if(EQSTR(In->name, "GE")){
-		VariableDec * Var1 = find_in_hash(*S,args->name);
+		VariableDec * Var1, * Var2; 
+		int res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
-		VariableDec * Var2 = find_in_hash(*S,args->name);
-		int res = GE(Var1,Var2,debug);
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if(!res1 && !res2)	
+			res = GE(Var1,Var2,debug);
+		else{
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+			fprintf(stderr,"Error in GE (Line %d): GE failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
 		if(res == 0)
 			strcpy(In->name,"true");
 		else if(res==-1)
@@ -118,10 +133,20 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 			return res;
 		}
 	}else if(EQSTR(In->name, "LE")){
-		VariableDec * Var1 = find_in_hash(*S,args->name);
+		VariableDec * Var1, * Var2; 
+		int res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
-		VariableDec * Var2 = find_in_hash(*S,args->name);
-		int res = LE(Var1,Var2,debug);
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if(!res1 && !res2)	
+			res = GE(Var1,Var2,debug);
+		else{
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+			fprintf(stderr,"Error in LE (Line %d): LE failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
 		if(res == 0)
 			strcpy(In->name,"true");
 		else if(res == -1)

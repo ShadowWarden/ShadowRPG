@@ -162,5 +162,5 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 				}
 		}
 		/* If it didn't return in the loop, then things went wrong */
-		return 1;
+		return 101;
 }
