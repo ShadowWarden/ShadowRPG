@@ -76,5 +76,3 @@ int Print(Input * args, SymTable S, int debug){
 	}
 	return 0;
 }
-
-

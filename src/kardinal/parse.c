@@ -202,11 +202,11 @@ void sequential_print(Input *In, char *name, int debug){
 	}while(tmp!=NULL);
 }
 
-Input * parse(Input *In, State **Player, int *PlayerSize, SymTable *S, int debug){
+int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int debug){
 	int pos = 0;	
 	Input *argsold = NULL;
-	Input *old = In;
-	Input *cur = In->prev;
+	Input *old = *In;
+	Input *cur = (*In)->prev;
 	int curlvl = old->lvl; 
 
 	(debug==1) ? fprintf(stderr,"Debug : Entered parse\n") : 0;
@@ -261,12 +261,19 @@ Input * parse(Input *In, State **Player, int *PlayerSize, SymTable *S, int debug
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
-			evaluate(cur,args,Player,PlayerSize,S,debug);
+
+			int res = evaluate(cur,args,Player,PlayerSize,S,line,debug);
+			
 			(debug==1) ? fprintf(stderr,"About to free args\n") : 0;
 			Free(args);
 			(debug==1) ? fprintf(stderr,"Debug : Freed args\n") : 0;
 			curlvl = cur->lvl;
 			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 2\n\n") : 0;
+			if(res){
+				/* If evaluate failed. Exit immediately */
+				Free(argsold);
+				return res;
+			}
 		}else{
 /* If stmt 3 in the gameplan. If curlvl doesn't change, then we're looking at
 *  another argument. Write to argsold and get on with life ;-)
@@ -286,5 +293,5 @@ Input * parse(Input *In, State **Player, int *PlayerSize, SymTable *S, int debug
 	Free(argsold);
 	(debug==1) ? fprintf(stderr,"Debug : Freed argsold\n") : 0;
 	(debug==1) ? fprintf(stderr,"Debug : Survived the parse loop!\n") : 0;
-	return In;	
+	return 0;	
 }

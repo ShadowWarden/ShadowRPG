@@ -23,7 +23,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTable *S, int debug){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTable *S, int line, int debug){
 /* At present, it works. We have a few different things that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -79,8 +79,9 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 	}else if(EQSTR(In->name, "setvar")){
 		int result = -setvar(S,&args,debug);
 		if(result != 0){
-			(debug==1) ? fprintf(stderr,"(setvar) Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",-result) : 0;
+			fprintf(stderr,"Error in setvar (Line %d): Setvar failed with error code %d. Look at the documentation to troubleshoot\n",line,-result);
 			strcpy(In->name,"false");
+			return result;
 		}else{
 			strcpy(In->name,"true");
 		}

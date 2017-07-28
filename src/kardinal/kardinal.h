@@ -35,6 +35,7 @@ typedef struct VariableDec{
 	char type;		// Variable Type
 	char *value;		// Value
 //	int size; 		// Size in bytes
+//	int level;
 	struct VariableDec *prev;	// Pointer to the previous element
 }VariableDec;
 
@@ -50,10 +51,10 @@ Input * build(Input *, char *);
 void Free(Input *);
 void print(Input, int);
 void print_final(Input, int);
-Input * parse(Input *, State **, int *,SymTable *, int);
+int parse(Input **, State **, int *,SymTable *, int, int);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, SymTable *, int);
+int evaluate(Input *, Input *, State **, int *, SymTable *, int, int);
 
 // state.c
 int build_states_test(FILE *i, int);

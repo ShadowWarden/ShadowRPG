@@ -30,7 +30,9 @@ int main(int argc, char ** argv){
 //	char input[MAX_INPUT];
 	State *Player;
 	int PlayerSize = 0;
-	
+	//int level = 0;
+	int line_number=0;
+
 	if(argc<3){
 		printf("2 input parameters needed!\n");
 		exit(1);
@@ -59,6 +61,7 @@ int main(int argc, char ** argv){
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
+	fclose(state_in);
 	while(fgets(line,MAX_INPUT,fin)){
 	//	In->prev = NULL;
 		int i=0;
@@ -75,13 +78,26 @@ int main(int argc, char ** argv){
 		if(ch == '#'){
 		// Comment
 			continue;
-		}		
+		}
+		line_number++;	
 		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
 		In = build(In,line);
 //		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-		In = parse(In,&Player,&PlayerSize,&S,debug);
+		
+		
+		int res = parse(&In,&Player,&PlayerSize,&S,line_number,debug);
+		
+		if(res){
+		/* There was an error. Exit */
+				Free(In);
+				Free_var(S);
+				free(Titles);
+				return -1;
+		
+		}
+		
 		(debug == 1) ? printf("Debug : Command stack after parse\n") : 0;
 		print(*In,debug);
 		(debug==1) ? printf("\nDebug : Final Result\n") : 0;
@@ -97,6 +113,5 @@ int main(int argc, char ** argv){
 	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
 	free(Titles);
 //	free(Player);
-	fclose(state_in);
 	return 0;
 }
