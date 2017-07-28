@@ -16,9 +16,12 @@
 #
 # Do NOT use addttl yet on this branch. We're only testing setvar and have commented out the
 # Free(Player) in main.c
-setvar(a,4,int)
-setvar(b,4,int)
-setvar(c,5,int)
+setvar(a,4)
+setvar(b,"This is a string")
+#setvar(c,"5")
+#random(shit,"shit2")
+#setvar(str,"This is a string")
 #setvar(str,"This is an example\n",string);
-all(EQ(a,a),GE(c,b))
-print("The value of A is ",a,"\n")
+#all(EQ(a,a),GE(c,b))
+#print("The value of B is ",b,"\n")
+print(b," and the value of a is ",a,"\n")

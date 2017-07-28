@@ -23,7 +23,7 @@ struct State{
 };
 
 struct Input{
-	char name[20];
+	char name[50];
 	int type;     // 0 = Arg  ;  1 = Var
 	int lvl;
 	struct Input * prev;
@@ -32,9 +32,9 @@ struct Input{
 
 typedef struct VariableDec{
 	char varname[20]; 	// Variable Name
-	char type[7];		// Variable Type
+	char type;		// Variable Type
 	char *value;		// Value
-	int size; 		// Size in bytes
+//	int size; 		// Size in bytes
 	struct VariableDec *prev;	// Pointer to the previous element
 }VariableDec;
 

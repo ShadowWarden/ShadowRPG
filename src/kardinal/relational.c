@@ -34,9 +34,9 @@ int EQ(VariableDec *A, VariableDec *B, int debug){
 		return -3;
 	}
 	else{
-		if(strcmp(A->type,B->type)==0){
-			if(strcmp(A->type,"int")==0){
-				if(*A->value == *B->value){
+		if(A->type == B->type){
+			if(A->type == 'i'){
+				if(*A->value  == *B->value){
 					(debug==1) ? fprintf(stderr,"Debug : The values are equal!\n") : 0;
 					return 0;
 				}
@@ -44,14 +44,12 @@ int EQ(VariableDec *A, VariableDec *B, int debug){
 					(debug==1) ? fprintf(stderr,"Debug : The values fail the comparison!\n") : 0;
 					return -1;
 				}
+			}else{
+				fprintf(stdout,"Error in EQ: Incorrect variable type for relational comparison\n");
+			 	return 1;
 			}
-			else{
-				(debug==1) ? fprintf(stderr,"Type not mentioned. Check documentation for syntax\n") : 0;
-				return 1;
-			}
-		}
-		else{
-			(debug==1) ? fprintf(stderr,"Debug : Type mismatch. Check inputs\n") : 0;
+		}else{
+			fprintf(stdout,"Error in EQ: Type mismatch. Check inputs\n");
 			return -2;
 		}
 	}
@@ -69,8 +67,8 @@ int GE(VariableDec *A, VariableDec *B, int debug){
 		return -3;
 	}
 	else{
-		if(strcmp(A->type,B->type)==0){
-			if(strcmp(A->type,"int")==0){
+		if(A->type == B->type){
+			if(A->type == 'i'){
 				if(*A->value < *B->value){
 					(debug==1) ? fprintf(stderr,"Debug : The first value is greater than the second!\n") : 0;
 					return 0;
@@ -79,14 +77,13 @@ int GE(VariableDec *A, VariableDec *B, int debug){
 					(debug==1) ? fprintf(stderr,"Debug : The values fail the comparison!\n") : 0;
 					return -1;
 				}
-			}
-			else{
-				(debug==1) ? fprintf(stderr,"Type not mentioned. Check documentation for syntax\n") : 0;
-				return 1;
+			}else{
+				fprintf(stderr,"Error in EQ: Incorrect type for relational comparison\n");
+				return 1; 
 			}
 		}
 		else{
-			(debug==1) ? fprintf(stderr,"Debug : Type mismatch. Check inputs\n") : 0;
+			fprintf(stderr,"Error in EQ: Type mismatch. Check inputs\n");
 			return -2;
 		}
 	}
@@ -104,24 +101,24 @@ int LE(VariableDec *A, VariableDec *B, int debug){
 		return -3;
 	}
 	else{
-		if(strcmp(A->type,B->type)==0){
-			if(strcmp(A->type,"int")==0){
-				if(*A->value > *B->value){
+		if(A->type == B->type){
+			if(A->type == 'i'){
+				if(*A->value >  *B->value){
 					(debug==1) ? fprintf(stderr,"Debug : The first value is lesser than the second!\n") : 0;
 					return 0;
 				}
 				else{
-					(debug==1) ? fprintf(stderr,"Debug : The values fail the comparison!\n") : 0;
+					(debug ==1)? fprintf(stderr,"Debug : The values fail the comparison!\n") : 0;
 					return -1;
 				}
 			}
 			else{
-				(debug==1) ? fprintf(stderr,"Type not mentioned. Check documentation for syntax\n") : 0;
-				return 1;
+				fprintf(stderr,"Error in EQ: Incorrect type for relational comparison\n");
+				return 1; 
 			}
 		}
 		else{
-			(debug==1) ? fprintf(stderr,"Debug : Type mismatch. Check inputs\n") : 0;
+			fprintf(stderr,"Error in EQ: Type mismatch. Check inputs\n");
 			return -2;
 		}
 	}

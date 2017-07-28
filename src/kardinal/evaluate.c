@@ -86,7 +86,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		}
 		args=args->prev;
 	}else if(EQSTR(In->name, "EQ")){
-//		print_variable_stack(S);
 		VariableDec * Var1 = find_in_hash(*S,args->name);
 		(debug == 1) ? fprintf(stderr,"%s\n",args->name):0;
 		(debug == 1) ? fprintf(stderr,"(EQ) Found Var1\n"):0;
@@ -113,7 +112,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		/* Need to do an error condition here */
 
 	}else if(EQSTR(In->name, "LE")){
-//		print_variable_stack(S);
 		VariableDec * Var1 = find_in_hash(*S,args->name);
 		args = args->prev;
 		VariableDec * Var2 = find_in_hash(*S,args->name);
