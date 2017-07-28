@@ -72,7 +72,7 @@ void print_variable_stack(SymTable);
 int setvar(SymTable *,Input **, int);
 int createhash(char *);
 int add_to_table(SymTable *, VariableDec *);
-VariableDec * find_in_hash(SymTable, char *);
+int find_in_hash(VariableDec **, SymTable, char *);
 
 // logical.c
 int All(Input *, Input *, int);

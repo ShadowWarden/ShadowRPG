@@ -66,6 +66,7 @@ int main(int argc, char ** argv){
 	//	In->prev = NULL;
 		int i=0;
 		char ch=line[i];
+		line_number++;	
 /* Pretty sure my beautiful conditional operator is no longer necessary
 *  :'-( - OHR
 */
@@ -79,7 +80,6 @@ int main(int argc, char ** argv){
 		// Comment
 			continue;
 		}
-		line_number++;	
 		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));

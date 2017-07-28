@@ -80,7 +80,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		int result = -setvar(S,&args,debug);
 		if(result != 0){
 			fprintf(stderr,"Error in setvar (Line %d): Setvar failed with error code %d. Look at the documentation to troubleshoot\n",line,-result);
-			strcpy(In->name,"false");
 			return result;
 		}else{
 			strcpy(In->name,"true");
@@ -98,8 +97,12 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		int res = EQ(Var1,Var2,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
-		else
+		else if(res == -1){
 			strcpy(In->name,"false");
+		}else{
+			fprintf(stderr,"Error in EQ (Line %d): EQ failed with error code %d. Look at the documentation to troubleshoot\n",line,-res);
+			return res;
+		}
 		/* Need to do an error condition here */
 	}else if(EQSTR(In->name, "GE")){
 		VariableDec * Var1 = find_in_hash(*S,args->name);
@@ -108,10 +111,12 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		int res = GE(Var1,Var2,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
-		else
+		else if(res==-1)
 			strcpy(In->name,"false");
-		/* Need to do an error condition here */
-
+		else{
+			fprintf(stderr,"Error in GE (Line %d): GE failed with error code %d. Look at the documentation to troubleshoot\n",line,-res);
+			return res;
+		}
 	}else if(EQSTR(In->name, "LE")){
 		VariableDec * Var1 = find_in_hash(*S,args->name);
 		args = args->prev;
@@ -119,15 +124,20 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		int res = LE(Var1,Var2,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
-		else
+		else if(res == -1)
 			strcpy(In->name,"false");
-		/* Need to do an error condition here */
+		else{
+			fprintf(stderr,"Error in LE (Line %d): LE failed with error code %d. Look at the documentation to troubleshoot\n",line,-res);
+			return res;
+		}
 	}else if(EQSTR(In->name, "print")){
 		int res = Print(args,*S,debug);
 		if(res == 0)
 			strcpy(In->name,"true");
-		else
-			strcpy(In->name,"false");
+		else{
+			fprintf(stderr,"Error in print (Line %d): print failed with error code %d. Look at the documentation to troubleshoot\n",line,res);
+			return res;
+		}
 	}else{
 /* Come up with a better default condition
 */

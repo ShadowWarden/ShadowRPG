@@ -44,10 +44,13 @@ int Print(Input * args, SymTable S, int debug){
 			Vars->value[i-1]='\0';
 			Vars->type = 's';			
 		}else{
-	//		fprintf(stderr,"Debug: Entered Else\n");
-			VariableDec *Found = find_in_hash(S,args->name);
+			VariableDec *Found;
+			int res = find_in_hash(&Found,S,args->name);
+			if(res != 0){
+			/* Undeclared variable */
+					return res;
+			}
 			Vars = (VariableDec *) malloc (sizeof(VariableDec)); 
-	//		fprintf(stderr,"Debug: Found: %s\n",Found->value);
 			if(Found->type == 'i'){
 				Vars->value = (char *) malloc (sizeof(int));
 				*(Vars->value) = *(Found->value);

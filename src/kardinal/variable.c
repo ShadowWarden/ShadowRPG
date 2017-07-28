@@ -150,15 +150,17 @@ int createhash(char * a){
 		return sum%CAP;
 }
 
-VariableDec * find_in_hash(SymTable S, char * varname){
+int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 		int hashkey = createhash(varname);
 		VariableDec * vars =  S.Vars[hashkey];
-		do{
+		while(vars!=NULL){
 				if(strcmp(vars->varname,varname) == 0){
-						return vars;		
+					*Found = vars;		
+					return 0;
 				}else{
-						vars = vars->prev;
+					vars = vars->prev;
 				}
-		}while(vars!=NULL);
-		return vars;
+		}
+		/* If it didn't return in the loop, then things went wrong */
+		return 1;
 }
