@@ -20,5 +20,7 @@
 setvar(a,4)
 setvar(b,5)
 if(some(GE(b,a),EQ(a,b),1))
+    setvar(c,"6")
     print("b is greater than or equal to a\n")
-endif
+    print("The value of c is ",c,"\n")
+endif(null)

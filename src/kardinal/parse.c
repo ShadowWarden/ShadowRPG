@@ -269,7 +269,7 @@ int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int
 			(debug==1) ? fprintf(stderr,"Debug : Freed args\n") : 0;
 			curlvl = cur->lvl;
 			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 2\n\n") : 0;
-			if(res){
+			if(res && (res!=202 || res!= 201 || res!=-202)){
 				/* If evaluate failed. Exit immediately */
 				Free(argsold);
 				return res;

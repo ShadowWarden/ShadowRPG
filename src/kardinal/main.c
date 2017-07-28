@@ -26,13 +26,11 @@ State * Titles;
 int main(int argc, char ** argv){
 	/* Declarations */
 	char line[MAX_INPUT];
-//	char ** result;
-//	char input[MAX_INPUT];
 	State *Player;
 	int PlayerSize = 0;
-	//int level = 0;
 	int if_false_flag = 0;
 	int line_number=0;
+	int scope_level = 0;
 
 	if(argc<3){
 		printf("2 input parameters needed!\n");
@@ -88,15 +86,30 @@ int main(int argc, char ** argv){
 		
 		if(res == 201){
 			if_false_flag = 1;
-		}else if(res == -202 || res==202){	
+		}else if(res == -202){
+			/* Endif. Get rid of local symbol table */	
 			if_false_flag = 0;
+			if(S->level == scope_level){
+				SymTable *tmp = S;
+				S = S->prev;
+				Free_var(*tmp);
+				free(tmp);
+			}
+			scope_level -= 1;
+		}else if(res == 202){
+			/* If statement. Create local symtable */
+			SymTable * tmp = S;
+			scope_level += 1;
+			S = (SymTable *) malloc (sizeof(SymTable));
+			S->level = scope_level;
+			S->prev = tmp;
 		}else if(res){
 		/* There was an error. Exit */
-				Free(In);
-				Free_var(*S);
-				free(S);
-				free(Titles);
-				return -1;
+			Free(In);
+			Free_var(*S);
+			free(S);
+			free(Titles);
+			return -1;
 		
 		}
 		

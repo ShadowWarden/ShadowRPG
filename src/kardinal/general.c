@@ -34,14 +34,16 @@ int Print(Input * args, SymTable S, int debug){
 			Vars = (VariableDec *) malloc (sizeof(VariableDec)); 
 			Vars->value = (char *) malloc (sizeof(char)*(strlen(args->name)-2));
 			int i;
+			int flag = 0;
 			for(i=1;i<strlen(args->name)-1;i++){
 				if(args->name[i]=='\\'){
 					Vars->value[i-1]='\n';
 					i++;
+					flag++;
 				}else
 					Vars->value[i-1]=args->name[i];
 			}
-			Vars->value[i-1]='\0';
+			Vars->value[i-1-flag]='\0';
 			Vars->type = 's';			
 		}else{
 			VariableDec *Found;
