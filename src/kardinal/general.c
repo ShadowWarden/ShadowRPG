@@ -79,3 +79,14 @@ int Print(Input * args, SymTable S, int debug){
 	}
 	return 0;
 }
+
+int If(Input * args,int debug){
+	if(strcmp(args->name,"true")==0){
+		return 0;
+	}else if(strcmp(args->name,"false")==0){
+		return -1;
+	}else{
+		/* Invalid input */
+		return -2;
+	}
+}

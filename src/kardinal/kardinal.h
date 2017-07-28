@@ -86,6 +86,7 @@ int LE(VariableDec *,VariableDec *, int);
 
 //general.c
 int Print(Input *, SymTable , int);
+int If(Input *, int);
 
 // Extern variables
 extern State * Titles;

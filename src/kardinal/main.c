@@ -31,6 +31,7 @@ int main(int argc, char ** argv){
 	State *Player;
 	int PlayerSize = 0;
 	//int level = 0;
+	int if_false_flag = 0;
 	int line_number=0;
 
 	if(argc<3){
@@ -71,12 +72,12 @@ int main(int argc, char ** argv){
 *  :'-( - OHR
 */
 //		int size_in = (MAX_INPUT>(sizeof(line)))?MAX_INPUT:sizeof(line);
-		while(ch==' '){
+		while(ch==' ' || ch=='\t'){
 			i++;
 			ch = line[i];
 		}
 		(debug==1) ? printf("Debug : ch = %c\n",ch) : 0;
-		if(ch == '#'){
+		if(ch == '#' || (if_false_flag==1 && ch!='e')){
 		// Comment
 			continue;
 		}
@@ -89,7 +90,11 @@ int main(int argc, char ** argv){
 		
 		int res = parse(&In,&Player,&PlayerSize,&S,line_number,debug);
 		
-		if(res){
+		if(res == 201){
+			if_false_flag = 1;
+		}else if(res == -202 || res==202){	
+			if_false_flag = 0;
+		}else if(res){
 		/* There was an error. Exit */
 				Free(In);
 				Free_var(S);

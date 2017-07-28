@@ -16,11 +16,9 @@
 #
 # Do NOT use addttl yet on this branch. We're only testing setvar and have commented out the
 # Free(Player) in main.c
+
 setvar(a,4)
-setvar(b,"5")
-GE(c,a)
-#setvar(c,"5")
-#random(shit,"shit2")
-#setvar(str,"This is a string")
-#setvar(str,"This is an example\n",string);
-print("The value of a is ",a,"\n")
+setvar(b,5)
+if(some(GE(b,a),EQ(a,b),1))
+    print("b is greater than or equal to a\n")
+endif

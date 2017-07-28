@@ -42,7 +42,11 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 	if(EQSTR(In->name,"all")){
 		All(In,args,debug);
 	}else if(EQSTR(In->name,"some")){
-		Some(In,args,debug);
+		int res = Some(In,args,debug);
+		if(res == -1){
+			fprintf(stderr,"Error in some (Line %d): some failed with error code %d - Limit not specified or wrong type\n",line,res);
+			return res;
+		}
 	}else if(EQSTR(In->name,"not")){
 /* Note to NearlyHeadless : Do an errorcheck for number of arguments here. 
 *  There should be exactly 1 and no more. I'm just spitting out a warning in
@@ -163,10 +167,22 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 			fprintf(stderr,"Error in print (Line %d): print failed with error code %d. Look at the documentation to troubleshoot\n",line,res);
 			return res;
 		}
+	}else if(EQSTR(In->name, "if")){
+		int res = If(args, debug);
+		if(res == 0){
+		/* Error code 202 is if/true. 201 is false */
+			return 202;
+		}else if(res == -1){
+			return 201;
+		}else{
+			fprintf(stderr,"Error in If (Line %d): print failed with error code %d. Look at the documentation to troubleshoot\n",line,res);
+			return res;
+		}
+	}else if(EQSTR(In->name, "endif")){
+		return -202;
 	}else{
-/* Come up with a better default condition
-*/
-		strcpy(In->name,"false");
+		fprintf(stderr,"Error in print (Line %d): print failed with error code 102 - Unknown reference to %s\n",line,In->name);
+		return 102;
 	}
 		
 	(debug==1) ? printf("Debug : Leaving Evaluate\n") : 0;

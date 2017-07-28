@@ -19,6 +19,7 @@
 #include"kardinal.h"
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
@@ -44,8 +45,19 @@ int All(Input *In, Input *args, int debug){
 
 int Some(Input *In, Input *args, int debug){
 	(debug==1) ? fprintf(stderr,"Debug : Command is 'some'\n") : 0;
-	int flag = 0;
+	int flag = 0,j;
+	for(j=0;j<strlen(args->name);j++){
+		if(!isdigit(args->name[j])){
+			flag = 1;
+			break;
+		}
+	}
+	if(flag){
+		return -1;
+	}
+	
 	int lim = atoi(args->name);
+	flag = 0;
 	do{
 		if(EQSTR(args->name,"true")){
 			flag++;
