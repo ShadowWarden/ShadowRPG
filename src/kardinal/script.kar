@@ -17,9 +17,12 @@
 # Do NOT use addttl yet on this branch. We're only testing setvar and have commented out the
 # Free(Player) in main.c
 
+# Set integers 4 and 5 to a and b respectively
 setvar(a,4)
 setvar(b,5)
+# If b > a or b == a
 if(some(GE(b,a),EQ(a,b),1))
+# Set the string "6" to c
     setvar(c,"6")
     print("b is greater than or equal to a\n")
     print("The value of c is ",c,"\n")
