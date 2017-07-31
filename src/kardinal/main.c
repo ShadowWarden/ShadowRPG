@@ -88,16 +88,16 @@ int main(int argc, char ** argv){
 			if_false_flag = 1;
 		}else if(res == -202){
 			/* Endif. Get rid of local symbol table */	
-			if(!if_false_flag){
+			if(!if_false_flag && scope_level != 0){
 				if(S->level == scope_level){
 					SymTable *tmp = S;
 					S = S->prev;
 					Free_var(*tmp);
 					free(tmp);
 				}
+				scope_level -= 1;
 			}
 			if_false_flag = 0;
-			scope_level -= 1;
 		}else if(res == 202){
 			/* If statement. Create local symtable */
 			SymTable * tmp = S;
