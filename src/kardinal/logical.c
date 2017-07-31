@@ -69,7 +69,7 @@ int Some(Input *In, Input *args, int debug){
 		strcpy(In->name,"true");	
 	}else{
 		strcpy(In->name,"false");
-		return -1;
+		return 1;
 	}
 	(debug==1) ? fprintf(stderr,"Debug : Flag=%d, In.name=%s\n",flag,In->name) : 0;
 	return 0;

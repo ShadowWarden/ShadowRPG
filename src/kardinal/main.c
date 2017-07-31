@@ -72,7 +72,7 @@ int main(int argc, char ** argv){
 		}
 		(debug==1) ? printf("Debug : ch = %c\n",ch) : 0;
 		if(ch == '#' || (if_false_flag==1 && ch!='e')){
-		// Comment
+		// Comment and not endif!
 			continue;
 		}
 		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
@@ -105,7 +105,7 @@ int main(int argc, char ** argv){
 			S = (SymTable *) malloc (sizeof(SymTable));
 			S->level = scope_level;
 			S->prev = tmp;
-		}else if(res){
+		}else if(res!=1 && res){
 		/* There was an error. Exit */
 			Free(In);
 			Free_var(*S);
