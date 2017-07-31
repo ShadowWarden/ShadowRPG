@@ -54,7 +54,7 @@ Input * build(Input * In, char *in){
 	int flag_space = 0;
 	char ch = in[i];	
 	// Remove preceding spaces
-	while(ch == ' '){
+	while(ch == ' ' || ch == '\t'){
 		i++;
 		ch = in[i];
 	}
@@ -122,7 +122,7 @@ Input * build(Input * In, char *in){
 			index++;
 		}
 		if(flag_space && ch == ' '){
-			buf[index] = ' ';
+			buf[index] = ch;
 			index++;
 		}
 		i++;

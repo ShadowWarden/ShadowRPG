@@ -21,10 +21,9 @@
 setvar(a,4)
 setvar(b,5)
 # If b > a or b == a
-if(all(GE(b,a),EQ(a,b)))
+if(true)
 # Set the string "6" to c
-    setvar(c,"6")
-    print("b is greater than or equal to a\n")
-    print("The value of c is ",c,"\n")
+	setvar(c,"6")
+	print("b is greater than or equal to a\n")
+	print("The value of c is ",c,"\n")
 endif(null)
-print("Left if block\n")
