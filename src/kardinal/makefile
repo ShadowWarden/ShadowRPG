@@ -1,7 +1,7 @@
 obj=main.o parse.o evaluate.o state.o variable.o logical.o relational.o general.o
 
 kardinal: $(obj)
-	cc -Wall -o kardinal -O3 $(obj)
+	cc -Wall -o kardinal -O3 $(obj) -lreadline
 
 state.o: state.c
 	cc -Wall -c state.c
