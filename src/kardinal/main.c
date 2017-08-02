@@ -32,7 +32,7 @@ int main(int argc, char ** argv){
 		int if_false_flag = 0;
 		int line_number=0;
 		int scope_level = 0;
-		int debug = 1;
+		int debug = 0;
 
 //		if(argc<3){
 //				printf("2 input parameters needed!\n");
@@ -58,17 +58,17 @@ int main(int argc, char ** argv){
 //		build_states_test(state_in, debug);
 		//	dump_states_test(debug);
 //		add_state_to_player(2,&Player,&PlayerSize);
-		printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
+//		printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 //		fclose(state_in);
 
 		//		line = readline(">")
 		do{
 				//	In->prev = NULL;
-	//			if(line){
-	//				free(line);
-	//				line = (char *) NULL;		
-	//			}
-				line = readline(">");
+				if(line){
+					free(line);
+					line = (char *) NULL;		
+				}
+				line = readline("Kardinal > ");
 				int i=0;
 				char ch=line[i];
 				line_number++;	
