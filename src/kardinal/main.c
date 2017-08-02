@@ -68,7 +68,13 @@ int main(int argc, char ** argv){
 					free(line);
 					line = (char *) NULL;		
 				}
-				line = readline("Kardinal > ");
+				line = readline("Kardinal> ");
+			
+				if(line == NULL){
+						printf("Debug: Line = null\n");
+						break;
+				}
+
 				int i=0;
 				char ch=line[i];
 				line_number++;	
@@ -139,7 +145,7 @@ int main(int argc, char ** argv){
 		Free_var(*S);
 		free(S);
 		(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
-		free(Titles);
+//		free(Titles);
 		//	free(Player);
 		return 0;
 }
