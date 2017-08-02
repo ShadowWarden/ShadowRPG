@@ -33,6 +33,7 @@ int main(int argc, char ** argv){
 		int line_number=0;
 		int scope_level = 0;
 		int debug = 0;
+		int i;
 
 //		if(argc<3){
 //				printf("2 input parameters needed!\n");
@@ -55,6 +56,10 @@ int main(int argc, char ** argv){
 			 // Initialize variable stack
 		SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
+		for(i=0;i<CAP;i++){
+			S->Vars[i] = NULL;
+		}
+
 //		build_states_test(state_in, debug);
 		//	dump_states_test(debug);
 //		add_state_to_player(2,&Player,&PlayerSize);
@@ -71,7 +76,6 @@ int main(int argc, char ** argv){
 				line = readline("Kardinal> ");
 			
 				if(line == NULL){
-						printf("Debug: Line = null\n");
 						break;
 				}
 
@@ -121,6 +125,9 @@ int main(int argc, char ** argv){
 						S = (SymTable *) malloc (sizeof(SymTable));
 						S->level = scope_level;
 						S->prev = tmp;
+						for(i=0;i<CAP;i++){
+							S->Vars[i] = NULL;
+						}
 				}else if(res!=1 && res){
 						/* There was an error. Exit */
 						Free(In);
@@ -143,6 +150,7 @@ int main(int argc, char ** argv){
 		//	print_variable_stack(S);
 		(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 		Free_var(*S);
+//		(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
 		free(S);
 		(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
 //		free(Titles);
