@@ -23,7 +23,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, VariableDec **Vars, int *size_var, int debug){
+int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTable *S, int line, int debug){
 /* At present, it works. We have a few different things that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -37,12 +37,16 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 */
 	(debug==1) ? fprintf(stderr,"Debug : Entered Evaluate\n") : 0;
 	(debug==1) ? fprintf(stderr,"Debug : Printing arguments\n") : 0;
-//	print(*args);
+	print(*args,debug);
 	In->type = 0;
 	if(EQSTR(In->name,"all")){
 		All(In,args,debug);
 	}else if(EQSTR(In->name,"some")){
-		Some(In,args,debug);
+		int res = Some(In,args,debug);
+		if(res == -1){
+			fprintf(stderr,"Error in some (Line %d): some failed with error code %d - Limit not specified or wrong type\n",line,res);
+			return res;
+		}
 	}else if(EQSTR(In->name,"not")){
 /* Note to NearlyHeadless : Do an errorcheck for number of arguments here. 
 *  There should be exactly 1 and no more. I'm just spitting out a warning in
@@ -77,48 +81,135 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, Variabl
 			strcpy(In->name,"false");
 		}
 	}else if(EQSTR(In->name, "setvar")){
-		int result = -setvar(Vars,size_var,&args,debug);
+		int result = -setvar(S,&args,debug);
 		if(result != 0){
-			(debug==1) ? fprintf(stderr,"(setvar) Error : Setvar failed with error code %d. Look at the documentation to troubleshoot\n",-result) : 0;
-			strcpy(In->name,"false");
+			fprintf(stderr,"Error in setvar (Line %d): Setvar failed with error code %d. Look at the documentation to troubleshoot\n",line,-result);
+			return result;
 		}else{
 			strcpy(In->name,"true");
 		}
 		args=args->prev;
 	}else if(EQSTR(In->name, "EQ")){
-		VariableDec * Var1 = *Vars;
-		VariableDec * Var2 = Var1->prev;
-		int res = EQ(Var1,Var2,debug);
+		VariableDec * Var1, * Var2; 
+		int res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = EQ(Var1,Var2,debug);
+		else{	
+			fprintf(stderr,"Error in EQ (Line %d): EQ failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		if(res1 == 102){
+			/* Tmp was allocated to Var1 */
+			free(Var1->value);
+			free(Var1);
+		}
+		if(res2 == 102){
+			free(Var2->value);
+			free(Var2);
+		}
 		if(res == 0)
 			strcpy(In->name,"true");
-		else
+		else if(res == -1){
 			strcpy(In->name,"false");
+		}else{
+			fprintf(stderr,"Error in EQ (Line %d): EQ failed with error code %d. Look at the documentation to troubleshoot\n",line,-res);
+			return res;
+		}
 		/* Need to do an error condition here */
 	}else if(EQSTR(In->name, "GE")){
-		VariableDec * Var1 = *Vars;
-		VariableDec * Var2 = Var1->prev;
-	
-		int res = GE(Var1,Var2,debug);
+		VariableDec * Var1, * Var2; 
+		int res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = GE(Var1,Var2,debug);
+		else{	
+			fprintf(stderr,"Error in GE (Line %d): GE failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		if(res1 == 102){
+			/* Tmp was allocated to Var1 */
+			free(Var1->value);
+			free(Var1);
+		}
+		if(res2 == 102){
+			free(Var2->value);
+			free(Var2);
+		}		
 		if(res == 0)
 			strcpy(In->name,"true");
-		else
+		else if(res==-1)
 			strcpy(In->name,"false");
-		/* Need to do an error condition here */
-
+		else{
+			fprintf(stderr,"Error in GE (Line %d): GE failed with error code %d. Look at the documentation to troubleshoot\n",line,-res);
+			return res;
+		}
 	}else if(EQSTR(In->name, "LE")){
-		VariableDec * Var1 = *Vars;
-		VariableDec * Var2 = Var1->prev;
-	
-		int res = LE(Var1,Var2,debug);
+		VariableDec * Var1, * Var2; 
+		int res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = LE(Var1,Var2,debug);
+		else{	
+			fprintf(stderr,"Error in LE (Line %d): LE failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		if(res1 == 102){
+			/* Tmp was allocated to Var1 */
+			free(Var1->value);
+			free(Var1);
+		}
+		if(res2 == 102){
+			free(Var2->value);
+			free(Var2);
+		}
 		if(res == 0)
 			strcpy(In->name,"true");
-		else
+		else if(res == -1)
 			strcpy(In->name,"false");
-		/* Need to do an error condition here */
+		else{
+			fprintf(stderr,"Error in LE (Line %d): LE failed with error code %d. Look at the documentation to troubleshoot\n",line,-res);
+			return res;
+		}
+	}else if(EQSTR(In->name, "print")){
+		int res = Print(args,*S,debug);
+		if(res == 0)
+			strcpy(In->name,"true");
+		else{
+			fprintf(stderr,"Error in print (Line %d): print failed with error code %d. Look at the documentation to troubleshoot\n",line,res);
+			return res;
+		}
+	}else if(EQSTR(In->name, "if")){
+		int res = If(args, debug);
+		if(res == 0){
+		/* Error code 202 is if/true. 201 is false */
+			return 202;
+		}else if(res == -1){
+			return 201;
+		}else{
+			fprintf(stderr,"Error in If (Line %d): print failed with error code %d. Look at the documentation to troubleshoot\n",line,res);
+			return res;
+		}
+	}else if(EQSTR(In->name, "endif")){
+		return -202;
 	}else{
-/* Come up with a better default condition
-*/
-		strcpy(In->name,"false");
+		fprintf(stderr,"Error in print (Line %d): print failed with error code 102 - Unknown reference to %s\n",line,In->name);
+		return 102;
 	}
 		
 	(debug==1) ? printf("Debug : Leaving Evaluate\n") : 0;

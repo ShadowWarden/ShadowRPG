@@ -22,6 +22,7 @@ int Statecpy(State *a, State b){
 	a->id = b.id;
 	strcpy(a->name,b.name);
 	a->attribute=b.attribute;
+	return 0;
 }
 
 int getsize(FILE * in){
@@ -51,6 +52,7 @@ int build_states_test(FILE * in, int debug){
 		Titles[i].attribute = att;
 		Titles[i].id = i+1;
 	}
+	return 0;
 }
 
 int find_ttl(int StateId, State ** Player, int * PlayerSize, int debug){
@@ -143,4 +145,5 @@ int print_player_state(State* P, int PlayerSize, int debug){
 		printf("Debug : %d %s %d\n",P[i].id,P[i].name,P[i].attribute);
 	}
 	(debug==1) ? fprintf(stderr,"(print_player_states) Debug : Exiting print_player_state\n") : 0;
+	return 0;
 }

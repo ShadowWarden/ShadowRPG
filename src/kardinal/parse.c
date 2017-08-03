@@ -31,9 +31,7 @@ int freeform_new(Input **In, Input cur, int pos){
 	new->type = cur.type;
 	strcpy(new->name,cur.name);
 	new->prev = *In;
-//	new->pos = pos;
 	*In = new;
-//	printf("Debug : %d : %s : %d : %d\n",cur.lvl,cur.name,cur.type,pos);	
 	return 0;
 }
 
@@ -53,18 +51,16 @@ Input * build(Input * In, char *in){
 	int index = 0;
 	int lvl = 0;
 	int maxlvl = 0;
-	char ch = in[i];
-		
+	int flag_space = 0;
+	char ch = in[i];	
 	// Remove preceding spaces
-	while(ch == ' '){
+	while(ch == ' ' || ch == '\t'){
 		i++;
 		ch = in[i];
 	}
-//	Debug(debug,"Debug : Removed Spaces\n");
 	int flag = 0;
 	while(i<strlen(in)){
 		ch = in[i];
-//		Input * cmd;
 		if(ch == '('){
 /* If the buffer character is a (, then the word that came before it has 
 *  to be a command (Rule 1). Hence, we give it type 1. We check for 
@@ -88,25 +84,24 @@ Input * build(Input * In, char *in){
 			flag ++;
 			index = 0;
 			lvl+=1;
-		}else if(ch == ',' || ch == ')' && index!=0){
+		}else if(ch == ',' || ch == ')'){
 /* If the buffer character is a ',' or a ')', then the word that came 
 *  before it has to be an argument. The if statements below are to avoid 
 *  corner cases that occur when you have a ) followed by a , and when you're
 *  looking at the final ) 
 */
-			buf[index] = '\0';
-		//	printf("buf : %s\n",buf);
-			Input * new = (Input *) malloc (sizeof(Input));
-			strcpy(new->name,buf);
-			new->type = 0;
-			new->lvl = lvl;
-			maxlvl = (lvl>maxlvl)?lvl:maxlvl;
-			new->prev = In;
-	//		new->parent = In;
-			In = new;
-			flag++;
-			index = 0;
-			if(ch == ')' && i != strlen(in)-1){
+			if(!(ch == ')' && index == 0)){
+				buf[index] = '\0';
+				Input * new = (Input *) malloc (sizeof(Input));
+				strcpy(new->name,buf);
+				new->type = 0;
+				new->lvl = lvl;
+				maxlvl = (lvl>maxlvl)?lvl:maxlvl;
+				new->prev = In;
+				In = new;
+				flag++;
+				index = 0;
+			}if(ch == ')' && (i != strlen(in)-1 || index == 0)){
 	// Skip the next 'comma' Ex : var(var2(arg1,arg2),arg3) Skip the comma after arg2) and go straight to arg3
 				lvl -= 1;
 				i++;
@@ -116,18 +111,23 @@ Input * build(Input * In, char *in){
 					ch = in[i];
 				}
 				continue;
-			} 
+			}
 		}else if(ch != ' ' && index < MAXBUF && ch!=')'){
 /* If the character looked at is neither a ',' nor a bracket, then it must
 *  be a word (either arg or cmd). Write to buffer.
 */
+			if(ch == '"'){
+				flag_space = (flag_space == 1)? 0 : 1;
+			}
 			buf[index] = ch;
 			index++;
-		//	printf("buf : %s\n",buf);
+		}
+		if(flag_space && ch == ' '){
+			buf[index] = ch;
+			index++;
 		}
 		i++;
 	}
-//	printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 	return In;	
 }
 
@@ -140,26 +140,13 @@ void Free(Input * In){
 	free(In);
 }
 
-int find_maxlvl(Input In){
-	Input *tmp = &In;
-	int maxlvl = 0;	
-	while(tmp!=NULL){
-		maxlvl = (tmp->lvl>maxlvl)?tmp->lvl:maxlvl;	
-		tmp = tmp->prev;
-	}
-	return maxlvl;
-}
+
 
 void print(Input In, int debug){
 	Input *tmp = &In;
-//	printf("%d\n",strcmp(In.name,"def\0"));
 	int flag = 0;
-//	printf("i : str : t : l\n");
-//	printf("Debug : tmp = %p\n",tmp);
 	while(tmp != NULL){
-	//	char buf[20];
 		(debug==1) ? fprintf(stderr,"Debug : %d : %s : %d : %d\n",flag,tmp->name,tmp->type,tmp->lvl) : 0;
-	//	debug(debug)
 		tmp = tmp->prev;
 		flag++;
 	}
@@ -203,6 +190,7 @@ int write(Input *In1, Input *In2){
 	In1->type = In2->type;
 	In1->lvl = In2->lvl;
 	In1->prev = In2->prev;
+	return 0;
 }
 
 void sequential_print(Input *In, char *name, int debug){
@@ -215,15 +203,12 @@ void sequential_print(Input *In, char *name, int debug){
 	}while(tmp!=NULL);
 }
 
-Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, int *size_var, int debug){
-	int i,j;
-	int maxlvl = find_maxlvl(*In);
+int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int debug){
 	int pos = 0;	
 	Input *argsold = NULL;
-	Input *old = In;
-	Input *cur = In->prev;
+	Input *old = *In;
+	Input *cur = (*In)->prev;
 	int curlvl = old->lvl; 
-// I'm shifting the defn of curlvl here to make things a little clearer.
 
 	(debug==1) ? fprintf(stderr,"Debug : Entered parse\n") : 0;
 
@@ -236,10 +221,7 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 			(debug==1) ? fprintf(stderr,"Debug : Entered if stmt 1\n") : 0;
 			freeform_new(&argsold,*old,pos);
 			(debug==1) ? fprintf(stderr,"Debug : Survived freeform_new()\n") : 0;
-//			size_argsold++;
-//			write(&argsold[size_argsold],old);
 			print(*argsold, debug);
-		//	old = cur;
 			pos++;
 			curlvl = cur->lvl;
 			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 1\n\n") : 0;
@@ -261,18 +243,15 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 			Input *args=NULL;
 			(debug==1) ? fprintf(stderr,"Debug : curlvl if stmt 2 : %d\n",curlvl) : 0;
 			while(tmp!=NULL){
-	//			printf("Debug : curlvl if stmt 2 : %d\n",curlvl);
 				if(tmp->lvl == curlvl){
 					freeform_new(&args,*tmp,size_args);
 					size_args+=1;
 				}
 				tmp = tmp->prev;
-//				printf("Debug : tmp --> tmp->prev\n");
 			}
 
 			(debug==1) ? fprintf(stderr,"Debug : Survived the args loop\n") : 0;
 			argsold = selective_free(argsold,curlvl);
-		//	printf("Debug : tmp = %p\n",argsold);	
 			if(argsold!=NULL){
 				(debug==1) ? fprintf(stderr,"Debug : Argsold in if stmt 2\n") : 0;
 				print(*argsold, debug);
@@ -283,11 +262,19 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 *  a seg fault - even though I'm not using it. Anyone know why?
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
-			evaluate(cur,args,Player,PlayerSize,Vars,size_var,debug);
+
+			int res = evaluate(cur,args,Player,PlayerSize,S,line,debug);
+			
+			(debug==1) ? fprintf(stderr,"About to free args\n") : 0;
 			Free(args);
 			(debug==1) ? fprintf(stderr,"Debug : Freed args\n") : 0;
 			curlvl = cur->lvl;
 			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 2\n\n") : 0;
+			if(res && (res!=202 || res!= 201 || res!=-202)){
+				/* If evaluate failed. Exit immediately */
+				Free(argsold);
+				return res;
+			}
 		}else{
 /* If stmt 3 in the gameplan. If curlvl doesn't change, then we're looking at
 *  another argument. Write to argsold and get on with life ;-)
@@ -301,12 +288,11 @@ Input * parse(Input *In, State **Player, int *PlayerSize, VariableDec **Vars, in
 			curlvl = cur->lvl;
 			(debug==1) ? fprintf(stderr,"Debug : Leaving if stmt 3\n\n") : 0;
 		}
-//		sequential_print(argsold,size_argsold);
 		old = cur;
 		cur = cur->prev;	
 	}
 	Free(argsold);
 	(debug==1) ? fprintf(stderr,"Debug : Freed argsold\n") : 0;
 	(debug==1) ? fprintf(stderr,"Debug : Survived the parse loop!\n") : 0;
-	return In;	
+	return 0;	
 }

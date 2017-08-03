@@ -16,6 +16,14 @@
 #
 # Do NOT use addttl yet on this branch. We're only testing setvar and have commented out the
 # Free(Player) in main.c
-setvar(a,3,string)
-setvar(b,4,string)
-all(EQ(a,b),GE(a,b))
+
+# Set integers 4 and 5 to a and b respectively
+
+# If b > a or b == a
+# Set the string "6" to c
+
+setvar(a,5)
+setvar(b,6)
+#if(some(GE(a,5),LE(b,10),1))
+#	print("a is equal to 5\n")
+#endif(null)
