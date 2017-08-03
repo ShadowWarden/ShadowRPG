@@ -32,31 +32,32 @@ int main(int argc, char ** argv){
 	int line_number=0;
 	int scope_level = 0;
 
-	if(argc<3){
-		printf("2 input parameters needed!\n");
+	if(argc<2){
+		printf("Input file needed!\n");
 		exit(1);
 	}
-	FILE * state_in = fopen(argv[2],"r"),
-	     * fin = fopen(argv[1],"r");
+	FILE * fin = fopen(argv[1],"r");
 	int debug=0;
-	if(argc>3){
-		if(strcmp(argv[3],"--debug")==0){
+	if(argc>2){
+		if(strcmp(argv[2],"--debug")==0){
 			printf("Yay\n");
 			debug=1;
 		}
 		else{
-			printf("Unidentifiable argument %s\n", argv[3]);
+			printf("Unidentifiable argument %s\n", argv[2]);
 			exit(2);
 		}
 	}
 	// Initialize variable stack
 	SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
-	build_states_test(state_in, debug);
+	int i;
+	for(i=0;i<CAP;i++)
+			S->Vars[i] = NULL; 
+
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
-	fclose(state_in);
 	while(fgets(line,MAX_INPUT,fin)){
 	//	In->prev = NULL;
 		int i=0;
@@ -111,6 +112,7 @@ int main(int argc, char ** argv){
 			Free_var(*S);
 			free(S);
 			free(Titles);
+			fclose(fin);
 			return -1;
 		
 		}
@@ -126,6 +128,7 @@ int main(int argc, char ** argv){
 	}	
 //	print_variable_stack(S);
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
+	fclose(fin);
 	Free_var(*S);
 	free(S);
 	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;

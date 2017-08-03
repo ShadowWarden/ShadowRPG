@@ -24,6 +24,6 @@
 
 setvar(a,5)
 setvar(b,6)
-if(some(GE(a,5),LE(b,10),1))
-	print("a is equal to 5\n")
-endif(null)
+#if(some(GE(a,5),LE(b,10),1))
+#	print("a is equal to 5\n")
+#endif(null)
