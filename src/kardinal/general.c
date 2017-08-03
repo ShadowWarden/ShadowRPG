@@ -43,7 +43,7 @@ int Print(Input * args, SymTable S, int debug){
 				}else
 					Vars->value[i-1-flag]=args->name[i];
 			}
-			Vars->value[i-flag]='\0';
+			Vars->value[i-1-flag]='\0';
 			Vars->type = 's';			
 		}else{
 			VariableDec *Found;

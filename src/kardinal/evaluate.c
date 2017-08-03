@@ -95,14 +95,23 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
-		if(!res1 && !res2)	
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
 			res = EQ(Var1,Var2,debug);
-		else{
+		else{	
+			fprintf(stderr,"Error in EQ (Line %d): EQ failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
 			/* Change this ASAP so that it actually checks to make
 			 * sure that res1/res2=101
 			 */
-			fprintf(stderr,"Error in EQ (Line %d): EQ failed with error code 101. Look at the documentation to troubleshoot\n",line);
-			return 101;
+		if(res1 == 102){
+			/* Tmp was allocated to Var1 */
+			free(Var1->value);
+			free(Var1);
+		}
+		if(res2 == 102){
+			free(Var2->value);
+			free(Var2);
 		}
 		if(res == 0)
 			strcpy(In->name,"true");
@@ -119,15 +128,24 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
-		if(!res1 && !res2)	
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
 			res = GE(Var1,Var2,debug);
-		else{
-			/* Change this ASAP so that it actually checks to make
-			 * sure that res1/res2=101
-			 */
+		else{	
 			fprintf(stderr,"Error in GE (Line %d): GE failed with error code 101. Look at the documentation to troubleshoot\n",line);
 			return 101;
 		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		if(res1 == 102){
+			/* Tmp was allocated to Var1 */
+			free(Var1->value);
+			free(Var1);
+		}
+		if(res2 == 102){
+			free(Var2->value);
+			free(Var2);
+		}		
 		if(res == 0)
 			strcpy(In->name,"true");
 		else if(res==-1)
@@ -142,14 +160,23 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
-		if(!res1 && !res2)	
-			res = GE(Var1,Var2,debug);
-		else{
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = LE(Var1,Var2,debug);
+		else{	
+			fprintf(stderr,"Error in LE (Line %d): LE failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
 			/* Change this ASAP so that it actually checks to make
 			 * sure that res1/res2=101
 			 */
-			fprintf(stderr,"Error in LE (Line %d): LE failed with error code 101. Look at the documentation to troubleshoot\n",line);
-			return 101;
+		if(res1 == 102){
+			/* Tmp was allocated to Var1 */
+			free(Var1->value);
+			free(Var1);
+		}
+		if(res2 == 102){
+			free(Var2->value);
+			free(Var2);
 		}
 		if(res == 0)
 			strcpy(In->name,"true");
