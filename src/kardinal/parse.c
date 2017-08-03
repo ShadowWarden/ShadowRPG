@@ -84,23 +84,24 @@ Input * build(Input * In, char *in){
 			flag ++;
 			index = 0;
 			lvl+=1;
-		}else if(ch == ',' || (ch == ')' && index!=0)){
+		}else if(ch == ',' || ch == ')'){
 /* If the buffer character is a ',' or a ')', then the word that came 
 *  before it has to be an argument. The if statements below are to avoid 
 *  corner cases that occur when you have a ) followed by a , and when you're
 *  looking at the final ) 
 */
-			buf[index] = '\0';
-			Input * new = (Input *) malloc (sizeof(Input));
-			strcpy(new->name,buf);
-			new->type = 0;
-			new->lvl = lvl;
-			maxlvl = (lvl>maxlvl)?lvl:maxlvl;
-			new->prev = In;
-			In = new;
-			flag++;
-			index = 0;
-			if(ch == ')' && i != strlen(in)-1){
+			if(!(ch == ')' && index == 0)){
+				buf[index] = '\0';
+				Input * new = (Input *) malloc (sizeof(Input));
+				strcpy(new->name,buf);
+				new->type = 0;
+				new->lvl = lvl;
+				maxlvl = (lvl>maxlvl)?lvl:maxlvl;
+				new->prev = In;
+				In = new;
+				flag++;
+				index = 0;
+			}if(ch == ')' && (i != strlen(in)-1 || index == 0)){
 	// Skip the next 'comma' Ex : var(var2(arg1,arg2),arg3) Skip the comma after arg2) and go straight to arg3
 				lvl -= 1;
 				i++;
@@ -110,7 +111,7 @@ Input * build(Input * In, char *in){
 					ch = in[i];
 				}
 				continue;
-			} 
+			}
 		}else if(ch != ' ' && index < MAXBUF && ch!=')'){
 /* If the character looked at is neither a ',' nor a bracket, then it must
 *  be a word (either arg or cmd). Write to buffer.
