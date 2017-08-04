@@ -32,11 +32,11 @@ int main(int argc, char ** argv){
 	int line_number=0;
 	int scope_level = 0;
 
-	if(argc<2){
-		printf("Input file needed!\n");
-		exit(1);
-	}
-	FILE * fin = fopen(argv[1],"r");
+//	if(argc<2){
+//		printf("Input file needed!\n");
+//		exit(1);
+//	}
+//	FILE * fin = fopen(argv[1],"r");
 	int debug=0;
 	if(argc>2){
 		if(strcmp(argv[2],"--debug")==0){
@@ -58,11 +58,14 @@ int main(int argc, char ** argv){
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
-	while(fgets(line,MAX_INPUT,fin)){
+	while(fgets(line,MAX_INPUT,stdin)){
 	//	In->prev = NULL;
 		int i=0;
 		char ch=line[i];
 		line_number++;	
+		if(line==NULL){
+			break;
+		}
 /* Pretty sure my beautiful conditional operator is no longer necessary
 *  :'-( - OHR
 */
@@ -112,7 +115,7 @@ int main(int argc, char ** argv){
 			Free_var(*S);
 			free(S);
 			free(Titles);
-			fclose(fin);
+			//fclose(fin);
 			return -1;
 		
 		}
@@ -128,7 +131,7 @@ int main(int argc, char ** argv){
 	}	
 //	print_variable_stack(S);
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
-	fclose(fin);
+//	fclose(fin);
 	Free_var(*S);
 	free(S);
 	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
