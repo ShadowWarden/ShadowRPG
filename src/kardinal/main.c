@@ -71,7 +71,7 @@ int main(int argc, char ** argv){
 				//	In->prev = NULL;
 				if(line){
 					free(line);
-				char *line; 
+					line = NULL;
 				}
 				line = linenoise("Kardinal> ");
 			
