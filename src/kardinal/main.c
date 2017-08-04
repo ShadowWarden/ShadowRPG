@@ -16,8 +16,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "/home/omkar/programs/gdb-7.2/readline/readline.h"
 #include "kardinal.h"
+#include "linenoise.h"
 
 #define MAX_INPUT 256
 
@@ -71,9 +71,9 @@ int main(int argc, char ** argv){
 				//	In->prev = NULL;
 				if(line){
 					free(line);
-					line = (char *) NULL;		
+				char *line; 
 				}
-				line = readline("Kardinal> ");
+				line = linenoise("Kardinal> ");
 			
 				if(line == NULL){
 						break;
@@ -146,7 +146,7 @@ int main(int argc, char ** argv){
 				print_player_state(Player,PlayerSize,debug);
 				Free(In);
 		}while(line != NULL);
-		printf("Here\n");	
+		printf("Here");	
 		//	print_variable_stack(S);
 		(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 		Free_var(*S);

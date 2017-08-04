@@ -1,7 +1,7 @@
-obj=main.o parse.o evaluate.o state.o variable.o logical.o relational.o general.o
+obj=main.o parse.o evaluate.o state.o variable.o logical.o relational.o general.o linenoise.o
 
 kardinal: $(obj)
-	cc -Wall -o kardinal -O3 $(obj) -lreadline
+	cc -Wall -o kardinal -O1 $(obj) 
 
 state.o: state.c
 	cc -Wall -c state.c
@@ -26,6 +26,9 @@ relational.o: relational.c
 
 general.o: general.c
 	cc -Wall -c general.c
+
+linenoise.o: linenoise.c
+	cc -Wall -c linenoise.c
 
 
 .PHONY: debug
