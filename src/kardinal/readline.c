@@ -13,4 +13,75 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
+/* TODO:
+*  1. Implement backspace: get rid of line[i], shift everything to the left
+*     back by 1, i--, size -= 1
+*  2. Implement left arrow: i--, if i>0
+*  3. Implement right arrow: i++, if i<=size
+*  4. Print cursor at i
+*/
 
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ncurses.h>
+
+char * readline(char * prompt){
+	// Size = total limit of line. i = current position
+	int size = 0, i = 0;
+	char key;
+	/* Initialize basic line char */
+	char * line = (char *) malloc ((size+1)*sizeof(char));
+	printw("%s",prompt);
+	while(key = getch()){
+		switch(key){
+			case '\n':
+			// End. If size = 0, then return null
+				if(size == 0){
+					free(line);
+					return NULL;
+				}else{
+					line[size+1] = '\0';
+					printw("\n");
+					return line;
+				}
+				break;
+//			case KEY_LEFT:
+				/* Move position back by 1 */
+//				if(i != 0){
+//					i--;
+//				}
+			default:
+			/* Add a new letter at position i. And shift 
+			*  everything to the right by 1. Realloc to size+1
+			*/
+				line = (char *) realloc (line, size+2);
+				size+=1;
+				int j;	
+				for(j = size; j >= i+1; j--){
+					line[j] = line[j-1];
+				}
+				line[i] = key;
+				i++;
+				for(j=i-1;j<size;j++){
+					printw("%c",line[j]);
+				}
+				break;
+		}
+	}
+}
+
+int main(int argc, char ** argv){
+	initscr();
+	cbreak();
+	noecho();
+	keypad(stdscr,true);
+	char * line = readline("Enter Something: ");
+	printw("You entered %s\n",line);
+	if(line != NULL)
+		free(line);
+	getch();
+	endwin();
+	return 0;
+}
