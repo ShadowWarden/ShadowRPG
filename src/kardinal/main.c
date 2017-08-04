@@ -146,7 +146,7 @@ int main(int argc, char ** argv){
 				print_player_state(Player,PlayerSize,debug);
 				Free(In);
 		}while(line != NULL);
-	
+		printf("Here\n");	
 		//	print_variable_stack(S);
 		(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 		Free_var(*S);
