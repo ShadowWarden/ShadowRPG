@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "kardinal.h"
 
 #define MAX_INPUT 256
@@ -25,7 +27,7 @@ State * Titles;
 
 int main(int argc, char ** argv){
 	/* Declarations */
-	char line[MAX_INPUT];
+	char *line;
 	State *Player;
 	int PlayerSize = 0;
 	int if_false_flag = 0;
@@ -58,7 +60,7 @@ int main(int argc, char ** argv){
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
-	while(fgets(line,MAX_INPUT,stdin)){
+	while(line = readline("kardinal> ")){
 	//	In->prev = NULL;
 		int i=0;
 		char ch=line[i];
@@ -128,6 +130,10 @@ int main(int argc, char ** argv){
 		(debug==1) ? printf("\nDebug : Size of Player state stack : %d\n",PlayerSize) : 0;
 		print_player_state(Player,PlayerSize,debug);
 		Free(In);
+		if(line != NULL){
+			free(line);
+			line = NULL;
+		}
 	}	
 //	print_variable_stack(S);
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
