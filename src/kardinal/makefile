@@ -1,7 +1,9 @@
-obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o
+obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o readline.o
+
+flags=-lncurses
 
 kardinal: $(obj)
-	cc -Wall -o kardinal -O3 $(obj)
+	cc -Wall -o kardinal -O3 $(obj) $(flags)
 
 evaluate.o: evaluate.c
 	cc -Wall -c evaluate.c 
@@ -24,10 +26,12 @@ relational.o: relational.c
 general.o: general.c
 	cc -Wall -c general.c
 
+readline.o: readline.c
+	cc -Wall -c readline.c
 
 .PHONY: debug
-debug: main.o parse.o evaluate.o variable.o logical.o relational.o
-	cc -Wall -g -o kardinal $(obj)
+debug: $(obj)
+	cc -Wall -g -o kardinal $(obj) $(flags)
 
 .PHONY: clean
 clean:

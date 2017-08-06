@@ -34,7 +34,7 @@ char * readline(char * prompt){
 	/* Initialize basic line char */
 	char * line = (char *) malloc ((size+1)*sizeof(char));
 	printw("%s",prompt);
-	while(key = getch()){
+	while((key = getch())){
 		switch(key){
 			case '\n':
 			// End. If size = 0, then return null
@@ -70,18 +70,5 @@ char * readline(char * prompt){
 				break;
 		}
 	}
-}
-
-int main(int argc, char ** argv){
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr,true);
-	char * line = readline("Enter Something: ");
-	printw("You entered %s\n",line);
-	if(line != NULL)
-		free(line);
-	getch();
-	endwin();
-	return 0;
+	return NULL;
 }
