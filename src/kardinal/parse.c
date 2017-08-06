@@ -203,7 +203,7 @@ void sequential_print(Input *In, char *name, int debug){
 	}while(tmp!=NULL);
 }
 
-int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int debug){
+int parse(Input **In, SymTable *S, int line,int debug){
 	int pos = 0;	
 	Input *argsold = NULL;
 	Input *old = *In;
@@ -263,7 +263,7 @@ int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
 
-			int res = evaluate(cur,args,Player,PlayerSize,S,line,debug);
+			int res = evaluate(cur,args,S,line,debug);
 			
 			(debug==1) ? fprintf(stderr,"About to free args\n") : 0;
 			Free(args);

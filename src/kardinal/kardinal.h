@@ -16,19 +16,19 @@
 #define CAP 13
 #define OFFSET 133
 
-struct State{
+typedef struct State{
 	unsigned int id;
 	char name[20];
 	int attribute;
-};
+}State;
 
-struct Input{
+typedef struct Input{
 	char name[50];
 	int type;     // 0 = Arg  ;  1 = Var
 	int lvl;
 	struct Input * prev;
 //	int pos;
-};
+}Input;
 
 typedef struct VariableDec{
 	char varname[20]; 	// Variable Name
@@ -45,18 +45,20 @@ typedef struct SymbolTable{
 	struct SymbolTable * prev;
 }SymTable;
 
-typedef struct Input Input;
-typedef struct State State;
+typedef struct Control{
+	char ctrl;
+	struct Control * prev;
+}Control;
 
 // parse.c
 Input * build(Input *, char *);
 void Free(Input *);
 void print(Input, int);
 void print_final(Input, int);
-int parse(Input **, State **, int *,SymTable *, int, int);
+int parse(Input **,SymTable *, int, int);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, SymTable *, int, int);
+int evaluate(Input *, Input *, SymTable *, int, int);
 
 // state.c
 int build_states_test(FILE *i, int);
