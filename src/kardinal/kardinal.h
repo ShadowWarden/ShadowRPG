@@ -16,12 +16,6 @@
 #define CAP 13
 #define OFFSET 133
 
-typedef struct State{
-	unsigned int id;
-	char name[20];
-	int attribute;
-}State;
-
 typedef struct Input{
 	char name[50];
 	int type;     // 0 = Arg  ;  1 = Var
@@ -60,16 +54,6 @@ int parse(Input **,SymTable *, int, int);
 // evaluate.c
 int evaluate(Input *, Input *, SymTable *, int, int);
 
-// state.c
-int build_states_test(FILE *i, int);
-int dump_states_test(int);
-int find_ttl(int, State **, int *, int);
-int add_state_to_player(int, State **, int *, int);
-int remove_state_from_player(int, State **, int *, int);
-int print_player_state(State *, int, int);
-int getsize(FILE *);
-//int Statecpy(State *, State *);
-
 //variable.c
 int Free_var(SymTable);
 void print_variable_stack(SymTable);
@@ -91,7 +75,3 @@ int LE(VariableDec *,VariableDec *, int);
 //general.c
 int Print(Input *, SymTable , int);
 int If(Input *, int);
-
-// Extern variables
-extern State * Titles;
-extern int TitleSize;
