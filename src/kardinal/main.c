@@ -22,14 +22,20 @@
 
 #define MAX_INPUT 256
 
-int TitleSize;
-State * Titles;
+//int TitleSize;
+//State * Titles;
 
 int main(int argc, char ** argv){
 	/* Declarations */
+<<<<<<< HEAD
 	char *line;
 	State *Player;
 	int PlayerSize = 0;
+=======
+	char line[MAX_INPUT];
+//	State *Player;
+//	int PlayerSize = 0;
+>>>>>>> 28d9c364af14fdab881f938c9f4849d037a692ca
 	int if_false_flag = 0;
 	int line_number=0;
 	int scope_level = 0;
@@ -88,7 +94,7 @@ int main(int argc, char ** argv){
 //		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 		
 		
-		int res = parse(&In,&Player,&PlayerSize,S,line_number,debug);
+		int res = parse(&In,S,line_number,debug);
 		
 		if(res == 201){
 			if_false_flag = 1;
@@ -116,8 +122,12 @@ int main(int argc, char ** argv){
 			Free(In);
 			Free_var(*S);
 			free(S);
+<<<<<<< HEAD
 			free(Titles);
 			//fclose(fin);
+=======
+			fclose(fin);
+>>>>>>> 28d9c364af14fdab881f938c9f4849d037a692ca
 			return -1;
 		
 		}
@@ -127,8 +137,6 @@ int main(int argc, char ** argv){
 		(debug==1) ? printf("\nDebug : Final Result\n") : 0;
 		print_final(*In, debug);
 	//	scanf("%c",&junk);	
-		(debug==1) ? printf("\nDebug : Size of Player state stack : %d\n",PlayerSize) : 0;
-		print_player_state(Player,PlayerSize,debug);
 		Free(In);
 		if(line != NULL){
 			free(line);
@@ -140,8 +148,5 @@ int main(int argc, char ** argv){
 //	fclose(fin);
 	Free_var(*S);
 	free(S);
-	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
-	free(Titles);
-//	free(Player);
 	return 0;
 }
