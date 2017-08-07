@@ -19,10 +19,6 @@
 
 #define MAXBUF 100
 
-void Debug(char * msg){
-	fprintf(stderr,"%s",msg);
-}
-
 int freeform_new(Input **In, Input cur, int pos){
 	// Creates a new node in the freeform stack
 
