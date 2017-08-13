@@ -45,7 +45,7 @@ typedef struct Control{
 }Control;
 
 // parse.c
-Input * build(Input *, char *);
+int build(Input **, char *);
 void Free(Input *);
 void print(Input, int);
 void print_final(Input, int);

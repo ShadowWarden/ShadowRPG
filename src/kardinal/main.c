@@ -60,7 +60,7 @@ int main(int argc, char ** argv){
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	while(fgets(line,MAX_INPUT,fin)){
 	//	In->prev = NULL;
-		int i=0;
+		int i=0, res;
 		char ch=line[i];
 		line_number++;	
 /* Pretty sure my beautiful conditional operator is no longer necessary
@@ -79,11 +79,11 @@ int main(int argc, char ** argv){
 		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
-		In = build(In,line);
+		res = build(&In,line);
 //		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
 		
 		
-		int res = parse(&In,S,line_number,debug);
+		res = parse(&In,S,line_number,debug);
 		
 		if(res == 201){
 			if_false_flag = 1;

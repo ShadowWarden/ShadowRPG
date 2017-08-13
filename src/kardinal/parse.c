@@ -19,10 +19,6 @@
 
 #define MAXBUF 100
 
-void Debug(char * msg){
-	fprintf(stderr,"%s",msg);
-}
-
 int freeform_new(Input **In, Input cur, int pos){
 	// Creates a new node in the freeform stack
 
@@ -35,7 +31,7 @@ int freeform_new(Input **In, Input cur, int pos){
 	return 0;
 }
 
-Input * build(Input * In, char *in){
+int build(Input ** In, char *in){
 /* This takes the input string - something like all(ttl(abc,def,efg)) and breaks
 *  it up as follows : 
 *  1. Anything that preceeds a bracket is a command. In this case, that refers
@@ -69,17 +65,17 @@ Input * build(Input * In, char *in){
 */			
 			buf[index] = '\0';
 			if(flag==0){
-				strcpy(In->name,buf);
-				In->type = 1;
-				In->prev = NULL;
-				In->lvl = lvl;
+				strcpy((*In)->name,buf);
+				(*In)->type = 1;
+				(*In)->prev = NULL;
+				(*In)->lvl = lvl;
 			}else{
 				Input * new = (Input *) malloc (sizeof(Input));
 				strcpy(new->name,buf);
 				new->type = 1;				
-				new->prev = In;
+				new->prev = *In;
 				new->lvl = lvl;
-				In = new;
+				*In = new;
 			}
 			flag ++;
 			index = 0;
@@ -97,8 +93,8 @@ Input * build(Input * In, char *in){
 				new->type = 0;
 				new->lvl = lvl;
 				maxlvl = (lvl>maxlvl)?lvl:maxlvl;
-				new->prev = In;
-				In = new;
+				new->prev = *In;
+				*In = new;
 				flag++;
 				index = 0;
 			}if(ch == ')' && (i != strlen(in)-1 || index == 0)){
@@ -128,7 +124,7 @@ Input * build(Input * In, char *in){
 		}
 		i++;
 	}
-	return In;	
+	return 0;	
 }
 
 void Free(Input * In){
