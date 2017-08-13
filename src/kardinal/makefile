@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-obj=main.o parse.o evaluate.o state.o variable.o logical.o relational.o general.o linenoise.o
-=======
 obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o
->>>>>>> 9c1ebb89e081af69b24359a770b3176d14cf38e4
 
 kardinal: $(obj)
-	cc -Wall -o kardinal -O3 $(obj) 
+	cc -Wall -o kardinal -O3 $(obj)
 
 evaluate.o: evaluate.c
 	cc -Wall -c evaluate.c 
@@ -27,9 +23,6 @@ relational.o: relational.c
 
 general.o: general.c
 	cc -Wall -c general.c
-
-linenoise.o: linenoise.c
-	cc -Wall -c linenoise.c
 
 
 .PHONY: debug
