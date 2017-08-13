@@ -122,6 +122,8 @@ int setvar(SymTable * S, Input ** args, int debug){
 		(*args) = (*args)->prev;
 
 		strcpy(var->varname,(*args)->name);
+		var->prev = NULL;
+
 		int hashkey = createhash(var->varname);
 		if(S->Vars[hashkey] == NULL){	
 				S->Vars[hashkey]=var;
