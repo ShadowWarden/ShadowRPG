@@ -122,6 +122,8 @@ int setvar(SymTable * S, Input ** args, int debug){
 		(*args) = (*args)->prev;
 
 		strcpy(var->varname,(*args)->name);
+		var->prev = NULL;
+
 		int hashkey = createhash(var->varname);
 		if(S->Vars[hashkey] == NULL){	
 				S->Vars[hashkey]=var;
@@ -153,18 +155,47 @@ int createhash(char * a){
 int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 		int hashkey = createhash(varname);
 		SymTable *tmp = &S;
-		while(tmp != NULL){
-			VariableDec * vars =  tmp->Vars[hashkey];
-			while(vars!=NULL){
-				if(strcmp(vars->varname,varname) == 0){
-					*Found = vars;		
-					return 0;
-				}else{
-					vars = vars->prev;
-				}
+		if(isdigit(varname[0])){
+			int flag = 0;
+			int j = 1;
+			for(j=0;j<strlen(varname);j++){
+					if(isdigit(varname[j])==0){
+							flag = 1;
+							break;	
+					}
 			}
-			tmp = tmp->prev;
-		}
+			if(flag){
+				/* Unknown symbol */
+				return 104;
+			}else{
+				/* Allocate a tmp variable */
+				*Found = (VariableDec *) malloc (sizeof(VariableDec));
+				strcpy((*Found)->varname,"tmp");
+				(*Found)->type = 'i';
+				(*Found)->value = (char *) malloc (sizeof(int));
+				*(*Found)->value = atoi(varname); 
+				return 102;
+			}
+		}/*else if(varname[0]=='"' && varname[strlen(varname)-1]=='"'){
+		}else if (varname[0]!='"' || varname[strlen(varname)-1]!='"'){
+			return 104;
+		}*/
+		else{
+			while(tmp != NULL){
+				VariableDec * vars =  tmp->Vars[hashkey];
+				while(vars!=NULL){
+					if(strcmp(vars->varname,varname) == 0){
+						*Found = vars;		
+						return 0;
+					}else{
+						vars = vars->prev;
+					}
+				}
+				tmp = tmp->prev;
+			}
 		/* If it didn't return in the loop, then things went wrong */
-		return 101;
+			return 101;
+		}
+		/* Something went wrong */
+		return 106;
 }

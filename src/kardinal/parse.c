@@ -19,10 +19,6 @@
 
 #define MAXBUF 100
 
-void Debug(char * msg){
-	fprintf(stderr,"%s",msg);
-}
-
 int freeform_new(Input **In, Input cur, int pos){
 	// Creates a new node in the freeform stack
 
@@ -35,7 +31,7 @@ int freeform_new(Input **In, Input cur, int pos){
 	return 0;
 }
 
-Input * build(Input * In, char *in){
+int build(Input ** In, char *in){
 /* This takes the input string - something like all(ttl(abc,def,efg)) and breaks
 *  it up as follows : 
 *  1. Anything that preceeds a bracket is a command. In this case, that refers
@@ -69,38 +65,39 @@ Input * build(Input * In, char *in){
 */			
 			buf[index] = '\0';
 			if(flag==0){
-				strcpy(In->name,buf);
-				In->type = 1;
-				In->prev = NULL;
-				In->lvl = lvl;
+				strcpy((*In)->name,buf);
+				(*In)->type = 1;
+				(*In)->prev = NULL;
+				(*In)->lvl = lvl;
 			}else{
 				Input * new = (Input *) malloc (sizeof(Input));
 				strcpy(new->name,buf);
 				new->type = 1;				
-				new->prev = In;
+				new->prev = *In;
 				new->lvl = lvl;
-				In = new;
+				*In = new;
 			}
 			flag ++;
 			index = 0;
 			lvl+=1;
-		}else if(ch == ',' || (ch == ')' && index!=0)){
+		}else if(ch == ',' || ch == ')'){
 /* If the buffer character is a ',' or a ')', then the word that came 
 *  before it has to be an argument. The if statements below are to avoid 
 *  corner cases that occur when you have a ) followed by a , and when you're
 *  looking at the final ) 
 */
-			buf[index] = '\0';
-			Input * new = (Input *) malloc (sizeof(Input));
-			strcpy(new->name,buf);
-			new->type = 0;
-			new->lvl = lvl;
-			maxlvl = (lvl>maxlvl)?lvl:maxlvl;
-			new->prev = In;
-			In = new;
-			flag++;
-			index = 0;
-			if(ch == ')' && i != strlen(in)-1){
+			if(!(ch == ')' && index == 0)){
+				buf[index] = '\0';
+				Input * new = (Input *) malloc (sizeof(Input));
+				strcpy(new->name,buf);
+				new->type = 0;
+				new->lvl = lvl;
+				maxlvl = (lvl>maxlvl)?lvl:maxlvl;
+				new->prev = *In;
+				*In = new;
+				flag++;
+				index = 0;
+			}if(ch == ')' && (i != strlen(in)-1 || index == 0)){
 	// Skip the next 'comma' Ex : var(var2(arg1,arg2),arg3) Skip the comma after arg2) and go straight to arg3
 				lvl -= 1;
 				i++;
@@ -110,7 +107,7 @@ Input * build(Input * In, char *in){
 					ch = in[i];
 				}
 				continue;
-			} 
+			}
 		}else if(ch != ' ' && index < MAXBUF && ch!=')'){
 /* If the character looked at is neither a ',' nor a bracket, then it must
 *  be a word (either arg or cmd). Write to buffer.
@@ -127,7 +124,7 @@ Input * build(Input * In, char *in){
 		}
 		i++;
 	}
-	return In;	
+	return 0;	
 }
 
 void Free(Input * In){
@@ -202,7 +199,7 @@ void sequential_print(Input *In, char *name, int debug){
 	}while(tmp!=NULL);
 }
 
-int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int debug){
+int parse(Input **In, SymTable *S, int line,int debug){
 	int pos = 0;	
 	Input *argsold = NULL;
 	Input *old = *In;
@@ -262,7 +259,7 @@ int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
 
-			int res = evaluate(cur,args,Player,PlayerSize,S,line,debug);
+			int res = evaluate(cur,args,S,line,debug);
 			
 			(debug==1) ? fprintf(stderr,"About to free args\n") : 0;
 			Free(args);

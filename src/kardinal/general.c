@@ -37,11 +37,11 @@ int Print(Input * args, SymTable S, int debug){
 			int flag = 0;
 			for(i=1;i<strlen(args->name)-1;i++){
 				if(args->name[i]=='\\'){
-					Vars->value[i-1]='\n';
+					Vars->value[i-1-flag]='\n';
 					i++;
 					flag++;
 				}else
-					Vars->value[i-1]=args->name[i];
+					Vars->value[i-1-flag]=args->name[i];
 			}
 			Vars->value[i-1-flag]='\0';
 			Vars->type = 's';			
