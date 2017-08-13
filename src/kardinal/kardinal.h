@@ -15,6 +15,8 @@
 #define SIZE_DOUBLE 8
 #define CAP 13
 #define OFFSET 133
+#define VERSION "0.9.0"
+
 
 typedef struct Input{
 	char name[50];

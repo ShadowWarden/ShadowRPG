@@ -1,4 +1,4 @@
-obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o
+obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o etc.o
 
 flags=-lreadline
 
@@ -26,9 +26,11 @@ relational.o: relational.c
 general.o: general.c
 	cc -Wall -c general.c
 
+etc.o: etc.c
+	cc -Wall -c etc.c
 
 .PHONY: debug
-debug: main.o parse.o evaluate.o variable.o logical.o relational.o
+debug: $(obj)
 	cc -Wall -g -o kardinal $(obj)
 
 .PHONY: clean

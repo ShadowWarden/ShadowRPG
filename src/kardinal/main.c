@@ -37,12 +37,12 @@ int main(int argc, char ** argv){
 
 	int debug=0;
 	if(argc>1){
-		if(strcmp(argv[2],"--debug")==0){
+		if(strcmp(argv[1],"--debug")==0){
 			printf("Yay\n");
 			debug=1;
 		}
 		else{
-			printf("Unidentifiable argument %s\n", argv[2]);
+			printf("Unidentifiable argument %s\n", argv[1]);
 			exit(2);
 		}
 	}
@@ -56,7 +56,9 @@ int main(int argc, char ** argv){
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
-	while(line = readline("kardinal> ")){
+	banner();	
+	
+	while((line = readline("kardinal> "))){
 		if(line == NULL)
 			break;
 	//	In->prev = NULL;
@@ -127,6 +129,7 @@ int main(int argc, char ** argv){
 		}
 	}	
 //	print_variable_stack(S);
+	printf("\n");
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 	Free_var(*S);
 	free(S);
