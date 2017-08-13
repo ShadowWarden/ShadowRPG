@@ -11,6 +11,8 @@
 *  Any redistribution of this code must contain this header in its entirety
 *
 */
+#define VERSION "0.9.0"
+#define RELEASE "13 August 2017 10:24:37"
 
 #define SIZE_DOUBLE 8
 #define CAP 13
@@ -76,6 +78,9 @@ int LE(VariableDec *,VariableDec *, int);
 //general.c
 int Print(Input *, SymTable , int);
 int If(Input *, int);
+
+//etc.c
+void banner();
 
 //arithmetic.c
 char * Add(SymTable *, VariableDec *, VariableDec *, int *, int);
