@@ -124,12 +124,13 @@ int main(int argc, char ** argv){
 	//	scanf("%c",&junk);	
 		Free(In);
 		if(line != NULL){
+			add_history(line);
 			free(line);
 			line = NULL;
 		}
 	}	
 //	print_variable_stack(S);
-	printf("\n");
+	printf("\nGoodbye\n");
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 	Free_var(*S);
 	free(S);
