@@ -77,3 +77,6 @@ int LE(VariableDec *,VariableDec *, int);
 //general.c
 int Print(Input *, SymTable , int);
 int If(Input *, int);
+
+//etc.c
+void banner();
