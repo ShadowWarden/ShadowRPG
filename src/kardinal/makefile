@@ -1,7 +1,9 @@
 obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o
 
+flags=-lreadline
+
 kardinal: $(obj)
-	cc -Wall -o kardinal -O3 $(obj)
+	cc -Wall -o kardinal -O3 $(obj) $(flags)
 
 evaluate.o: evaluate.c
 	cc -Wall -c evaluate.c 
