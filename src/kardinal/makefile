@@ -1,10 +1,4 @@
-<<<<<<< HEAD
 obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o arithmetic.o
-=======
-obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o etc.o
-
-flags=
->>>>>>> b192aa44060d29fa65f107de08c0b2e7f6290ff0
 
 kardinal: $(obj)
 	cc -Wall -o kardinal -O3 $(obj)
@@ -30,13 +24,8 @@ relational.o: relational.c
 general.o: general.c
 	cc -Wall -c general.c
 
-<<<<<<< HEAD
 arithmetic.o: arithmetic.c
 	cc -Wall -c arithmetic.c
-=======
-etc.o: etc.c
-	cc -Wall -c etc.c
->>>>>>> b192aa44060d29fa65f107de08c0b2e7f6290ff0
 
 .PHONY: debug
 debug: $(obj)
