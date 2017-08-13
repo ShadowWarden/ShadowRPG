@@ -36,19 +36,22 @@ int main(int argc, char ** argv){
 		printf("Input file needed!\n");
 		exit(1);
 	}
-	FILE * fin = fopen(argv[1],"r");
 	int debug=0;
 	if(argc>2){
 		if(strcmp(argv[2],"--debug")==0){
-			printf("Yay\n");
 			debug=1;
-		}
-		else{
+		}else{
 			printf("Unidentifiable argument %s\n", argv[2]);
 			exit(2);
 		}
 	}
+	if(strcmp(argv[1],"--version") == 0){
+		banner();
+		return 0;
+	}
 	// Initialize variable stack
+	
+	FILE * fin = fopen(argv[1],"r");
 	SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
 	int i;

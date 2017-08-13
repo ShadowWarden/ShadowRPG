@@ -12,6 +12,9 @@
 *
 */
 
+#define VERSION "0.9.0"
+#define RELEASE "13 August 2017 10:24:37"
+
 #define SIZE_DOUBLE 8
 #define CAP 13
 #define OFFSET 133
@@ -75,3 +78,4 @@ int LE(VariableDec *,VariableDec *, int);
 //general.c
 int Print(Input *, SymTable , int);
 int If(Input *, int);
+void banner();
