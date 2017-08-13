@@ -19,35 +19,54 @@
 #include "kardinal.h"
 #include <ctype.h>
 
-int Free_var(SymTable S){
-		int i;
-		for(i=0;i<CAP;i++){
-				if(S.Vars[i]!=NULL){
-						VariableDec * var = S.Vars[i];
-						while(var != NULL){
-								VariableDec *tmp = var;
-								var = var->prev;
-								free(tmp->value);
-								free(tmp);
-						}
-				}
+int Free_var(SymTable *S){
+	int i;
+	for(i=0;i<CAP;i++){
+		VariableDec * var = S->Vars[i];
+		while(var != NULL){
+			VariableDec *tmp = var;
+			var = var->prev;
+			free(tmp->value);
+			free(tmp);
 		}
-		return 0;
+	}
+	return 0;
 }
 
-/* void print_variable_stack(SymTable S){
- *		int i;
- *		for(i=0;i<CAP;i++){
- *				if(S.Vars[i]!=NULL){
- *						VariableDec * tmp = S.Vars[i];
- *						while(tmp != NULL){
- *								printf("%d:%c:%s:%d\n",i,tmp->varname,tmp->type,(int)*tmp->value,tmp->size);
- *								tmp = tmp->prev;
- *						}
- *				}
- *		}
- * }
- */
+int Free_tmp_vars(SymTable *S,int num_temp_variables){
+	int i;
+	for(i=0;i<num_temp_variables;i++){
+		char resname[12];
+		snprintf(resname,12,"__tmp%d",i);
+		int hashkey = createhash(resname);
+		VariableDec ** var = &(S->Vars[hashkey]);
+		while((*var) != NULL){
+			if(strcmp((*var)->varname,resname) == 0){
+			/* Delete this link in the list */
+				VariableDec * tmp = *var;
+				(*var) = (*var)->prev;
+				free(tmp->value);
+				free(tmp);
+			}else{
+				(*var) = (*var)->prev;
+			}
+		}
+	}
+	return 0;
+}
+
+void print_variable_stack(SymTable S){
+ 	int i;
+	for(i=0;i<CAP;i++){
+		if(S.Vars[i]!=NULL){	
+			VariableDec * tmp = S.Vars[i];
+ 			while(tmp != NULL){
+				printf("%d:%s:%c:%d\n",i,tmp->varname,tmp->type,(int)*tmp->value);
+				tmp = tmp->prev;
+			}
+		}
+	}
+}
 
 /* This is STRICTLY a work in progress function! The return type is Input * 
  *  because I didn't want to pass a pointer by reference (and thus work with

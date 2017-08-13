@@ -199,7 +199,7 @@ void sequential_print(Input *In, char *name, int debug){
 	}while(tmp!=NULL);
 }
 
-int parse(Input **In, SymTable *S, int line,int debug){
+int parse(Input **In, SymTable **S, int line, int *num_temp_variables,int debug){
 	int pos = 0;	
 	Input *argsold = NULL;
 	Input *old = *In;
@@ -259,7 +259,7 @@ int parse(Input **In, SymTable *S, int line,int debug){
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
 
-			int res = evaluate(cur,args,S,line,debug);
+			int res = evaluate(cur,args,*S,line,num_temp_variables,debug);
 			
 			(debug==1) ? fprintf(stderr,"About to free args\n") : 0;
 			Free(args);
@@ -269,6 +269,7 @@ int parse(Input **In, SymTable *S, int line,int debug){
 			if(res && (res!=202 || res!= 201 || res!=-202)){
 				/* If evaluate failed. Exit immediately */
 				Free(argsold);
+				Free_tmp_vars(*S,*num_temp_variables);
 				return res;
 			}
 		}else{
@@ -288,6 +289,7 @@ int parse(Input **In, SymTable *S, int line,int debug){
 		cur = cur->prev;	
 	}
 	Free(argsold);
+	Free_tmp_vars(*S,*num_temp_variables);
 	(debug==1) ? fprintf(stderr,"Debug : Freed argsold\n") : 0;
 	(debug==1) ? fprintf(stderr,"Debug : Survived the parse loop!\n") : 0;
 	return 0;	

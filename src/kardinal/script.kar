@@ -24,8 +24,8 @@
 
 setvar(a,5)
 setvar(b,a)
-setvar(a,"Hi!")
 print("a=",a," and b=",b,"\n")
+print("a+b=",+(a,b),"\n")
 #if(some(GE(a,5),LE(b,10),1))
 #	print("a is equal to 5\n")
 #endif(null)

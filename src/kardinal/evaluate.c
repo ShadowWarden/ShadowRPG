@@ -23,7 +23,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, SymTable *S, int line, int debug){
+int evaluate(Input * In, Input * args, SymTable *S, int line, int * num_temp_variables, int debug){
 /* At present, it works. We have a few different things that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -180,6 +180,22 @@ int evaluate(Input * In, Input * args, SymTable *S, int line, int debug){
 		}
 	}else if(EQSTR(In->name, "endif")){
 		return -202;
+	}else if(EQSTR(In->name, "+")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Add(S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in LE (Line %d): LE failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
 	}else{
 		fprintf(stderr,"Error in print (Line %d): print failed with error code 102 - Unknown reference to %s\n",line,In->name);
 		return 102;

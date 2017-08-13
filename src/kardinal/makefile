@@ -1,4 +1,4 @@
-obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o
+obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o arithmetic.o
 
 kardinal: $(obj)
 	cc -Wall -o kardinal -O3 $(obj)
@@ -24,9 +24,11 @@ relational.o: relational.c
 general.o: general.c
 	cc -Wall -c general.c
 
+arithmetic.o: arithmetic.c
+	cc -Wall -c arithmetic.c
 
 .PHONY: debug
-debug: main.o parse.o evaluate.o variable.o logical.o relational.o
+debug: $(obj)
 	cc -Wall -g -o kardinal $(obj)
 
 .PHONY: clean

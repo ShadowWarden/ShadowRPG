@@ -61,6 +61,7 @@ int main(int argc, char ** argv){
 	while(fgets(line,MAX_INPUT,fin)){
 	//	In->prev = NULL;
 		int i=0, res;
+		int num_temp_variables = 0;
 		char ch=line[i];
 		line_number++;	
 /* Pretty sure my beautiful conditional operator is no longer necessary
@@ -80,10 +81,8 @@ int main(int argc, char ** argv){
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
 		res = build(&In,line);
-//		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-		
-		
-		res = parse(&In,S,line_number,debug);
+//		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);	
+		res = parse(&In,&S,line_number,&num_temp_variables,debug);
 		
 		if(res == 201){
 			if_false_flag = 1;
@@ -93,7 +92,7 @@ int main(int argc, char ** argv){
 				if(S->level == scope_level){
 					SymTable *tmp = S;
 					S = S->prev;
-					Free_var(*tmp);
+					Free_var(tmp);
 					free(tmp);
 				}
 				scope_level -= 1;
@@ -109,7 +108,7 @@ int main(int argc, char ** argv){
 		}else if(res!=1 && res){
 		/* There was an error. Exit */
 			Free(In);
-			Free_var(*S);
+			Free_var(S);
 			free(S);
 			fclose(fin);
 			return -1;
@@ -122,11 +121,12 @@ int main(int argc, char ** argv){
 		print_final(*In, debug);
 	//	scanf("%c",&junk);	
 		Free(In);
+	//	print_variable_stack(*S);
 	}	
-//	print_variable_stack(S);
+//	print_variable_stack(*S);
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 	fclose(fin);
-	Free_var(*S);
+	Free_var(S);
 	free(S);
 	return 0;
 }

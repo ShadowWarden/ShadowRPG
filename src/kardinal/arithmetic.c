@@ -30,12 +30,11 @@ char * Add(SymTable * S, VariableDec * Var1, VariableDec * Var2, int * num_temp_
 	Res->type = 'i';
 	Res->value = (char *) malloc (sizeof(int));
 	*Res->value = (int)(*Var1->value)+(int)(*Var2->value);
-	char resname[12]="__tmp";
-	char tmp[5];
-	snprintf(tmp,5,"%d",*num_temp_variables);
+	char resname[12];
+	snprintf(resname,12,"__tmp%d",*num_temp_variables);
 	*num_temp_variables += 1;
-   	strcat(resname,tmp);
 	strcpy(Res->varname,resname);
+	Res->prev = NULL;
 
 	int hashkey = createhash(resname);
 	if(S->Vars[hashkey] == NULL){

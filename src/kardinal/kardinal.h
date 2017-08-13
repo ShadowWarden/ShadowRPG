@@ -49,13 +49,14 @@ int build(Input **, char *);
 void Free(Input *);
 void print(Input, int);
 void print_final(Input, int);
-int parse(Input **,SymTable *, int, int);
+int parse(Input **,SymTable **, int, int *,int);
 
 // evaluate.c
-int evaluate(Input *, Input *, SymTable *, int, int);
+int evaluate(Input *, Input *, SymTable *, int, int *, int);
 
 //variable.c
-int Free_var(SymTable);
+int Free_var(SymTable *);
+int Free_tmp_vars(SymTable *, int);
 void print_variable_stack(SymTable);
 int setvar(SymTable *,Input **, int);
 int createhash(char *);
@@ -75,3 +76,6 @@ int LE(VariableDec *,VariableDec *, int);
 //general.c
 int Print(Input *, SymTable , int);
 int If(Input *, int);
+
+//arithmetic.c
+char * Add(SymTable *, VariableDec *, VariableDec *, int *, int);
