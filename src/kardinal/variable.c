@@ -57,6 +57,8 @@ int Free_var(SymTable S){
  */
 int setvar(SymTable * S, Input ** args, int debug){
 		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
+		int is_var=0;
+		
 		if(var == NULL){
 				(debug==1) ? fprintf(stderr,"Error : Malloc returned NULL. Is there any memory left?\n") : 0;
 				return -1;
@@ -83,16 +85,34 @@ int setvar(SymTable * S, Input ** args, int debug){
 			}else{
 				var->type = 'i';
 			}
+		}else{
+			/* Argument is a variablename */
+			VariableDec * tmp;
+			int res = find_in_hash(&tmp,*S,(*args)->name);
+			if(res != 0){
+			// Something went wrong. Likely, the variable hasn't
+			// been allocated yet	
+				free(var);
+				fprintf(stdout,"Error in setvar: Unknown symbol %s",(*args)->name);
+				return res;
+			}
+			else{
+				is_var = 1;	
+				var->value = (char *) malloc(sizeof(tmp->value));
+				*var->value = *tmp->value; 
+				var->type = tmp->type;
+			}
 		}
 		(debug==1) ? fprintf(stderr,"Debug : Type = %c\n",var->type) : 0;
 
 		//Extract Args here
-		if(var->type == 'i'){
+		if(!is_var){
+			if(var->type == 'i'){
 				var->value=(char *)malloc(sizeof(int));
 				//		var->size=sizeof(char)*(strlen((*args)->name)+1);
-		}else if(var->type == 's'){
+			}else if(var->type == 's'){
 				var->value=(char *)malloc(sizeof(char)*(strlen((*args)->name)-2));
-		}else{
+			}else{
 				free(var);
 				(debug==1) ? fprintf(stderr,"Type not mentioned. Check documentation for syntax\n") : 0;
 				return -2;
@@ -101,12 +121,12 @@ int setvar(SymTable * S, Input ** args, int debug){
 				 *  Someone needs to do an errorcheck on the default. Ideally,
 				 *  we just shouldn't allow the type variable to be empty
 				 */
-		}	// Compatible only for single float values
-		if(var->type == 'i'){
+			}	// Compatible only for single float values
+			if(var->type == 'i'){
 				int intermediate_buffer = atoi((*args)->name);
 				*var->value = intermediate_buffer;
 				(debug==1) ? fprintf(stderr,"Debug: Assigned %d successfully\n",(int)*var->value) : 0;
-		}else if(var->type == 's'){
+			}else if(var->type == 's'){
 				int j;
 				for(j=1; j<strlen((*args)->name)-1; j++){
 						if((*args)->name[j]=='\\'){
@@ -117,8 +137,8 @@ int setvar(SymTable * S, Input ** args, int debug){
 				}
 				var->value[j-1] = '\0';
 				(debug==1) ? fprintf(stderr,"Debug: Assigned %s successfully\n",var->value) : 0;
+			}
 		}
-
 		(*args) = (*args)->prev;
 
 		strcpy(var->varname,(*args)->name);

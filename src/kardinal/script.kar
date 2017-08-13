@@ -23,7 +23,7 @@
 # Set the string "6" to c
 
 setvar(a,5)
-setvar(b,6)
+setvar(b,a)
 print("a=",a," and b=",b,"\n")
 #if(some(GE(a,5),LE(b,10),1))
 #	print("a is equal to 5\n")
