@@ -144,16 +144,33 @@ int setvar(SymTable * S, Input ** args, int debug){
 		strcpy(var->varname,(*args)->name);
 		var->prev = NULL;
 
-		int hashkey = createhash(var->varname);
-		if(S->Vars[hashkey] == NULL){	
+		VariableDec *tmp_var;
+		int res = find_in_hash(&tmp_var,*S,var->varname);
+
+		if(res){
+			int hashkey = createhash(var->varname);
+			if(S->Vars[hashkey] == NULL){	
 				S->Vars[hashkey]=var;
-		}else{
+			}else{
 				VariableDec * tmp = S->Vars[hashkey];
 				while(tmp->prev != NULL){
 						tmp = tmp->prev;
 				}
 				tmp->prev = var;
+			}
+		}else{
+			/* Variable already in SymTable */
+			free(tmp_var->value);
+			tmp_var->value = (char *) malloc (sizeof(*var->value));
+			if(var->type == 's')
+				strcpy(tmp_var->value,var->value);
+			else
+				*tmp_var->value = *var->value;
+
+			tmp_var->type = var->type;	
+			free(var);
 		}
+			
 		return 0;
 }
 
