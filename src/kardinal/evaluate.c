@@ -187,9 +187,57 @@ int evaluate(Input * In, Input * args, SymTable *S, int line, int * num_temp_var
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
 		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
-			res = Add(S,Var1,Var2,num_temp_variables,debug);
+			res = Arith(0,S,Var1,Var2,num_temp_variables,debug);
 		else{	
-			fprintf(stderr,"Error in LE (Line %d): LE failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			fprintf(stderr,"Error in + (Line %d): + failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
+	}else if(EQSTR(In->name, "-")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Arith(1,S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in - (Line %d): - failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
+	}else if(EQSTR(In->name, "*")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Arith(2,S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in * (Line %d): * failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
+	}else if(EQSTR(In->name, "/")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Arith(3,S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in / (Line %d): / failed with error code 101. Look at the documentation to troubleshoot\n",line);
 			return 101;
 		}
 			/* Change this ASAP so that it actually checks to make

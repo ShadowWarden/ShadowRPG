@@ -21,7 +21,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-char * Add(SymTable * S, VariableDec * Var1, VariableDec * Var2, int * num_temp_variables,int debug){
+char * Arith(int operator, SymTable * S, VariableDec * Var1, VariableDec * Var2, int * num_temp_variables,int debug){
 	if(Var1->type != 'i' || Var2->type != 'i'){
 		return NULL;
 	}
@@ -29,13 +29,28 @@ char * Add(SymTable * S, VariableDec * Var1, VariableDec * Var2, int * num_temp_
 	VariableDec * Res = (VariableDec *) malloc (sizeof(VariableDec));
 	Res->type = 'i';
 	Res->value = (char *) malloc (sizeof(int));
-	*Res->value = (int)(*Var1->value)+(int)(*Var2->value);
 	char resname[12];
 	snprintf(resname,12,"__tmp%d",*num_temp_variables);
 	*num_temp_variables += 1;
 	strcpy(Res->varname,resname);
 	Res->prev = NULL;
 
+	switch(operator){
+		case 0:
+		*Res->value = (int)(*Var1->value)+(int)(*Var2->value);
+		break;
+		case 1:
+		*Res->value = (int)(*Var1->value)-(int)(*Var2->value);
+		break;
+		case 2:
+		*Res->value = (int)(*Var1->value)*(int)(*Var2->value);
+		break;
+		case 3:
+		*Res->value = (int)(*Var1->value)/(int)(*Var2->value);
+		break;
+		default:
+		return NULL;
+	}
 	int hashkey = createhash(resname);
 	if(S->Vars[hashkey] == NULL){
 		S->Vars[hashkey] = Res;

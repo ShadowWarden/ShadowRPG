@@ -83,4 +83,4 @@ int If(Input *, int);
 void banner();
 
 //arithmetic.c
-char * Add(SymTable *, VariableDec *, VariableDec *, int *, int);
+char * Arith(int,SymTable *, VariableDec *, VariableDec *, int *, int);
