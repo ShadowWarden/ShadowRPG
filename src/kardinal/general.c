@@ -79,6 +79,7 @@ int Print(Input * args, SymTable S, int debug){
 		free(tmp->value);
 		free(tmp);
 	}
+	printf("\n");
 	return 0;
 }
 
