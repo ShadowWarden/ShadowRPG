@@ -79,7 +79,7 @@ int main(int argc, char ** argv){
 	char *(*line_func)(char *) = NULL; //pointer to a function
 	FILE * fin = fopen(argv[file_flag_pos] , "r");
 
-	char * foo(char *fake_prompt){      //wrap fgets to have the same signature as readline
+	char * cfgets(char *fake_prompt){      //wrap fgets to have the same signature as readline
 		char * line = (char *) malloc (sizeof(char)*MAX_INPUT);
 		return fgets(line,MAX_INPUT,fin);
 	}
@@ -94,7 +94,7 @@ int main(int argc, char ** argv){
 			line_func = &readline ;
 			break;
 		case 2:
-			line_func = &foo;
+			line_func = &cfgets;
 			break;
 		default:
 			line_func = &readline ;
@@ -176,6 +176,5 @@ int main(int argc, char ** argv){
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 	Free_var(*S);
 	free(S);
-	free(line_func);
 	return 0;
 }
