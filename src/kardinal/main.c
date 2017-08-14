@@ -41,11 +41,31 @@ int main(int argc, char ** argv){
 			printf("Yay\n");
 			debug=1;
 		}
-		else{
-			printf("Unidentifiable argument %s\n", argv[1]);
-			exit(2);
-		}
 	}
+	//check for flags in args
+	unsigned char ar_flag = 0;//flag to start in interactive mode
+	// first bit - interactive mode on 
+	// second bit - load file 
+	// comment here as you add more flags
+	int file_flag_pos; // keep track of file flag position
+	if(argc>1){
+		for(int j=0; j<argc ; j++){
+			if(strcmp(argv[j],"-i")==0){
+				ar_flag = ar_flag | 0b00000001;
+				(debug==1) ? printf("-i flag detected \n"): 0 ;
+				banner();
+			}
+			if(strcmp(argv[j],"-f")==0){
+				ar_flag = ar_flag | 0b00000010;
+				(debug==1) ? printf("-f flag detected \n") :0 ;
+				file_flag_pos = j+1;
+				printf("filename is %s \n" , argv[file_flag_pos]);
+				//check if file exists
+			}
+		}}
+	
+
+
 	// Initialize variable stack
 	SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
@@ -56,9 +76,31 @@ int main(int argc, char ** argv){
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
-	banner();	
+	char *(*line_func)(char *) = NULL; //pointer to a function
+	FILE * fin = fopen(argv[file_flag_pos] , "r");
+
+	char * foo(char *fake_prompt){      //wrap fgets to have the same signature as readline
+		char * line = (char *) malloc (sizeof(char)*MAX_INPUT);
+		return fgets(line,MAX_INPUT,fin);
+	}
+	(debug ==1 ) ? printf("ar_flag is %d \n" ,(int)ar_flag) : 0 ;
+
+
+	switch(ar_flag){
+		case 0:
+			line_func = &readline;
+			break;
+		case 1:
+			line_func = &readline ;
+			break;
+		case 2:
+			line_func = &foo;
+			break;
+		default:
+			line_func = &readline ;
+		}
 	
-	while((line = readline("kardinal> "))){
+	while((line = line_func("kardinal> "))){
 		if(line == NULL)
 			break;
 	//	In->prev = NULL;
@@ -134,5 +176,6 @@ int main(int argc, char ** argv){
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 	Free_var(*S);
 	free(S);
+	free(line_func);
 	return 0;
 }
