@@ -61,7 +61,7 @@ void print_variable_stack(SymTable S){
 		if(S.Vars[i]!=NULL){	
 			VariableDec * tmp = S.Vars[i];
  			while(tmp != NULL){
-				printf("%d:%s:%c:%d\n",i,tmp->varname,tmp->type,(int)*tmp->value);
+				printf("%d:%s:%c:%d\n",i,tmp->varname,tmp->type,*((int *)tmp->value));
 				tmp = tmp->prev;
 			}
 		}
@@ -117,8 +117,13 @@ int setvar(SymTable * S, Input ** args, int debug){
 			}
 			else{
 				is_var = 1;	
-				var->value = (char *) malloc(sizeof(tmp->value));
-				*var->value = *tmp->value; 
+				if(tmp->type == 'c'){
+						var->value = (char *) malloc(sizeof(tmp->value));
+						strcpy((char *)var->value, (char *)tmp->value); 
+				}else if(tmp->type == 'i'){
+						var->value = (int *) malloc(sizeof(tmp->value));
+						*((int *)var->value)= *(int *)tmp->value; 
+				}
 				var->type = tmp->type;
 			}
 		}
@@ -127,7 +132,7 @@ int setvar(SymTable * S, Input ** args, int debug){
 		//Extract Args here
 		if(!is_var){
 			if(var->type == 'i'){
-				var->value=(char *)malloc(sizeof(int));
+				var->value=(int *)malloc(sizeof(int));
 				//		var->size=sizeof(char)*(strlen((*args)->name)+1);
 			}else if(var->type == 's'){
 				var->value=(char *)malloc(sizeof(char)*(strlen((*args)->name)-2));
@@ -142,20 +147,22 @@ int setvar(SymTable * S, Input ** args, int debug){
 				 */
 			}	// Compatible only for single float values
 			if(var->type == 'i'){
-				int intermediate_buffer = atoi((*args)->name);
-				*var->value = intermediate_buffer;
-				(debug==1) ? fprintf(stderr,"Debug: Assigned %d successfully\n",(int)*var->value) : 0;
+				int buffer = atoi((*args)->name);
+				*((int *)var->value) = buffer; 	
+				(debug==1) ? fprintf(stderr,"Debug: Assigned %d successfully\n",*((int *)var->value)) : 0;
 			}else if(var->type == 's'){
-				int j;
+				int j,flag =0;
+				char * array = (char *) var->value;
 				for(j=1; j<strlen((*args)->name)-1; j++){
 						if((*args)->name[j]=='\\'){
-								var->value[j-1]='\n';
+								array[j-1-flag]='\n';
 								j++;
+								flag++;
 						}else
-								var->value[j-1]=(*args)->name[j];
+								array[j-1-flag]=(*args)->name[j];
 				}
-				var->value[j-1] = '\0';
-				(debug==1) ? fprintf(stderr,"Debug: Assigned %s successfully\n",var->value) : 0;
+				array[j-1-flag] = '\0';
+				(debug==1) ? fprintf(stderr,"Debug: Assigned %s successfully\n",(char *)var->value) : 0;
 			}
 		}
 		(*args) = (*args)->prev;
@@ -180,12 +187,13 @@ int setvar(SymTable * S, Input ** args, int debug){
 		}else{
 			/* Variable already in SymTable */
 			free(tmp_var->value);
-			tmp_var->value = (char *) malloc (sizeof(*var->value));
-			if(var->type == 's')
-				strcpy(tmp_var->value,var->value);
-			else
-				*tmp_var->value = *var->value;
-
+			if(var->type == 's'){
+				tmp_var->value = (char *) malloc (sizeof(*var->value));
+				strcpy((char *)tmp_var->value,(char *)var->value);
+			}else{
+				tmp_var->value = (int *) malloc (sizeof(*var->value));
+				*((int *)tmp_var->value) = *((int *)var->value);
+			}
 			tmp_var->type = var->type;	
 			free(var);
 		}
@@ -229,7 +237,7 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 				strcpy((*Found)->varname,"tmp");
 				(*Found)->type = 'i';
 				(*Found)->value = (char *) malloc (sizeof(int));
-				*(*Found)->value = atoi(varname); 
+				*((int *) (*Found)->value) = atoi(varname); 
 				return 102;
 			}
 		}/*else if(varname[0]=='"' && varname[strlen(varname)-1]=='"'){

@@ -29,7 +29,7 @@ typedef struct Input{
 typedef struct VariableDec{
 	char varname[20]; 	// Variable Name
 	char type;		// Variable Type
-	char *value;		// Value
+	void *value;		// Value
 //	int size; 		// Size in bytes
 //	int level;
 	struct VariableDec *prev;	// Pointer to the previous element

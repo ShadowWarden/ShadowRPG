@@ -35,15 +35,16 @@ int Print(Input * args, SymTable S, int debug){
 			Vars->value = (char *) malloc (sizeof(char)*(strlen(args->name)-2));
 			int i;
 			int flag = 0;
+			char * array = (char *) Vars->value;
 			for(i=1;i<strlen(args->name)-1;i++){
 				if(args->name[i]=='\\'){
-					Vars->value[i-1-flag]='\n';
+					array[i-1-flag]='\n';
 					i++;
 					flag++;
 				}else
-					Vars->value[i-1-flag]=args->name[i];
+					array[i-1-flag]=args->name[i];
 			}
-			Vars->value[i-1-flag]='\0';
+			array[i-1-flag]='\0';
 			Vars->type = 's';			
 		}else{
 			VariableDec *Found;
@@ -54,12 +55,12 @@ int Print(Input * args, SymTable S, int debug){
 			}
 			Vars = (VariableDec *) malloc (sizeof(VariableDec)); 
 			if(Found->type == 'i'){
-				Vars->value = (char *) malloc (sizeof(int));
-				*(Vars->value) = *(Found->value);
+				Vars->value = (int *) malloc (sizeof(int));
+				*((int *)Vars->value) = *((int *)Found->value);
 				Vars->type = 'i';
 			}else if(Found->type == 's'){
 				Vars->value = (char *) malloc (sizeof(char)*(strlen(Found->value)+1));
-				strcpy(Vars->value,Found->value);
+				strcpy((char *)Vars->value,(char *)Found->value);
 	//			fprintf(stderr,"Debug: Vars: %s\n",Vars->value);
 				Vars->type = 's';
 			
@@ -70,9 +71,9 @@ int Print(Input * args, SymTable S, int debug){
 	}
 	while(Vars != NULL){
 		if(Vars->type == 'i'){
-			printf("%d",*(Vars->value));
+			printf("%d",*((int *)Vars->value));
 		}else{
-			printf("%s",(Vars->value));
+			printf("%s",(char *)(Vars->value));
 		}
 		VariableDec *tmp = Vars;
 		Vars = Vars->prev;

@@ -22,7 +22,7 @@
 # If b > a or b == a
 # Set the string "6" to c
 
-setvar(a,5)
+setvar(a,140)
 setvar(b,a)
 print("a=",a," and b=",b)
 print("a+b=",+(a,b))

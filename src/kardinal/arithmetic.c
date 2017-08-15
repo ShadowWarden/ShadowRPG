@@ -28,7 +28,7 @@ char * Arith(int operator, SymTable * S, VariableDec * Var1, VariableDec * Var2,
 	
 	VariableDec * Res = (VariableDec *) malloc (sizeof(VariableDec));
 	Res->type = 'i';
-	Res->value = (char *) malloc (sizeof(int));
+	Res->value = (int *) malloc (sizeof(int));
 	char resname[12];
 	snprintf(resname,12,"__tmp%d",*num_temp_variables);
 	*num_temp_variables += 1;
@@ -37,16 +37,16 @@ char * Arith(int operator, SymTable * S, VariableDec * Var1, VariableDec * Var2,
 
 	switch(operator){
 		case 0:
-		*Res->value = (int)(*Var1->value)+(int)(*Var2->value);
+		*((int *) Res->value) = *((int *)Var1->value)+*((int *)Var2->value);
 		break;
 		case 1:
-		*Res->value = (int)(*Var1->value)-(int)(*Var2->value);
+		*((int *) Res->value) = *((int *)Var1->value)-*((int *)Var2->value);
 		break;
 		case 2:
-		*Res->value = (int)(*Var1->value)*(int)(*Var2->value);
+		*((int *) Res->value) = (*((int *)Var1->value))*(*((int *)Var2->value));
 		break;
 		case 3:
-		*Res->value = (int)(*Var1->value)/(int)(*Var2->value);
+		*((int *) Res->value) = (*((int *)Var1->value))/(*((int *)Var2->value));
 		break;
 		default:
 		return NULL;
