@@ -114,6 +114,8 @@ int main(int argc, char ** argv){
 			S = (SymTable *) malloc (sizeof(SymTable));
 			S->level = scope_level;
 			S->prev = tmp;
+			for(i=0;i<CAP;i++)
+				S->Vars[i] = NULL; 
 		}else if(res!=1 && res){
 		/* There was an error. Exit */
 			Free(In);
