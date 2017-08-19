@@ -19,35 +19,54 @@
 #include "kardinal.h"
 #include <ctype.h>
 
-int Free_var(SymTable S){
-		int i;
-		for(i=0;i<CAP;i++){
-				if(S.Vars[i]!=NULL){
-						VariableDec * var = S.Vars[i];
-						while(var != NULL){
-								VariableDec *tmp = var;
-								var = var->prev;
-								free(tmp->value);
-								free(tmp);
-						}
-				}
+int Free_var(SymTable *S){
+	int i;
+	for(i=0;i<CAP;i++){
+		VariableDec * var = S->Vars[i];
+		while(var != NULL){
+			VariableDec *tmp = var;
+			var = var->prev;
+			free(tmp->value);
+			free(tmp);
 		}
-		return 0;
+	}
+	return 0;
 }
 
-/* void print_variable_stack(SymTable S){
- *		int i;
- *		for(i=0;i<CAP;i++){
- *				if(S.Vars[i]!=NULL){
- *						VariableDec * tmp = S.Vars[i];
- *						while(tmp != NULL){
- *								printf("%d:%c:%s:%d\n",i,tmp->varname,tmp->type,(int)*tmp->value,tmp->size);
- *								tmp = tmp->prev;
- *						}
- *				}
- *		}
- * }
- */
+int Free_tmp_vars(SymTable *S,int num_temp_variables){
+	int i;
+	for(i=0;i<num_temp_variables;i++){
+		char resname[12];
+		snprintf(resname,12,"__tmp%d",i);
+		int hashkey = createhash(resname);
+		VariableDec ** var = &(S->Vars[hashkey]);
+		while((*var) != NULL){
+			if(strcmp((*var)->varname,resname) == 0){
+			/* Delete this link in the list */
+				VariableDec * tmp = *var;
+				(*var) = (*var)->prev;
+				free(tmp->value);
+				free(tmp);
+			}else{
+				(*var) = (*var)->prev;
+			}
+		}
+	}
+	return 0;
+}
+
+void print_variable_stack(SymTable S){
+ 	int i;
+	for(i=0;i<CAP;i++){
+		if(S.Vars[i]!=NULL){	
+			VariableDec * tmp = S.Vars[i];
+ 			while(tmp != NULL){
+				printf("%d:%s:%c:%d\n",i,tmp->varname,tmp->type,*((int *)tmp->value));
+				tmp = tmp->prev;
+			}
+		}
+	}
+}
 
 /* This is STRICTLY a work in progress function! The return type is Input * 
  *  because I didn't want to pass a pointer by reference (and thus work with
@@ -57,6 +76,8 @@ int Free_var(SymTable S){
  */
 int setvar(SymTable * S, Input ** args, int debug){
 		VariableDec *var = (VariableDec*)malloc(sizeof(VariableDec));
+		int is_var=0;
+		
 		if(var == NULL){
 				(debug==1) ? fprintf(stderr,"Error : Malloc returned NULL. Is there any memory left?\n") : 0;
 				return -1;
@@ -83,16 +104,39 @@ int setvar(SymTable * S, Input ** args, int debug){
 			}else{
 				var->type = 'i';
 			}
+		}else{
+			/* Argument is a variablename */
+			VariableDec * tmp;
+			int res = find_in_hash(&tmp,*S,(*args)->name);
+			if(res != 0){
+			// Something went wrong. Likely, the variable hasn't
+			// been allocated yet	
+				free(var);
+				fprintf(stdout,"Error in setvar: Unknown symbol %s",(*args)->name);
+				return res;
+			}
+			else{
+				is_var = 1;	
+				if(tmp->type == 'c'){
+						var->value = (char *) malloc(sizeof(tmp->value));
+						strcpy((char *)var->value, (char *)tmp->value); 
+				}else if(tmp->type == 'i'){
+						var->value = (int *) malloc(sizeof(tmp->value));
+						*((int *)var->value)= *(int *)tmp->value; 
+				}
+				var->type = tmp->type;
+			}
 		}
 		(debug==1) ? fprintf(stderr,"Debug : Type = %c\n",var->type) : 0;
 
 		//Extract Args here
-		if(var->type == 'i'){
-				var->value=(char *)malloc(sizeof(int));
+		if(!is_var){
+			if(var->type == 'i'){
+				var->value=(int *)malloc(sizeof(int));
 				//		var->size=sizeof(char)*(strlen((*args)->name)+1);
-		}else if(var->type == 's'){
+			}else if(var->type == 's'){
 				var->value=(char *)malloc(sizeof(char)*(strlen((*args)->name)-2));
-		}else{
+			}else{
 				free(var);
 				(debug==1) ? fprintf(stderr,"Type not mentioned. Check documentation for syntax\n") : 0;
 				return -2;
@@ -101,37 +145,59 @@ int setvar(SymTable * S, Input ** args, int debug){
 				 *  Someone needs to do an errorcheck on the default. Ideally,
 				 *  we just shouldn't allow the type variable to be empty
 				 */
-		}	// Compatible only for single float values
-		if(var->type == 'i'){
-				int intermediate_buffer = atoi((*args)->name);
-				*var->value = intermediate_buffer;
-				(debug==1) ? fprintf(stderr,"Debug: Assigned %d successfully\n",(int)*var->value) : 0;
-		}else if(var->type == 's'){
-				int j;
+			}	// Compatible only for single float values
+			if(var->type == 'i'){
+				int buffer = atoi((*args)->name);
+				*((int *)var->value) = buffer; 	
+				(debug==1) ? fprintf(stderr,"Debug: Assigned %d successfully\n",*((int *)var->value)) : 0;
+			}else if(var->type == 's'){
+				int j,flag =0;
+				char * array = (char *) var->value;
 				for(j=1; j<strlen((*args)->name)-1; j++){
 						if((*args)->name[j]=='\\'){
-								var->value[j-1]='\n';
+								array[j-1-flag]='\n';
 								j++;
+								flag++;
 						}else
-								var->value[j-1]=(*args)->name[j];
+								array[j-1-flag]=(*args)->name[j];
 				}
-				var->value[j-1] = '\0';
-				(debug==1) ? fprintf(stderr,"Debug: Assigned %s successfully\n",var->value) : 0;
+				array[j-1-flag] = '\0';
+				(debug==1) ? fprintf(stderr,"Debug: Assigned %s successfully\n",(char *)var->value) : 0;
+			}
 		}
-
 		(*args) = (*args)->prev;
 
 		strcpy(var->varname,(*args)->name);
-		int hashkey = createhash(var->varname);
-		if(S->Vars[hashkey] == NULL){	
+		var->prev = NULL;
+
+		VariableDec *tmp_var = NULL;
+		int res = find_in_hash(&tmp_var,*S,var->varname);
+
+		if(res){
+			int hashkey = createhash(var->varname);
+			if(S->Vars[hashkey] == NULL){	
 				S->Vars[hashkey]=var;
-		}else{
+			}else{
 				VariableDec * tmp = S->Vars[hashkey];
 				while(tmp->prev != NULL){
 						tmp = tmp->prev;
 				}
 				tmp->prev = var;
+			}
+		}else{
+			/* Variable already in SymTable */
+			free(tmp_var->value);
+			if(var->type == 's'){
+				tmp_var->value = (char *) malloc (sizeof(*var->value));
+				strcpy((char *)tmp_var->value,(char *)var->value);
+			}else{
+				tmp_var->value = (int *) malloc (sizeof(*var->value));
+				*((int *)tmp_var->value) = *((int *)var->value);
+			}
+			tmp_var->type = var->type;	
+			free(var);
 		}
+			
 		return 0;
 }
 
@@ -152,10 +218,10 @@ int createhash(char * a){
 
 int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 		int hashkey = createhash(varname);
-		SymTable *tmp = &S;
+		SymTable *tmp = NULL;
 		if(isdigit(varname[0])){
 			int flag = 0;
-			int j = 1;
+			int j = 0;
 			for(j=0;j<strlen(varname);j++){
 					if(isdigit(varname[j])==0){
 							flag = 1;
@@ -171,7 +237,8 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 				strcpy((*Found)->varname,"tmp");
 				(*Found)->type = 'i';
 				(*Found)->value = (char *) malloc (sizeof(int));
-				*(*Found)->value = atoi(varname); 
+				*((int *) (*Found)->value) = atoi(varname); 
+				(*Found)->prev = NULL;
 				return 102;
 			}
 		}/*else if(varname[0]=='"' && varname[strlen(varname)-1]=='"'){
@@ -179,6 +246,7 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 			return 104;
 		}*/
 		else{
+			tmp = &S;
 			while(tmp != NULL){
 				VariableDec * vars =  tmp->Vars[hashkey];
 				while(vars!=NULL){
@@ -194,6 +262,4 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 		/* If it didn't return in the loop, then things went wrong */
 			return 101;
 		}
-		/* Something went wrong */
-		return 106;
 }

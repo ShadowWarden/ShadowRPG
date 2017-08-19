@@ -1,10 +1,9 @@
-obj=main.o parse.o evaluate.o state.o variable.o logical.o relational.o general.o
+obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o arithmetic.o etc.o
+
+flags=
 
 kardinal: $(obj)
 	cc -Wall -o kardinal -O3 $(obj)
-
-state.o: state.c
-	cc -Wall -c state.c
 
 evaluate.o: evaluate.c
 	cc -Wall -c evaluate.c 
@@ -27,9 +26,14 @@ relational.o: relational.c
 general.o: general.c
 	cc -Wall -c general.c
 
+arithmetic.o: arithmetic.c
+	cc -Wall -c arithmetic.c
+
+etc.o: etc.c
+	cc -Wall -c etc.c
 
 .PHONY: debug
-debug: main.o parse.o evaluate.o state.o variable.o logical.o relational.o
+debug: $(obj)
 	cc -Wall -g -o kardinal $(obj)
 
 .PHONY: clean

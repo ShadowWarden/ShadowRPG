@@ -20,14 +20,14 @@
 
 #define MAX_INPUT 256
 
-int TitleSize;
-State * Titles;
+//int TitleSize;
+//State * Titles;
 
 int main(int argc, char ** argv){
 	/* Declarations */
 	char line[MAX_INPUT];
-	State *Player;
-	int PlayerSize = 0;
+//	State *Player;
+//	int PlayerSize = 0;
 	int if_false_flag = 0;
 	int line_number=0;
 	int scope_level = 0;
@@ -36,8 +36,11 @@ int main(int argc, char ** argv){
 		printf("Input file needed!\n");
 		exit(1);
 	}
-	FILE * fin = fopen(argv[1],"r");
 	int debug=0;
+	if(strcmp(argv[1],"--version")==0){
+		banner();
+		return 0;
+	}
 	if(argc>2){
 		if(strcmp(argv[2],"--debug")==0){
 			printf("Yay\n");
@@ -48,19 +51,28 @@ int main(int argc, char ** argv){
 			exit(2);
 		}
 	}
+	
+	FILE * fin;
+   	if(!(fin = fopen(argv[1],"r"))){
+		fprintf(stderr,"File %s does not exist\n",argv[1]);
+		return 1;
+	}
 	// Initialize variable stack
 	SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
 	int i;
 	for(i=0;i<CAP;i++)
-			S->Vars[i] = NULL; 
+		S->Vars[i] = NULL;
+   	S->level = 0;
+	S->prev = NULL;   
 
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
 	while(fgets(line,MAX_INPUT,fin)){
 	//	In->prev = NULL;
-		int i=0;
+		int i=0, res;
+		int num_temp_variables = 0;
 		char ch=line[i];
 		line_number++;	
 /* Pretty sure my beautiful conditional operator is no longer necessary
@@ -79,11 +91,13 @@ int main(int argc, char ** argv){
 		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
-		In = build(In,line);
-//		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);
-		
-		
-		int res = parse(&In,&Player,&PlayerSize,S,line_number,debug);
+		In->name[0] = '\0';
+		In->type = 0;
+		In->lvl = 0;
+		In->prev = NULL;
+		res = build(&In,line);
+//		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);	
+		res = parse(&In,&S,line_number,&num_temp_variables,debug);
 		
 		if(res == 201){
 			if_false_flag = 1;
@@ -93,7 +107,7 @@ int main(int argc, char ** argv){
 				if(S->level == scope_level){
 					SymTable *tmp = S;
 					S = S->prev;
-					Free_var(*tmp);
+					Free_var(tmp);
 					free(tmp);
 				}
 				scope_level -= 1;
@@ -106,12 +120,13 @@ int main(int argc, char ** argv){
 			S = (SymTable *) malloc (sizeof(SymTable));
 			S->level = scope_level;
 			S->prev = tmp;
+			for(i=0;i<CAP;i++)
+				S->Vars[i] = NULL; 
 		}else if(res!=1 && res){
 		/* There was an error. Exit */
 			Free(In);
-			Free_var(*S);
+			Free_var(S);
 			free(S);
-			free(Titles);
 			fclose(fin);
 			return -1;
 		
@@ -122,17 +137,13 @@ int main(int argc, char ** argv){
 		(debug==1) ? printf("\nDebug : Final Result\n") : 0;
 		print_final(*In, debug);
 	//	scanf("%c",&junk);	
-		(debug==1) ? printf("\nDebug : Size of Player state stack : %d\n",PlayerSize) : 0;
-		print_player_state(Player,PlayerSize,debug);
 		Free(In);
+	//	print_variable_stack(*S);
 	}	
-//	print_variable_stack(S);
+//	print_variable_stack(*S);
 	(debug==1) ? printf("Debug : Survived print_variable_stack\n") : 0;
 	fclose(fin);
-	Free_var(*S);
+	Free_var(S);
 	free(S);
-	(debug==1) ? printf("Debug : Survived Free_var\n") : 0;
-	free(Titles);
-//	free(Player);
 	return 0;
 }

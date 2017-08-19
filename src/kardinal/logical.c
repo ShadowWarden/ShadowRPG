@@ -63,6 +63,8 @@ int Some(Input *In, Input *args, int debug){
 			flag++;
 			(debug==1) ? fprintf(stderr,"Debug : %s is true\n",args->name) : 0;	
 		}
+		if(flag == lim)
+			break;
 		args = args->prev;	
 	}while(args!=NULL);
 	if(flag==lim){

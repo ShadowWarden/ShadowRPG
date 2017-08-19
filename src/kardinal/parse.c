@@ -19,10 +19,6 @@
 
 #define MAXBUF 100
 
-void Debug(char * msg){
-	fprintf(stderr,"%s",msg);
-}
-
 int freeform_new(Input **In, Input cur, int pos){
 	// Creates a new node in the freeform stack
 
@@ -35,7 +31,7 @@ int freeform_new(Input **In, Input cur, int pos){
 	return 0;
 }
 
-Input * build(Input * In, char *in){
+int build(Input ** In, char *in){
 /* This takes the input string - something like all(ttl(abc,def,efg)) and breaks
 *  it up as follows : 
 *  1. Anything that preceeds a bracket is a command. In this case, that refers
@@ -69,17 +65,17 @@ Input * build(Input * In, char *in){
 */			
 			buf[index] = '\0';
 			if(flag==0){
-				strcpy(In->name,buf);
-				In->type = 1;
-				In->prev = NULL;
-				In->lvl = lvl;
+				strcpy((*In)->name,buf);
+				(*In)->type = 1;
+				(*In)->prev = NULL;
+				(*In)->lvl = lvl;
 			}else{
 				Input * new = (Input *) malloc (sizeof(Input));
 				strcpy(new->name,buf);
 				new->type = 1;				
-				new->prev = In;
+				new->prev = *In;
 				new->lvl = lvl;
-				In = new;
+				*In = new;
 			}
 			flag ++;
 			index = 0;
@@ -97,8 +93,8 @@ Input * build(Input * In, char *in){
 				new->type = 0;
 				new->lvl = lvl;
 				maxlvl = (lvl>maxlvl)?lvl:maxlvl;
-				new->prev = In;
-				In = new;
+				new->prev = *In;
+				*In = new;
 				flag++;
 				index = 0;
 			}if(ch == ')' && (i != strlen(in)-1 || index == 0)){
@@ -128,7 +124,7 @@ Input * build(Input * In, char *in){
 		}
 		i++;
 	}
-	return In;	
+	return 0;	
 }
 
 void Free(Input * In){
@@ -203,7 +199,7 @@ void sequential_print(Input *In, char *name, int debug){
 	}while(tmp!=NULL);
 }
 
-int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int debug){
+int parse(Input **In, SymTable **S, int line, int *num_temp_variables,int debug){
 	int pos = 0;	
 	Input *argsold = NULL;
 	Input *old = *In;
@@ -263,7 +259,7 @@ int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int
 */
 			(debug==1) ? fprintf(stderr,"Debug : Survived the selective_free\n") : 0;
 
-			int res = evaluate(cur,args,Player,PlayerSize,S,line,debug);
+			int res = evaluate(cur,args,*S,line,num_temp_variables,debug);
 			
 			(debug==1) ? fprintf(stderr,"About to free args\n") : 0;
 			Free(args);
@@ -273,6 +269,7 @@ int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int
 			if(res && (res!=202 || res!= 201 || res!=-202)){
 				/* If evaluate failed. Exit immediately */
 				Free(argsold);
+				Free_tmp_vars(*S,*num_temp_variables);
 				return res;
 			}
 		}else{
@@ -292,6 +289,7 @@ int parse(Input **In, State **Player, int *PlayerSize, SymTable *S, int line,int
 		cur = cur->prev;	
 	}
 	Free(argsold);
+	Free_tmp_vars(*S,*num_temp_variables);
 	(debug==1) ? fprintf(stderr,"Debug : Freed argsold\n") : 0;
 	(debug==1) ? fprintf(stderr,"Debug : Survived the parse loop!\n") : 0;
 	return 0;	
