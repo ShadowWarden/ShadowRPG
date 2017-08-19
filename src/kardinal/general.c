@@ -32,7 +32,7 @@ int Print(Input * args, SymTable S, int debug){
 		VariableDec *tmp = Vars; 
 		if(args->name[0]=='"'){
 			Vars = (VariableDec *) malloc (sizeof(VariableDec)); 
-			Vars->value = (char *) malloc (sizeof(char)*(strlen(args->name)-2));
+			Vars->value = (char *) malloc (sizeof(char)*(strlen(args->name)-1));
 			int i;
 			int flag = 0;
 			char * array = (char *) Vars->value;

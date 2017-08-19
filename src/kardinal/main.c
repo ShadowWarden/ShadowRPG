@@ -62,7 +62,9 @@ int main(int argc, char ** argv){
 
 	int i;
 	for(i=0;i<CAP;i++)
-			S->Vars[i] = NULL; 
+		S->Vars[i] = NULL;
+   	S->level = 0;
+	S->prev = NULL;   
 
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
@@ -89,6 +91,10 @@ int main(int argc, char ** argv){
 		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
+		In->name[0] = '\0';
+		In->type = 0;
+		In->lvl = 0;
+		In->prev = NULL;
 		res = build(&In,line);
 //		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);	
 		res = parse(&In,&S,line_number,&num_temp_variables,debug);

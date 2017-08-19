@@ -170,7 +170,7 @@ int setvar(SymTable * S, Input ** args, int debug){
 		strcpy(var->varname,(*args)->name);
 		var->prev = NULL;
 
-		VariableDec *tmp_var;
+		VariableDec *tmp_var = NULL;
 		int res = find_in_hash(&tmp_var,*S,var->varname);
 
 		if(res){
@@ -218,10 +218,10 @@ int createhash(char * a){
 
 int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 		int hashkey = createhash(varname);
-		SymTable *tmp = &S;
+		SymTable *tmp = NULL;
 		if(isdigit(varname[0])){
 			int flag = 0;
-			int j = 1;
+			int j = 0;
 			for(j=0;j<strlen(varname);j++){
 					if(isdigit(varname[j])==0){
 							flag = 1;
@@ -238,6 +238,7 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 				(*Found)->type = 'i';
 				(*Found)->value = (char *) malloc (sizeof(int));
 				*((int *) (*Found)->value) = atoi(varname); 
+				(*Found)->prev = NULL;
 				return 102;
 			}
 		}/*else if(varname[0]=='"' && varname[strlen(varname)-1]=='"'){
@@ -245,6 +246,7 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 			return 104;
 		}*/
 		else{
+			tmp = &S;
 			while(tmp != NULL){
 				VariableDec * vars =  tmp->Vars[hashkey];
 				while(vars!=NULL){
@@ -260,6 +262,4 @@ int find_in_hash(VariableDec ** Found, SymTable S, char * varname){
 		/* If it didn't return in the loop, then things went wrong */
 			return 101;
 		}
-		/* Something went wrong */
-		return 106;
 }
