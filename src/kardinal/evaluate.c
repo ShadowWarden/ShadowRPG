@@ -186,7 +186,7 @@ int evaluate(Input * In, Input * args, SymTable *S, int line, int * num_temp_var
 		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
-		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 102))
 			res = Arith(0,S,Var1,Var2,num_temp_variables,debug);
 		else{	
 			fprintf(stderr,"Error in + (Line %d): + failed with error code 101. Look at the documentation to troubleshoot\n",line);
@@ -202,7 +202,7 @@ int evaluate(Input * In, Input * args, SymTable *S, int line, int * num_temp_var
 		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
-		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 102))
 			res = Arith(1,S,Var1,Var2,num_temp_variables,debug);
 		else{	
 			fprintf(stderr,"Error in - (Line %d): - failed with error code 101. Look at the documentation to troubleshoot\n",line);
@@ -218,7 +218,7 @@ int evaluate(Input * In, Input * args, SymTable *S, int line, int * num_temp_var
 		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
-		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 102))
 			res = Arith(2,S,Var1,Var2,num_temp_variables,debug);
 		else{	
 			fprintf(stderr,"Error in * (Line %d): * failed with error code 101. Look at the documentation to troubleshoot\n",line);
@@ -234,7 +234,7 @@ int evaluate(Input * In, Input * args, SymTable *S, int line, int * num_temp_var
 		int res1 = find_in_hash(&Var1, *S,args->name);
 		args = args->prev;
 		int res2 = find_in_hash(&Var2, *S,args->name);
-		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 102))
 			res = Arith(3,S,Var1,Var2,num_temp_variables,debug);
 		else{	
 			fprintf(stderr,"Error in / (Line %d): / failed with error code 101. Look at the documentation to troubleshoot\n",line);
