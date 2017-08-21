@@ -21,7 +21,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-char * Arith(int operator, SymTable * S, VariableDec * Var1, VariableDec * Var2, int * num_temp_variables,int debug){
+char * Arith(int operator, SymTable *S, VariableDec * Var1, VariableDec * Var2, int * num_temp_variables,int debug){
 	if(Var1->type != 'i' || Var2->type != 'i'){
 		return NULL;
 	}
@@ -56,10 +56,12 @@ char * Arith(int operator, SymTable * S, VariableDec * Var1, VariableDec * Var2,
 		S->Vars[hashkey] = Res;
 	}else{
 		VariableDec * tmp = S->Vars[hashkey];
+	//	VariableDec * old = tmp;
 		while(tmp->prev != NULL){
 			tmp = tmp->prev;
 		}
 		tmp->prev = Res;
+	//	S->Vars[hashkey] = old;
 	}
 	
 	return Res->varname;	

@@ -39,17 +39,23 @@ int Free_tmp_vars(SymTable *S,int num_temp_variables){
 		char resname[12];
 		snprintf(resname,12,"__tmp%d",i);
 		int hashkey = createhash(resname);
-		VariableDec ** var = &(S->Vars[hashkey]);
-		while((*var) != NULL){
-			if(strcmp((*var)->varname,resname) == 0){
+		VariableDec * var = S->Vars[hashkey];
+		VariableDec * old = NULL;
+		while(var != NULL){
+			if(strcmp(var->varname,resname) != 0){
 			/* Delete this link in the list */
-				VariableDec * tmp = *var;
-				(*var) = (*var)->prev;
-				free(tmp->value);
-				free(tmp);
-			}else{
-				(*var) = (*var)->prev;
+				old = var;
+				var = var->prev;
+				continue;
 			}
+			
+			if(old){
+				old->prev = var->prev;
+			}else{
+				S->Vars[hashkey] = var->prev;
+			}
+			free(var);
+			break;
 		}
 	}
 	return 0;
