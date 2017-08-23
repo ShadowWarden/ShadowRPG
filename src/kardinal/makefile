@@ -1,5 +1,7 @@
 obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o arithmetic.o etc.o
 
+cfiles=main.c parse.c evaluate.c variable.c logical.c relational.c general.c arithmetic.c etc.c
+
 flags=
 
 kardinal: $(obj)
@@ -35,6 +37,12 @@ etc.o: etc.c
 .PHONY: debug
 debug: $(obj)
 	cc -Wall -g -o kardinal $(obj)
+
+.PHONY: windows
+windows: $(cfiles)
+	i686-w64-mingw32-gcc -Wall $(cfiles) -o kardinal.exe
+
+
 
 .PHONY: clean
 clean:
