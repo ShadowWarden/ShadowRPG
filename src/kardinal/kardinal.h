@@ -18,6 +18,13 @@
 #define CAP 13
 #define OFFSET 133
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define EQSTR(a,b) (strcmp(a,b)==0)
+
 typedef struct Input{
 	char name[50];
 	int type;     // 0 = Arg  ;  1 = Var

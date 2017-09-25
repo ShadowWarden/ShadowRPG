@@ -13,9 +13,6 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "kardinal.h"
 
 #define MAX_INPUT 256

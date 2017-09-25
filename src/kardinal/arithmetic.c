@@ -16,10 +16,7 @@
 *  entirety
 */
 
-#include<stdio.h>
 #include"kardinal.h"
-#include<stdlib.h>
-#include<string.h>
 
 char * Arith(int operator, SymTable *S, VariableDec * Var1, VariableDec * Var2, int * num_temp_variables,int debug){
 	if(Var1->type != 'i' || Var2->type != 'i'){

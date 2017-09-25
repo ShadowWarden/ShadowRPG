@@ -15,13 +15,7 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
-#include<stdio.h>
 #include"kardinal.h"
-#include<stdlib.h>
-#include<string.h>
-#include<ctype.h>
-
-#define EQSTR(a,b) (strcmp(a,b)==0)
 
 int All(Input *In, Input *args, int debug){
 	(debug==1) ? fprintf(stderr,"Debug : Command is 'all'\n") : 0;

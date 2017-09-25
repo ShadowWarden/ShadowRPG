@@ -13,11 +13,7 @@
  * Any redistribution of this code must contain this header in its entirety
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "kardinal.h"
-#include <ctype.h>
 
 int Free_var(SymTable *S){
 	int i;
@@ -104,9 +100,8 @@ int setvar(SymTable * S, Input ** args, int debug){
 					}
 			}
 			if(flag){
-				free(var);
-				fprintf(stdout,"Error in setvar: Unidentified type\n");
-				return -2;
+				// Title name. Alphanumeric
+				var->type = 't';
 			}else{
 				var->type = 'i';
 			}

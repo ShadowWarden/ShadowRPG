@@ -15,12 +15,7 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
-#include<stdio.h>
 #include"kardinal.h"
-#include<stdlib.h>
-#include<string.h>
-
-#define EQSTR(a,b) (strcmp(a,b)==0)
 
 int EQ(VariableDec *A, VariableDec *B, int debug){
 	// Compares A, B and returns 0 if equal

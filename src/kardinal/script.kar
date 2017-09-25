@@ -6,8 +6,8 @@
 #
 # Prototype Kardinal code. Every function that we put in will be tested here.
 # To run, simply use 
-# $ ./kardinal script.kar titles.txt
-# 
+# $ ./kardinal script.kar
+#
 # This project is under the GNU General GPL version 3.0 license. For more 
 # information about the license, refer the LICENCE file in the root directory 
 # or go online to <http://www.gnu.org/licenses>
@@ -24,11 +24,13 @@
 
 setvar(a,140)
 setvar(b,a)
+
 print("a=",a," and b=",b)
 print("a+b=",+(a,b))
 print("a-b=",-(a,b))
 print("a*b=",*(a,b))
 print("a/b=",/(a,b))
+
 #if(some(GE(a,5),LE(b,10),1))
 #	print("a is equal to 5\n")
 #endif(null)
