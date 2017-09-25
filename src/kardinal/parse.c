@@ -12,9 +12,6 @@
 *  Any redistribution of this code must contain this header in its entirety
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "kardinal.h"
 
 #define MAXBUF 100
