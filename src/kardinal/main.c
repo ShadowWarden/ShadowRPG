@@ -57,6 +57,9 @@ int main(int argc, char ** argv){
 	// Initialize variable stack
 	SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
+	// Initialize Control stack
+	Control *control = NULL;
+
 	int i;
 	for(i=0;i<CAP;i++)
 		S->Vars[i] = NULL;
@@ -100,14 +103,21 @@ int main(int argc, char ** argv){
 			if_false_flag = 1;
 		}else if(res == -202){
 			/* Endif. Get rid of local symbol table */	
-			if(!if_false_flag && scope_level != 0){
-				if(S->level == scope_level){
-					SymTable *tmp = S;
-					S = S->prev;
-					Free_var(tmp);
-					free(tmp);
-				}
-				scope_level -= 1;
+			if(control != NULL && control->ctrl == 'i'){
+				Control * temp = control;
+				control = control->prev;
+				free(temp);
+			}else{
+				/* Syntax error. Endif encountered without an if */
+				fprintf(stderr,"Syntax Error on line %d: Endif encoutnered without preceeding if\n",line_number);
+				goto error_quit;
+				break;
+			}
+			if(if_false_flag == 1){
+				SymTable *tmp = S;
+				S = S->prev;
+				Free_var(tmp);
+				free(tmp);
 			}
 			if_false_flag = 0;
 		}else if(res == 202){
@@ -119,8 +129,13 @@ int main(int argc, char ** argv){
 			S->prev = tmp;
 			for(i=0;i<CAP;i++)
 				S->Vars[i] = NULL; 
+			Control * tmp_ctrl = control;
+			control = (Control *) malloc(sizeof(control));	
+			control->prev = tmp_ctrl;
+			control->ctrl = 'i';
 		}else if(res!=1 && res){
 		/* There was an error. Exit */
+error_quit:
 			Free(In);
 			Free_var(S);
 			free(S);
