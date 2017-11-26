@@ -14,4 +14,5 @@ To evaluate a kardinal script, navigate to the folder with the kardinal executab
 ```
 ### Options
 --version: When given as the only argument, the program will return the version number of the given kardinal executable
+
 --debug: Has to be given after the path to input script. When given, this command will print all the internal debug messages that are typically suppressed.
