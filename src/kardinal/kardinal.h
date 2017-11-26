@@ -96,3 +96,4 @@ char * Arith(int,SymTable *, VariableDec *, VariableDec *, int *, int);
 //input.c
 int number_lines(FILE *);
 char ** read_source(char **,FILE *);
+void Free_source(char **,int);

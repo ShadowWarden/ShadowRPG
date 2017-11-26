@@ -32,7 +32,6 @@ print("a+b=",+(a,b))
 print("a-b=",-(a,b))
 print("a*b=",*(a,b))
 print("a/b=",/(a,b))
-
 #if(some(GE(a,5),LE(b,10),1))
 #	print("a is equal to 5\n")
 #endif(null)

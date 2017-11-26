@@ -50,6 +50,7 @@ int Free_tmp_vars(SymTable *S,int num_temp_variables){
 			}else{
 				S->Vars[hashkey] = var->prev;
 			}
+			free(var->value);
 			free(var);
 			break;
 		}

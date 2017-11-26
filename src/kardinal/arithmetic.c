@@ -60,6 +60,5 @@ char * Arith(int operator, SymTable *S, VariableDec * Var1, VariableDec * Var2, 
 		tmp->prev = Res;
 	//	S->Vars[hashkey] = old;
 	}
-	
 	return Res->varname;	
 }

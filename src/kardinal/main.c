@@ -147,6 +147,8 @@ error_quit:
 			Free_var(S);
 			free(S);
 			fclose(fin);
+			free(control);
+			free(line);
 			return -1;
 		
 		}
@@ -164,5 +166,8 @@ error_quit:
 	fclose(fin);
 	Free_var(S);
 	free(S);
+	free(control);
+	Free_source(line,num_lines);
+	free(line);
 	return 0;
 }
