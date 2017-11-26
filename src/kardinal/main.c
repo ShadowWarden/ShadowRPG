@@ -15,14 +15,13 @@
 
 #include "kardinal.h"
 
-#define MAX_INPUT 256
 
 //int TitleSize;
 //State * Titles;
 
 int main(int argc, char ** argv){
 	/* Declarations */
-	char line[MAX_INPUT];
+	char ** line;
 //	State *Player;
 //	int PlayerSize = 0;
 	int if_false_flag = 0;
@@ -54,6 +53,14 @@ int main(int argc, char ** argv){
 		fprintf(stderr,"File %s does not exist\n",argv[1]);
 		return 1;
 	}
+	// Count number of lines in source file
+	int lineindex;
+	int num_lines = number_lines(fin);
+
+	// Read in source to **line
+	line = (char **) malloc(num_lines*sizeof(char *)); 
+	line = read_source(line,fin);
+
 	// Initialize variable stack
 	SymTable * S = (SymTable *) malloc (sizeof(SymTable));
 
@@ -69,11 +76,11 @@ int main(int argc, char ** argv){
 //	dump_states_test(debug);
 //	add_state_to_player(2,&Player,&PlayerSize);
 //	printf("Debug : %d %s %d\n",Player[0].id,Player[0].name,Player[0].attribute);
-	while(fgets(line,MAX_INPUT,fin)){
+	for(lineindex = 0; lineindex < num_lines; lineindex++){
 	//	In->prev = NULL;
 		int i=0, res;
 		int num_temp_variables = 0;
-		char ch=line[i];
+		char ch=line[lineindex][i];
 		line_number++;	
 /* Pretty sure my beautiful conditional operator is no longer necessary
 *  :'-( - OHR
@@ -81,21 +88,21 @@ int main(int argc, char ** argv){
 //		int size_in = (MAX_INPUT>(sizeof(line)))?MAX_INPUT:sizeof(line);
 		while(ch==' ' || ch=='\t'){
 			i++;
-			ch = line[i];
+			ch = line[lineindex][i];
 		}
 		(debug==1) ? printf("Debug : ch = %c\n",ch) : 0;
 		if(ch == '#' || (if_false_flag==1 && ch!='e')){
 		// Comment and not endif!
 			continue;
 		}
-		(debug==1) ? printf("Debug : Command = %s\n",line) : 0;
+		(debug==1) ? printf("Debug : Command = %s\n",line[lineindex]) : 0;
 		// Build the command stack
 		Input *In = (Input *) malloc (sizeof(Input));
 		In->name[0] = '\0';
 		In->type = 0;
 		In->lvl = 0;
 		In->prev = NULL;
-		res = build(&In,line);
+		res = build(&In,line[lineindex]);
 //		printf("%s : %d : %d : %s\n\n\n",In->name,In->lvl,In->type,In->prev->name);	
 		res = parse(&In,&S,line_number,&num_temp_variables,debug);
 		

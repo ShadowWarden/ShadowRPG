@@ -1,6 +1,6 @@
-obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o arithmetic.o etc.o
+obj=main.o parse.o evaluate.o variable.o logical.o relational.o general.o arithmetic.o etc.o input.o
 
-cfiles=main.c parse.c evaluate.c variable.c logical.c relational.c general.c arithmetic.c etc.c
+cfiles=main.c parse.c evaluate.c variable.c logical.c relational.c general.c arithmetic.c etc.c input.c
 
 flags=
 
@@ -33,6 +33,9 @@ arithmetic.o: arithmetic.c
 
 etc.o: etc.c
 	cc -Wall -c etc.c
+
+input.o: input.c
+	cc -Wall -c input.c
 
 .PHONY: debug
 debug: $(obj)

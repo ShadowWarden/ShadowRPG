@@ -17,6 +17,7 @@
 #define SIZE_DOUBLE 8
 #define CAP 13
 #define OFFSET 133
+#define MAX_INPUT 256
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,3 +92,7 @@ void banner();
 
 //arithmetic.c
 char * Arith(int,SymTable *, VariableDec *, VariableDec *, int *, int);
+
+//input.c
+int number_lines(FILE *);
+char ** read_source(char **,FILE *);
