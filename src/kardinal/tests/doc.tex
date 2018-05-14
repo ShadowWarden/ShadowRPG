@@ -1,0 +1,50 @@
+% mathbio/hw1/hw1.tex
+%
+% Omkar H. Ramachandran
+% omkar.ramachandran@colorado.edu
+%
+% My solutions to HW1 of the mathbio class
+%
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1.2in,bmargin=1.2in,lmargin=1.2in,rmargin=1.2in}
+\usepackage{babel}
+\newcommand{\GeV}{\,{\rm GeV}}
+\newcommand{\mod}{\,{\rm mod}}
+\usepackage{graphicx}
+\graphicspath{{./plots/}}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{float}
+
+\lstdefinestyle{custompy}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=Python,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green},
+  commentstyle=\itshape\color{red},
+  identifierstyle=\color{black},
+  stringstyle=\color{blue},
+}
+
+\lstset{escapechar=@,style=custompy}
+
+\begin{document}
+\title{Kardinal Testing Documentation}
+\author{Omkar H. Ramachandran}
+\date{}
+\maketitle
+
+This is a code segment:
+\begin{lstlisting}
+print("Hello World!")
+\end{lstlisting}
+
+\end{document}
