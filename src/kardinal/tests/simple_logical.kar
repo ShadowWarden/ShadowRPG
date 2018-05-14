@@ -1,0 +1,33 @@
+# kardinal/script_logical.kar
+# Omkar H. Ramachandran
+# omkar.ramachandran@colorado.edu
+#
+# Simple logical operations
+#
+
+# Set a and b to 5 and 10 respectively
+setvar(a,5)
+setvar(b,6)
+setvar(c,12)
+
+#print("\n\n")
+# print out initial values
+print("Initial values\na=",a,"\nb=",b)
+
+# endif(null)
+# If b > a, print "b is greater than a"
+if(GE(b,a))
+	print("b is greater than a\n\n")
+endif(null)
+
+
+# if a > 7 or b < 10, print "a > 7 || b < 10"
+if(some(GE(a,7),LE(b,10),1))
+	print("a > 7 || b < 10\n\n")
+endif(null)
+
+# if all of (c > a, c > b, c == 12) are true,
+# print "Three of five true!"
+if(some(GE(a,10),GE(c,a),GE(c,b),LE(b,10),EQ(c,12),3))
+	print("Three of five true!\n\n")
+endif(null)

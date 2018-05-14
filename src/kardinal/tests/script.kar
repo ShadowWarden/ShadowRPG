@@ -1,0 +1,31 @@
+# kardinal/script.kar
+# Omkar H. Ramachandran
+# omkar.ramachandran@colorado.edu
+#  
+# Enter in your name if you make any changes here
+#
+# Prototype Kardinal code. Every function that we put in will be tested here.
+# To run, simply use 
+# $ ./kardinal script.kar titles.txt
+# 
+# This project is under the GNU General GPL version 3.0 license. For more 
+# information about the license, refer the LICENCE file in the root directory 
+# or go online to <http://www.gnu.org/licenses>
+#  
+# Any redistribution of this code must contain this header in its entirety
+#
+# Do NOT use addttl yet on this branch. We're only testing setvar and have commented out the
+# Free(Player) in main.c
+
+# Set integers 4 and 5 to a and b respectively
+
+# If b > a or b == a
+# Set the string "6" to c
+
+setvar(a,5)
+setvar(b,6)
+print("a=",a," b=",b," and a+b=",+(a,b),"\n")
+if(GE(+(a,b),10))
+	print("In if ",+(a,b),"\n")
+endif(null)
+print("End\n")
