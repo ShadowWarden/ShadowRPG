@@ -25,7 +25,13 @@
 
 #include "object.hpp"
 
-Object::Object(const char * objpath, const char * texturepath, const char * vertexshader, const char * fragmentshader){
+Object::Object(const char * objpath, 
+		const char * texturepath, 
+		const char * vertexshader, 
+		const char * fragmentshader,
+		int X, int Y){
+	locX = X;
+	locY = Y;
 	loadOBJ(objpath);	
 	loadTexture(texturepath);
 	InitShaders(vertexshader, fragmentshader);	
@@ -42,6 +48,17 @@ Object::~Object(){
 
 bool Object::setMatrices(){
 	Model = glm::mat4(1.0f);
+	glm::vec3 v = glm::vec3(locX,locY,0);
+	Translate = glm::translate(Model,v);
+//	for(int i = 0; i < 3; i++)
+//		std::cout<<v[i]<<' ';
+//	std::cout<<std::endl;
+//	for(int i = 0; i < 4; i++){
+//		for(int j = 0; j < 4; j++)
+//			std::cout<<Translate[i][j]<<' ';
+//		std::cout<<std::endl;
+//	}
+	
 	return true;
 }
 
@@ -345,13 +362,13 @@ bool Object::InitBuffers(){
 }
 
 bool Object::Animate(){
-	Model = glm::rotate(Model, 0.01f, glm::vec3(0,1,0));
+//	Model = glm::rotate(Model, 0.01f, glm::vec3(0,1,0));
 	return true;
 }
 
 bool Object::render(glm::mat4 Projection, glm::mat4 View){
 
-	glm::mat4 mvp = Projection*View*Model;
+	glm::mat4 mvp = Projection*View*Translate*Model;
 	
 	glUseProgram(programID);
 	// We draw something!

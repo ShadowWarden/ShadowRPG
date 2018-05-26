@@ -1,6 +1,6 @@
-obj=object.o
+obj=object.o controls.o
 exec=engine
-cfiles=main.cpp object.cpp
+cfiles=main.cpp object.cpp controls.cpp
 maincfile=main.cpp
 libpathflags=
 libbefore=-lGLEW -lglfw -lGL
@@ -11,6 +11,9 @@ $(exec): $(obj) $(maincfile)
 
 object.o: object.cpp
 	g++ -c object.cpp
+
+controls.o: controls.hpp
+	g++ -c controls.cpp
 
 .PHONY: clean
 clean:

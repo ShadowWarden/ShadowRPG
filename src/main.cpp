@@ -22,6 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "object.hpp"
+#include "controls.hpp"
 
 GLFWwindow * window;
 
@@ -81,7 +82,7 @@ int main(){
 
 	// Camera Matrix
 	glm::mat4 View = glm::lookAt(
-			glm::vec3(8,4,6),		// Camera Position in world frame
+			glm::vec3(0,4,8),		// Camera Position in world frame
 			glm::vec3(0,4,0),		// Look at (0,0,0)
 			glm::vec3(0,1,0)		// 'Up' direction in Camera coordinates
 			);
@@ -96,14 +97,23 @@ int main(){
 
 	fprintf(stdout, "DEBUG:Initialized VertexArray\n");
 
-	Object obj("pillar.obj", "pillar.bmp", "vertex.vs", "frag.fs");
+	Object obj1("pillar.obj", "pillar.bmp", "vertex.vs", "frag.fs",2,0);
+	Object obj2("pillar.obj", "pillar.bmp", "vertex.vs", "frag.fs",-2,0);
 
 	bool close = false;
 	do{
+		computeMatricesFromInputs();
+		Projection = getProjectionMatrix();
+		View = getViewMatrix();
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		obj.Animate();	
-		obj.render(Projection,View);
 		
+		obj1.Animate();	
+		obj2.Animate();
+
+		obj1.render(Projection,View);
+		obj2.render(Projection,View);
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 

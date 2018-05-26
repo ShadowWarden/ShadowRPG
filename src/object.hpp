@@ -2,12 +2,15 @@
 class Object{
 	private: 
 		int ObjectID;
+		int locX;
+		int locY;
 		std::vector <glm::vec3> vertices;
 		std::vector <glm::vec2> uvs;
 		std::vector <glm::vec3> normals; 
 		GLuint Texture;
 		glm::mat4 Model;
-		
+		glm::mat4 Translate;
+
 		GLuint vertexbuffer;
 		GLuint uvbuffer;
 		
@@ -21,7 +24,8 @@ class Object{
 		Object( const char * objpath,
 				const char * texturepath,
 				const char * vertexshader,
-				const char * fragmentshader);
+				const char * fragmentshader,
+				int, int);
 		bool loadOBJ(const char * path);
 		bool render(glm::mat4,glm::mat4);
 		bool loadTexture(const char * path);
