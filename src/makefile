@@ -1,23 +1,17 @@
-obj=main.o map.o character.o move.o inst.o
+obj=object.o
+exec=engine
+cfiles=main.cpp object.cpp
+maincfile=main.cpp
+libpathflags=
+libbefore=-lGLEW -lglfw -lGL
+libafter=-lSOIL
 
-../main: main.o map.o character.o move.o inst.o
-	cc -o ../main main.o map.o character.o move.o inst.o -lncurses
+$(exec): $(obj) $(maincfile)
+	g++  $(libpathflags) $(libbefore) -o $(exec) $(maincfile) $(obj) $(libafter)
 
-main.o: main.c
-	cc -c main.c
-
-map.o: map.c
-	cc -c map.c
-
-character.o: character.c
-	cc -c character.c
-
-move.o: move.c
-	cc -c move.c
-
-inst.o: inst.c
-	cc -c inst.c
+object.o: object.cpp
+	g++ -c object.cpp
 
 .PHONY: clean
 clean:
-	rm -f $(obj) ../main .*.swp
+	rm -f $(obj) $(exec) .*.swp
