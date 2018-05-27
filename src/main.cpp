@@ -15,7 +15,6 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <FTGL/ftgl.h>
 
 #include <vector>
 
@@ -23,7 +22,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "object.hpp"
-#include "font.hpp"
 #include "controls.hpp"
 
 GLFWwindow * window;
