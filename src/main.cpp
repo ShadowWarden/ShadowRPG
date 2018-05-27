@@ -15,6 +15,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <FTGL/ftgl.h>
 
 #include <vector>
 
@@ -22,6 +23,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "object.hpp"
+#include "font.hpp"
 #include "controls.hpp"
 
 GLFWwindow * window;
@@ -30,8 +32,6 @@ int main(){
 	// Parameters	
 	int height = 768;
 	int width = 1024;
-	float time_now = 0;
-	float T = 5;
 
 	// Initialize GLEW
 	glewExperimental = true;
@@ -73,18 +73,16 @@ int main(){
 
 	// Create Projection Matrix
 	glm::mat4 Projection = glm::perspective(
-			glm::radians(45.0f), 			// Field of View
-			(float) width/(float) height, 	// Aspect Ratio
-			0.1f,							// Near clipping plane of camera Frustum
-			100.0f							// Far clipping plane
-			);
-
+			45.0f,
+			4.0f/3.0f,
+			0.1f,
+			100.0f);
 
 	// Camera Matrix
 	glm::mat4 View = glm::lookAt(
-			glm::vec3(0,4,8),		// Camera Position in world frame
-			glm::vec3(0,4,0),		// Look at (0,0,0)
-			glm::vec3(0,1,0)		// 'Up' direction in Camera coordinates
+			glm::vec3(8,6,6),
+			glm::vec3(0,4,0),
+			glm::vec3(0,1,0)
 			);
 	
 	GLuint VertexArrayID;
@@ -93,27 +91,63 @@ int main(){
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-
+	glEnable(GL_CULL_FACE);
 
 	fprintf(stdout, "DEBUG:Initialized VertexArray\n");
 
-	Object obj1("pillar.obj", "pillar.bmp", "vertex.vs", "frag.fs",2,0);
-	Object obj2("pillar.obj", "pillar.bmp", "vertex.vs", "frag.fs",-2,0);
+	Object obj1("pillar.obj", "pillar.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",2,0);
+	Object obj2("texturewithanim.obj", "texture1.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",-2,0);
+
+
+	fprintf(stdout,"DEBUG: Initialized fonts\n");
 
 	bool close = false;
+	double lastTime = glfwGetTime();
+	int nbFrames = 0;
+	char fps[256];
+	sprintf(fps,"0 FPS");
+
+	float R = 8;
+	float theta = 3.1415/2;
+	float phi = 0;
+	float speed = 3.1415/2.5;
+
+	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f),3.1415f/2.0f,glm::vec3(1,0,0));
+
 	do{
+		double currentTime = glfwGetTime();
+		nbFrames ++;
+		if(currentTime - lastTime >= 5.0){
+			fprintf(stdout, "DEBUG: %s\n", fps);
+			sprintf(fps,"%d FPS",nbFrames/5);
+			nbFrames = 0;
+			lastTime += 5.0;
+			phi = 0;
+		}
+
 		computeMatricesFromInputs();
 		Projection = getProjectionMatrix();
 		View = getViewMatrix();
+
+		phi = speed*(currentTime-lastTime);
+
+		glm::vec4 pos = glm::vec4(R*glm::sin(theta)*glm::cos(phi),
+				R*glm::sin(theta)*glm::sin(phi),
+				R*glm::cos(theta),0);
+
+
+		glm::vec4 lightPos4x4 = rotate*pos;
+
+		glm::vec3 lightPos = glm::vec3(lightPos4x4);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		obj1.Animate();	
 		obj2.Animate();
 
-		obj1.render(Projection,View);
-		obj2.render(Projection,View);
-
+		obj1.render(Projection,View,lightPos);
+		obj2.render(Projection,View,lightPos);
+			
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 

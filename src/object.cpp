@@ -27,13 +27,16 @@
 
 Object::Object(const char * objpath, 
 		const char * texturepath, 
+		const char * normaltexturepath,
 		const char * vertexshader, 
 		const char * fragmentshader,
 		int X, int Y){
 	locX = X;
 	locY = Y;
 	loadOBJ(objpath);	
-	loadTexture(texturepath);
+	computeTangentBasis();
+	Texture = loadTexture(texturepath);
+	NormalTexture = loadTexture(normaltexturepath);
 	InitShaders(vertexshader, fragmentshader);	
 	InitBuffers();
 	setMatrices();
@@ -150,7 +153,7 @@ bool Object::loadOBJ(const char * path){
 
 }
 
-bool Object::loadTexture(const char * path){
+GLuint Object::loadTexture(const char * path){
 
 	printf("Reading image %s\n", path);
 
@@ -236,8 +239,7 @@ bool Object::loadTexture(const char * path){
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	// Return the ID of the texture we just created
-	Texture = textureID;
-	return true;
+	return textureID;
 }
 
 
@@ -350,13 +352,34 @@ bool Object::InitBuffers(){
 	glGenBuffers(1, &uvbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, uvs.size()*sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
+	
+	glGenBuffers(1, &normalbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+	glBufferData(GL_ARRAY_BUFFER, normals.size()*sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 
-	Vertex = glGetAttribLocation(programID, "vertex");
-	TextureID = glGetUniformLocation(programID, "Texture");
+	glGenBuffers(1, &tangentbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, tangentbuffer);
+	glBufferData(GL_ARRAY_BUFFER, tangents.size()*sizeof(glm::vec3), &tangents[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &bitangentbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, bitangentbuffer);
+	glBufferData(GL_ARRAY_BUFFER, bitangents.size()*sizeof(glm::vec3), &bitangents[0], GL_STATIC_DRAW);
+	std::cout<<vertices.size()<<' '<<tangents.size()<<' '<<bitangents.size()<<std::endl;
+
+	Vertex = glGetAttribLocation(programID, "vertex_modelSpace");
+	TextureID = glGetUniformLocation(programID, "TextureSampler");
+	NormalTextureID = glGetUniformLocation(programID, "NormalTextureSampler");
 	vertexUV = glGetAttribLocation(programID, "vertexUV");
+	normalHandler = glGetAttribLocation(programID, "normal_modelSpace");
+	tangentHandler = glGetAttribLocation(programID, "tangent_modelSpace");
+	bitangentHandler = glGetAttribLocation(programID, "bitangent_modelSpace");
 
 	// Hand over the matrix to GLSL
 	MatrixID = glGetUniformLocation(programID, "mvp");
+	ViewMatrixID = glGetUniformLocation(programID, "V");
+	ModelMatrixID = glGetUniformLocation(programID, "M");
+	LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+	mv3x3ID =  glGetUniformLocation(programID, "mv3x3");
 
 	return true;
 }
@@ -366,21 +389,32 @@ bool Object::Animate(){
 	return true;
 }
 
-bool Object::render(glm::mat4 Projection, glm::mat4 View){
+bool Object::render(glm::mat4 Projection, glm::mat4 View, glm::vec3 lightPos){
 
 	glm::mat4 mvp = Projection*View*Translate*Model;
-	
+	glm::mat4 mv = View*Model;
+	glm::mat3 mv3x3 = glm::mat3(mv);
+
 	glUseProgram(programID);
 	// We draw something!
 	// Enable our vertex arrayi
 
+	glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
 	// Send our transformation matrix to shader
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
+	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);
+	glUniformMatrix4fv(mv3x3ID, 1, GL_FALSE, &mv3x3[0][0]);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Texture);
 	glUniform1i(TextureID, 0);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, NormalTexture);
+	glUniform1i(NormalTextureID, 1);
+
 
 	glEnableVertexAttribArray(Vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -404,10 +438,70 @@ bool Object::render(glm::mat4 Projection, glm::mat4 View){
 		(void *)0		
 	);
 
+	glEnableVertexAttribArray(normalHandler);
+	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+	glVertexAttribPointer(
+		normalHandler,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void *)0		
+	);
+
+	glEnableVertexAttribArray(tangentHandler);
+	glBindBuffer(GL_ARRAY_BUFFER, tangentbuffer);
+	glVertexAttribPointer(
+		tangentHandler,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void *)0		
+	);
+
+	glEnableVertexAttribArray(bitangentHandler);
+	glBindBuffer(GL_ARRAY_BUFFER, bitangentbuffer);
+	glVertexAttribPointer(
+		bitangentHandler,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void *)0		
+	);
+
+
 	// Draw!
 	glDrawArrays(GL_TRIANGLES,0,vertices.size());	// Starting from vertex 0; 3 vertices in total.
+	
 	glDisableVertexAttribArray(Vertex);
 	glDisableVertexAttribArray(vertexUV);
+	glDisableVertexAttribArray(normalHandler);
 
+	return true;
+}
+
+bool Object::computeTangentBasis(){
+	for(unsigned int i = 0; i < vertices.size(); i +=3){
+		glm::vec3 deltaPos1 = vertices[i+1]-vertices[i+0];
+		glm::vec3 deltaPos2 = vertices[i+2]-vertices[i+0];
+
+		glm::vec2 deltaUV1 = uvs[i+1]-uvs[i+0];
+		glm::vec2 deltaUV2 = uvs[i+2]-uvs[i+0];
+	
+		float r = 1.0f/(deltaUV1.x*deltaUV2.y - deltaUV1.y*deltaUV2.x);
+		glm::vec3 tangent = (deltaPos1*deltaUV2.y - deltaPos2*deltaUV1.y)*r;
+		glm::vec3 bitangent = (deltaPos2*deltaUV1.x - deltaPos1*deltaUV2.x)*r;
+
+		tangents.push_back(tangent);
+		tangents.push_back(tangent);
+		tangents.push_back(tangent);
+
+		bitangents.push_back(bitangent);
+		bitangents.push_back(bitangent);
+		bitangents.push_back(bitangent);
+
+	}
 	return true;
 }
