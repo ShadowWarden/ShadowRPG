@@ -3,8 +3,8 @@ exec=engine
 cfiles=main.cpp object.cpp controls.cpp
 maincfile=main.cpp
 libpathflags=
-libbefore=-lGLEW -lglfw -lGL
-libafter=
+libafter=-lGLEW -lglfw -lGL
+libbefore=
 
 $(exec): $(obj) $(maincfile)
 	g++  $(libpathflags) $(libbefore) -o $(exec) $(maincfile) $(obj) $(libafter)
