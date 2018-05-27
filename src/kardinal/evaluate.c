@@ -23,7 +23,7 @@
 #define EQSTR(a,b) (strcmp(a,b)==0)
 
 
-int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTable *S, int line, int debug){
+int evaluate(Input * In, Input * args, SymTable *S, int line, int * num_temp_variables, int debug){
 /* At present, it works. We have a few different things that evaluate can do. The three things I
 *  want done ASAP are error checks (NearlyHeadless, all yours), variable support and condensing
 *  the code so that this function looks like 
@@ -53,33 +53,6 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 *  this version of the code here :
 */
 		Not(In,args,debug);
-	}else if(EQSTR(In->name,"ttl")){
-/* Only looking at last arg again. NearlyHeadless : Error check. In addition,
-*  Replace this with binary search (O(N) vs O(log N))
-*/
-		int id = atoi(args->name);
-		int result = -find_ttl(id,Player,PlayerSize,debug);
-		if(result){
-			strcpy(In->name,"false");			
-		}else{
-			strcpy(In->name,"true");	
-		}
-	}else if(EQSTR(In->name,"addttl")){
-/* Again. This only accepts exactly one argument. Error checks
-*/
-		add_state_to_player(atoi(args->name),Player,PlayerSize,debug);
-		(debug==1) ? fprintf(stderr,"(addttl) Debug : State %s added to player\n",Titles[atoi(args->name)-1].name) : 0;
-		strcpy(In->name,"true");			
-	}else if(EQSTR(In->name,"rmttl")){
-/* Remove title by ID from the player's stack
-*/
-		int result;
-		result = remove_state_from_player(atoi(args->name),Player,PlayerSize,debug);
-		if(result){
-			strcpy(In->name,"true");
-		}else{
-			strcpy(In->name,"false");
-		}
 	}else if(EQSTR(In->name, "setvar")){
 		int result = -setvar(S,&args,debug);
 		if(result != 0){
@@ -207,6 +180,70 @@ int evaluate(Input * In, Input * args, State ** Player, int *PlayerSize, SymTabl
 		}
 	}else if(EQSTR(In->name, "endif")){
 		return -202;
+	}else if(EQSTR(In->name, "+")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Arith(0,S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in + (Line %d): + failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
+	}else if(EQSTR(In->name, "-")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Arith(1,S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in - (Line %d): - failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
+	}else if(EQSTR(In->name, "*")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Arith(2,S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in * (Line %d): * failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
+	}else if(EQSTR(In->name, "/")){
+		VariableDec * Var1, * Var2; 
+		char *res;
+		int res1 = find_in_hash(&Var1, *S,args->name);
+		args = args->prev;
+		int res2 = find_in_hash(&Var2, *S,args->name);
+		if((res1 == 0 || res1 == 102) && (res2 == 0 || res2 == 0))
+			res = Arith(3,S,Var1,Var2,num_temp_variables,debug);
+		else{	
+			fprintf(stderr,"Error in / (Line %d): / failed with error code 101. Look at the documentation to troubleshoot\n",line);
+			return 101;
+		}
+			/* Change this ASAP so that it actually checks to make
+			 * sure that res1/res2=101
+			 */
+		strcpy(In->name,res);	
 	}else{
 		fprintf(stderr,"Error in print (Line %d): print failed with error code 102 - Unknown reference to %s\n",line,In->name);
 		return 102;

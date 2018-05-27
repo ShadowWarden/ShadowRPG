@@ -11,29 +11,25 @@
 *  Any redistribution of this code must contain this header in its entirety
 *
 */
+#define VERSION "0.9.0"
+#define RELEASE "13 August 2017 10:24:37"
 
 #define SIZE_DOUBLE 8
 #define CAP 13
 #define OFFSET 133
 
-struct State{
-	unsigned int id;
-	char name[20];
-	int attribute;
-};
-
-struct Input{
+typedef struct Input{
 	char name[50];
 	int type;     // 0 = Arg  ;  1 = Var
 	int lvl;
 	struct Input * prev;
 //	int pos;
-};
+}Input;
 
 typedef struct VariableDec{
 	char varname[20]; 	// Variable Name
 	char type;		// Variable Type
-	char *value;		// Value
+	void *value;		// Value
 //	int size; 		// Size in bytes
 //	int level;
 	struct VariableDec *prev;	// Pointer to the previous element
@@ -45,31 +41,24 @@ typedef struct SymbolTable{
 	struct SymbolTable * prev;
 }SymTable;
 
-typedef struct Input Input;
-typedef struct State State;
+typedef struct Control{
+	char ctrl;
+	struct Control * prev;
+}Control;
 
 // parse.c
-Input * build(Input *, char *);
+int build(Input **, char *);
 void Free(Input *);
 void print(Input, int);
 void print_final(Input, int);
-int parse(Input **, State **, int *,SymTable *, int, int);
+int parse(Input **,SymTable **, int, int *,int);
 
 // evaluate.c
-int evaluate(Input *, Input *, State **, int *, SymTable *, int, int);
-
-// state.c
-int build_states_test(FILE *i, int);
-int dump_states_test(int);
-int find_ttl(int, State **, int *, int);
-int add_state_to_player(int, State **, int *, int);
-int remove_state_from_player(int, State **, int *, int);
-int print_player_state(State *, int, int);
-int getsize(FILE *);
-//int Statecpy(State *, State *);
+int evaluate(Input *, Input *, SymTable *, int, int *, int);
 
 //variable.c
-int Free_var(SymTable);
+int Free_var(SymTable *);
+int Free_tmp_vars(SymTable *, int);
 void print_variable_stack(SymTable);
 int setvar(SymTable *,Input **, int);
 int createhash(char *);
@@ -90,6 +79,8 @@ int LE(VariableDec *,VariableDec *, int);
 int Print(Input *, SymTable , int);
 int If(Input *, int);
 
-// Extern variables
-extern State * Titles;
-extern int TitleSize;
+//etc.c
+void banner();
+
+//arithmetic.c
+char * Arith(int,SymTable *, VariableDec *, VariableDec *, int *, int);
