@@ -17,7 +17,6 @@ varying vec3 Position_worldspace;
 varying vec3 EyeDirection_cameraspace;
 varying vec3 LightDirection_cameraspace;
 
-
 void main(){
 	gl_Position = mvp*vec4(vertex_modelSpace, 1.0);
 	

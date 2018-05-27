@@ -78,7 +78,7 @@ int main(){
 
 	// Camera Matrix
 	glm::mat4 View = glm::lookAt(
-			glm::vec3(8,6,6),
+			glm::vec3(4,3,3),
 			glm::vec3(0,4,0),
 			glm::vec3(0,1,0)
 			);
@@ -93,9 +93,9 @@ int main(){
 
 	fprintf(stdout, "DEBUG:Initialized VertexArray\n");
 
-	Object obj1("pillar.obj", "pillar.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",2,0);
-	Object obj2("pillar.obj", "pillar.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",-2,0);
-
+//	Object obj1("pillar.obj", "pillar.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",5,0);
+	Object obj2("pillar.obj", "pillar.png", "pillar_normals.png", "vertex.vs", "frag.fs",0,0);
+	
 	fprintf(stdout,"DEBUG: Initialized fonts\n");
 
 	bool close = false;
@@ -104,7 +104,7 @@ int main(){
 	char fps[256];
 	sprintf(fps,"0 FPS");
 
-	float R = 8;
+	float R = 6;
 	float theta = 3.1415/2;
 	float phi = 3.1415;
 	float speed = 3.1415/2.5;
@@ -139,12 +139,12 @@ int main(){
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		obj1.Animate();	
+//		obj1.Animate();	
 		obj2.Animate();
 
-		obj1.render(Projection,View,lightPos);
-		obj2.render(Projection,View,lightPos);
-			
+//		obj1.render(Projection,View,lightPos);
+		obj2.render(Projection,View,lightPos);	
+		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 

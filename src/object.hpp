@@ -40,7 +40,6 @@ class Object{
 				int, int);
 		bool loadOBJ(const char * path);
 		bool render(glm::mat4,glm::mat4,glm::vec3);
-		GLuint loadTexture(const char * path);
 		bool InitShaders(const char * vertex_file_path, const char * fragment_file_path);
 		bool setMatrices();
 		bool InitBuffers();
