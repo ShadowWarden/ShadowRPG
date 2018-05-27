@@ -8,8 +8,6 @@ class Object{
 		std::vector <glm::vec3> vertices;
 		std::vector <glm::vec2> uvs;
 		std::vector <glm::vec3> normals; 
-		std::vector <glm::vec3> tangents;
-		std::vector <glm::vec3> bitangents;
 
 		GLuint NormalTexture;
 		GLuint Texture;
@@ -19,8 +17,6 @@ class Object{
 		GLuint vertexbuffer;
 		GLuint uvbuffer;
 		GLuint normalbuffer;
-		GLuint tangentbuffer;
-		GLuint bitangentbuffer;
 
 		// Shader Parameters
 		GLuint programID;
@@ -29,8 +25,6 @@ class Object{
 		GLuint NormalTextureID;
 		GLuint vertexUV;
 		GLuint normalHandler;
-		GLuint tangentHandler;
-		GLuint bitangentHandler;
 
 		GLuint MatrixID;
 		GLuint ViewMatrixID;
@@ -45,7 +39,6 @@ class Object{
 				const char * fragmentshader,
 				int, int);
 		bool loadOBJ(const char * path);
-		bool computeTangentBasis();
 		bool render(glm::mat4,glm::mat4,glm::vec3);
 		GLuint loadTexture(const char * path);
 		bool InitShaders(const char * vertex_file_path, const char * fragment_file_path);

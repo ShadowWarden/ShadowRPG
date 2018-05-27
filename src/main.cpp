@@ -96,8 +96,7 @@ int main(){
 	fprintf(stdout, "DEBUG:Initialized VertexArray\n");
 
 	Object obj1("pillar.obj", "pillar.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",2,0);
-	Object obj2("texturewithanim.obj", "texture1.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",-2,0);
-
+	Object obj2("pillar.obj", "pillar.bmp", "pillar_normals.bmp", "vertex.vs", "frag.fs",-2,0);
 
 	fprintf(stdout,"DEBUG: Initialized fonts\n");
 
@@ -109,7 +108,7 @@ int main(){
 
 	float R = 8;
 	float theta = 3.1415/2;
-	float phi = 0;
+	float phi = 3.1415;
 	float speed = 3.1415/2.5;
 
 	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f),3.1415f/2.0f,glm::vec3(1,0,0));
@@ -125,9 +124,9 @@ int main(){
 			phi = 0;
 		}
 
-		computeMatricesFromInputs();
-		Projection = getProjectionMatrix();
-		View = getViewMatrix();
+		//computeMatricesFromInputs();
+		//Projection = getProjectionMatrix();
+		//View = getViewMatrix();
 
 		phi = speed*(currentTime-lastTime);
 

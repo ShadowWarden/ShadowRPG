@@ -34,7 +34,6 @@ Object::Object(const char * objpath,
 	locX = X;
 	locY = Y;
 	loadOBJ(objpath);	
-	computeTangentBasis();
 	Texture = loadTexture(texturepath);
 	NormalTexture = loadTexture(normaltexturepath);
 	InitShaders(vertexshader, fragmentshader);	
@@ -357,22 +356,11 @@ bool Object::InitBuffers(){
 	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
 	glBufferData(GL_ARRAY_BUFFER, normals.size()*sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &tangentbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, tangentbuffer);
-	glBufferData(GL_ARRAY_BUFFER, tangents.size()*sizeof(glm::vec3), &tangents[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &bitangentbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, bitangentbuffer);
-	glBufferData(GL_ARRAY_BUFFER, bitangents.size()*sizeof(glm::vec3), &bitangents[0], GL_STATIC_DRAW);
-	std::cout<<vertices.size()<<' '<<tangents.size()<<' '<<bitangents.size()<<std::endl;
-
 	Vertex = glGetAttribLocation(programID, "vertex_modelSpace");
 	TextureID = glGetUniformLocation(programID, "TextureSampler");
 	NormalTextureID = glGetUniformLocation(programID, "NormalTextureSampler");
 	vertexUV = glGetAttribLocation(programID, "vertexUV");
 	normalHandler = glGetAttribLocation(programID, "normal_modelSpace");
-	tangentHandler = glGetAttribLocation(programID, "tangent_modelSpace");
-	bitangentHandler = glGetAttribLocation(programID, "bitangent_modelSpace");
 
 	// Hand over the matrix to GLSL
 	MatrixID = glGetUniformLocation(programID, "mvp");
@@ -449,29 +437,6 @@ bool Object::render(glm::mat4 Projection, glm::mat4 View, glm::vec3 lightPos){
 		(void *)0		
 	);
 
-	glEnableVertexAttribArray(tangentHandler);
-	glBindBuffer(GL_ARRAY_BUFFER, tangentbuffer);
-	glVertexAttribPointer(
-		tangentHandler,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void *)0		
-	);
-
-	glEnableVertexAttribArray(bitangentHandler);
-	glBindBuffer(GL_ARRAY_BUFFER, bitangentbuffer);
-	glVertexAttribPointer(
-		bitangentHandler,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void *)0		
-	);
-
-
 	// Draw!
 	glDrawArrays(GL_TRIANGLES,0,vertices.size());	// Starting from vertex 0; 3 vertices in total.
 	
@@ -479,29 +444,5 @@ bool Object::render(glm::mat4 Projection, glm::mat4 View, glm::vec3 lightPos){
 	glDisableVertexAttribArray(vertexUV);
 	glDisableVertexAttribArray(normalHandler);
 
-	return true;
-}
-
-bool Object::computeTangentBasis(){
-	for(unsigned int i = 0; i < vertices.size(); i +=3){
-		glm::vec3 deltaPos1 = vertices[i+1]-vertices[i+0];
-		glm::vec3 deltaPos2 = vertices[i+2]-vertices[i+0];
-
-		glm::vec2 deltaUV1 = uvs[i+1]-uvs[i+0];
-		glm::vec2 deltaUV2 = uvs[i+2]-uvs[i+0];
-	
-		float r = 1.0f/(deltaUV1.x*deltaUV2.y - deltaUV1.y*deltaUV2.x);
-		glm::vec3 tangent = (deltaPos1*deltaUV2.y - deltaPos2*deltaUV1.y)*r;
-		glm::vec3 bitangent = (deltaPos2*deltaUV1.x - deltaPos1*deltaUV2.x)*r;
-
-		tangents.push_back(tangent);
-		tangents.push_back(tangent);
-		tangents.push_back(tangent);
-
-		bitangents.push_back(bitangent);
-		bitangents.push_back(bitangent);
-		bitangents.push_back(bitangent);
-
-	}
 	return true;
 }

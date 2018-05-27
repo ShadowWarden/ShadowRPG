@@ -4,7 +4,6 @@ varying vec2 UV;
 varying vec3 Position_worldspace;
 varying vec3 EyeDirection_cameraspace;
 varying vec3 LightDirection_cameraspace;
-varying vec3 Normal_cameraspace;
 
 uniform sampler2D TextureSampler;
 uniform sampler2D NormalTextureSampler;
@@ -15,7 +14,7 @@ uniform mat4 M;
 uniform mat3 mv3x3;
 
 void main(){
-	vec3 LightColor = vec3(1,1,0.6);
+	vec3 LightColor = vec3(1,1,1);
 	float LightPower = 50.0f;
 
 	// Material Properties
@@ -27,8 +26,10 @@ void main(){
 	// Compute Distance
 	float distance = length(LightPosition_worldspace - Position_worldspace);
 
+	vec4 NC = V*M*vec4(normalize(texture2D(NormalTextureSampler,UV).rgb*2.0 -1.0),0.0);
+	
 	// Compute normal in cameraspace
-	vec3 n = normalize(Normal_cameraspace);
+	vec3 n = normalize(NC.xyz);
 	vec3 l = normalize(LightDirection_cameraspace);
 
 	float cosTheta = clamp(dot(n,l),0,1);
